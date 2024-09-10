@@ -35,7 +35,7 @@ public class PhaseJourneyCommands {
         world.addChild(build);
     }
 
-    private void addPhase(CommandSourceStack sourceStack, String phase) {
+    private static void addPhase(CommandSourceStack sourceStack, String phase) {
 
     }
 

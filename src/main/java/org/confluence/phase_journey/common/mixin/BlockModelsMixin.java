@@ -31,7 +31,7 @@ public class BlockModelsMixin {
 	private void getBlockModel(BlockState blockState, CallbackInfoReturnable<BakedModel> callback) {
 //		BakedModel overriddenModel = this.modelByStateCache.getOrDefault(Blocks.DIAMOND_BLOCK.defaultBlockState(), modelManager.getMissingModel());
 //		callback.setReturnValue(overriddenModel);
-		MixinUtil.getBlockModel(blockState, modelByStateCache, modelManager, callback);
+//		MixinUtil.getBlockModel(blockState, modelByStateCache, modelManager, callback);
 	}
 	
 }

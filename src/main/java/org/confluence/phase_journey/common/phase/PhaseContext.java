@@ -9,4 +9,11 @@ public class PhaseContext implements IPhaseContext {
     public PhaseContext(ResourceLocation phase) {
         this.phase = phase;
     }
+
+    public ResourceLocation getPhase() {
+        return phase;
+    }
+    public String getPhaseName() {
+        return phase.toString();
+    }
 }

@@ -20,6 +20,6 @@ public abstract class ItemModelShaperMixin {
 
     @Inject(at = @At("HEAD"), method = "getItemModel(Lnet/minecraft/world/item/ItemStack;)Lnet/minecraft/client/resources/model/BakedModel;", cancellable = true)
     private void getModel(ItemStack itemStack, CallbackInfoReturnable<BakedModel> callback) {
-        callback.setReturnValue(this.getItemModel(Items.DIAMOND_BLOCK));
+//        callback.setReturnValue(this.getItemModel(Items.DIAMOND_BLOCK));
     }
 }

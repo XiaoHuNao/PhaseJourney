@@ -9,6 +9,7 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.state.BlockState;
 import org.confluence.phase_journey.common.phase.PhaseManager;
+import org.confluence.phase_journey.common.phase.block.BlockPhaseContext;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Map;
@@ -17,14 +18,12 @@ public class MixinUtil {
     public static void getBlockModel(BlockState blockState, Map<BlockState, BakedModel> modelByStateCache, ModelManager modelManager, CallbackInfoReturnable<BakedModel> callback) {
         LocalPlayer player = Minecraft.getInstance().player;
         if (player != null) {
-            ListTag phaseJourneu = player.getPersistentData().getList("phase_journeu", Tag.TAG_STRING);
-            for (Tag tag : phaseJourneu) {
-                String asString = tag.getAsString();
-                PhaseManager.getBlockPhaseContexts(ResourceLocation.parse(asString)).forEach(blockPhaseContext -> {
-                    if (blockPhaseContext.getSourceBlock().equals(blockState)) {
-                        callback.setReturnValue(modelByStateCache.getOrDefault(blockPhaseContext.getReplaceBlock(), modelManager.getMissingModel()));
-                    }
-                });
+            ListTag phase_Journeu = player.getPersistentData().getList("phase_journeu", Tag.TAG_STRING);
+            BlockPhaseContext phaseContext = PhaseManager.isReplaceBlock(blockState);
+            if (phaseContext != null && phase_Journeu.contains(phaseContext.getPhaseName())){
+                BlockState replaceBlock = phaseContext.getReplaceBlock();
+                BakedModel orDefault = modelByStateCache.getOrDefault(replaceBlock, modelManager.getMissingModel());
+                callback.setReturnValue(orDefault);
             }
         }
     }

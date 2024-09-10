@@ -1,12 +1,12 @@
 package org.confluence.phase_journey.common.event.subscriber;
 
 import net.minecraft.world.level.block.Blocks;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.EventBusSubscriber;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 import org.confluence.phase_journey.PhaseJourney;
 import org.confluence.phase_journey.common.event.PhaseJourneyRegisterEvent;
 
-@EventBusSubscriber
+@Mod.EventBusSubscriber
 public class PhaseRegisterEventSubscriber {
     @SubscribeEvent
     public static void onPhaseJourneyRegister(PhaseJourneyRegisterEvent event) {

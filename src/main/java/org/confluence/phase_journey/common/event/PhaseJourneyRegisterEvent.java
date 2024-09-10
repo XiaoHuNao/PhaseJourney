@@ -1,6 +1,6 @@
 package org.confluence.phase_journey.common.event;
 
-import net.neoforged.bus.api.Event;
+import net.minecraftforge.eventbus.api.Event;
 import org.confluence.phase_journey.common.phase.PhaseRegisterContext;
 
 import java.util.function.Consumer;

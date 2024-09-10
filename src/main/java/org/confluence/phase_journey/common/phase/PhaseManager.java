@@ -23,4 +23,7 @@ public class PhaseManager {
     public static Collection<BlockPhaseContext> getBlockPhaseContexts(ResourceLocation phase){
         return blockPhaseContexts.get(phase);
     }
+    public static BlockPhaseContext isReplaceBlock(BlockState blockState){
+        return blockStatePhaseContexts.getOrDefault(blockState,null);
+    }
 }

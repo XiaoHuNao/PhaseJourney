@@ -25,12 +25,11 @@ public abstract class BlockBehaviourMixin {
             at = @At(value = "RETURN"),
             cancellable = true)
     private void getDrops(BlockState state, LootParams.Builder params, CallbackInfoReturnable<List<ItemStack>> cir) {
-        ResourceKey<LootTable> resourcekey = Blocks.DIAMOND_BLOCK.getLootTable();
-        LootParams lootparams = params.withParameter(LootContextParams.BLOCK_STATE, state).create(LootContextParamSets.BLOCK);
-        ServerLevel serverlevel = lootparams.getLevel();
-        LootTable loottable = serverlevel.getServer().reloadableRegistries().getLootTable(resourcekey);
-        ObjectArrayList<ItemStack> randomItems = loottable.getRandomItems(lootparams);
-
-        cir.setReturnValue(randomItems);
+//        ResourceKey<LootTable> resourcekey = Blocks.DIAMOND_BLOCK.getLootTable();
+//        LootParams lootparams = params.withParameter(LootContextParams.BLOCK_STATE, state).create(LootContextParamSets.BLOCK);
+//        ServerLevel serverlevel = lootparams.getLevel();
+//        LootTable loottable = serverlevel.getServer().reloadableRegistries().getLootTable(resourcekey);
+//        ObjectArrayList<ItemStack> randomItems = loottable.getRandomItems(lootparams);
+//        cir.setReturnValue(randomItems);
     }
 }
