@@ -5,11 +5,13 @@ import net.minecraft.core.Direction;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.common.util.LazyOptional;
 import org.confluence.phase_journey.api.IPhaseCapability;
+import org.confluence.phase_journey.common.event.PhaseJourneyEvent;
 import org.confluence.phase_journey.common.init.ModCapability;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -27,10 +29,12 @@ public class PhaseCapability implements IPhaseCapability,INBTSerializable<ListTa
     @Override
     public void addPhase(ResourceLocation phase){
         phases.add(phase);
+        MinecraftForge.EVENT_BUS.post(new PhaseJourneyEvent.Add(phase));
     }
     @Override
     public void removePhase(ResourceLocation phase){
         phases.remove(phase);
+        MinecraftForge.EVENT_BUS.post(new PhaseJourneyEvent.Remove(phase));
     }
 
     @Override
