@@ -11,7 +11,7 @@ public class PhaseRegisterEventSubscriber {
     @SubscribeEvent
     public static void onPhaseJourneyRegister(PhaseJourneyRegisterEvent event) {
         event.phaseRegister(context -> {
-            context.blockPhase(PhaseJourney.asResource("phase_journey:phase_1"), Blocks.DIAMOND_BLOCK, Blocks.STONE).register();
+            context.blockPhase(PhaseJourney.asResource("phase_1"), Blocks.DIAMOND_BLOCK, Blocks.STONE).register();
         });
     }
 

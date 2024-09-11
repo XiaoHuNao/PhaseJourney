@@ -1,21 +1,23 @@
 package org.confluence.phase_journey.common.phase.block;
 
-import com.google.common.collect.BiMap;
-import com.google.common.collect.HashBiMap;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import org.checkerframework.checker.nullness.qual.Nullable;
 import org.confluence.phase_journey.common.phase.PhaseContext;
-import org.confluence.phase_journey.common.phase.PhaseManager;
 import org.confluence.phase_journey.common.phase.PhaseRegisterContext;
 
-import java.util.AbstractMap;
-import java.util.Map;
-
 public class BlockPhaseContext extends PhaseContext {
-    private BlockState sourceBlock;
-    private BlockState replaceBlock;
+    public static final Codec<BlockPhaseContext> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+            ResourceLocation.CODEC.fieldOf("phase").forGetter(BlockPhaseContext::getPhase),
+            BlockState.CODEC.fieldOf("sourceBlock").forGetter(BlockPhaseContext::getSourceBlock),
+            BlockState.CODEC.fieldOf("replaceBlock").forGetter(BlockPhaseContext::getReplaceBlock),
+            Codec.BOOL.fieldOf("canDestroy").forGetter(BlockPhaseContext::canDestroy)
+    ).apply(instance,BlockPhaseContext::new));
+
+    private final BlockState sourceBlock;
+    private final BlockState replaceBlock;
     private boolean canDestroy = true;
 
     public BlockPhaseContext(ResourceLocation phase, Block sourceBlock, Block replaceBlock) {
@@ -28,21 +30,29 @@ public class BlockPhaseContext extends PhaseContext {
         this.sourceBlock = sourceBlockStack;
         this.replaceBlock = replaceBlock;
     }
+
+    public BlockPhaseContext(ResourceLocation phase, BlockState sourceBlockStack, BlockState replaceBlock, Boolean canDestroy) {
+        super(phase);
+        this.sourceBlock = sourceBlockStack;
+        this.replaceBlock = replaceBlock;
+        this.canDestroy = canDestroy;
+    }
+
     public BlockPhaseContext canDestroy(boolean canDestroy){
         this.canDestroy = canDestroy;
         return this;
     }
     public PhaseRegisterContext register(){
-        PhaseManager.registerBlockPhase(phase,this);
+        BlockPhaseManager.INSTANCE.registerBlockPhase(phase,this);
         return PhaseRegisterContext.INSTANCE;
     }
     public boolean canDestroy(){
         return canDestroy;
     }
-    public @Nullable BlockState getReplaceBlock(){
+    public BlockState getReplaceBlock(){
         return replaceBlock;
     }
-    public @Nullable BlockState getSourceBlock(){
+    public BlockState getSourceBlock(){
         return sourceBlock;
     }
 }

@@ -19,4 +19,8 @@ public interface IPhaseCapability {
 
 
     Set<ResourceLocation> getPhases();
+
+    void addPhase(ResourceLocation phase);
+
+    void removePhase(ResourceLocation phase);
 }

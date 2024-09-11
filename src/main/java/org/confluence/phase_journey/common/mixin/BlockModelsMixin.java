@@ -1,13 +1,14 @@
 package org.confluence.phase_journey.common.mixin;
 
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.block.BlockModelShaper;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.ModelManager;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-import org.confluence.phase_journey.common.phase.PhaseManager;
-import org.confluence.phase_journey.common.util.MixinUtil;
+import org.confluence.phase_journey.common.phase.block.BlockPhaseManager;
+import org.confluence.phase_journey.common.util.PhaseUtils;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -29,9 +30,19 @@ public class BlockModelsMixin {
 	
 	@Inject(at = @At("HEAD"), method = "getBlockModel", cancellable = true)
 	private void getBlockModel(BlockState blockState, CallbackInfoReturnable<BakedModel> callback) {
-//		BakedModel overriddenModel = this.modelByStateCache.getOrDefault(Blocks.DIAMOND_BLOCK.defaultBlockState(), modelManager.getMissingModel());
-//		callback.setReturnValue(overriddenModel);
-//		MixinUtil.getBlockModel(blockState, modelByStateCache, modelManager, callback);
+		LocalPlayer player = Minecraft.getInstance().player;
+		if (player != null) {
+			BlockPhaseManager.INSTANCE.getBlockPhaseContexts().forEach((phase, blockPhaseContext) -> {
+				if (PhaseUtils.ContainsPhase(phase,player) || PhaseUtils.ContainsPhase(phase,player.clientLevel)){
+					return;
+				}
+				if (BlockPhaseManager.INSTANCE.checkReplaceBlock(blockState)) {
+					BlockState replaceBlock = blockPhaseContext.getReplaceBlock();
+					BakedModel orDefault = modelByStateCache.getOrDefault(replaceBlock, modelManager.getMissingModel());
+					callback.setReturnValue(orDefault);
+				}
+			});
+		}
 	}
 	
 }

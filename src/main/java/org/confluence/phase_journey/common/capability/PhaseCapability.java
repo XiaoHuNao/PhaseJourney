@@ -1,11 +1,10 @@
 package org.confluence.phase_journey.common.capability;
 
+import com.google.common.collect.Sets;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.Level;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.INBTSerializable;
@@ -19,11 +18,19 @@ import java.util.Set;
 
 
 public class PhaseCapability implements IPhaseCapability,INBTSerializable<ListTag> {
-    private Set<ResourceLocation> phases;
+    private final Set<ResourceLocation> phases = Sets.newHashSet();
 
     @Override
     public Set<ResourceLocation> getPhases() {
         return phases;
+    }
+    @Override
+    public void addPhase(ResourceLocation phase){
+        phases.add(phase);
+    }
+    @Override
+    public void removePhase(ResourceLocation phase){
+        phases.remove(phase);
     }
 
     @Override

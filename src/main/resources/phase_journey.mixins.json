@@ -10,7 +10,8 @@
   ],
   "client": [
     "BlockModelsMixin",
-    "ItemModelShaperMixin"
+    "ItemModelShaperMixin",
+    "LevelRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1
