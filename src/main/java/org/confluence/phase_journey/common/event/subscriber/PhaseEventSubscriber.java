@@ -12,7 +12,7 @@ public class PhaseEventSubscriber {
     @SubscribeEvent
     public static void onPhaseJourneyRegister(PhaseJourneyEvent.Register event) {
         event.phaseRegister(context -> {
-            context.blockPhase(PhaseJourney.asResource("phase_1"), Blocks.DIAMOND_BLOCK, Blocks.STONE).register();
+            context.blockPhase(PhaseJourney.asResource("phase_1"), Blocks.STONE, Blocks.CRAFTING_TABLE).register();
         });
     }
 

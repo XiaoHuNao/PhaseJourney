@@ -9,16 +9,19 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.confluence.phase_journey.common.command.PhaseJourneyCommands;
 import org.confluence.phase_journey.common.event.PhaseJourneyEvent;
 import org.confluence.phase_journey.common.network.NetworkHandler;
 import org.jetbrains.annotations.NotNull;
-import org.slf4j.Logger;
+
 
 @Mod(PhaseJourney.MODID)
 public class PhaseJourney {
     public static final String MODID = "phase_journey";
-    public static final Logger LOGGER = LogUtils.getLogger();
+    public static final Logger LOGGER = LogManager.getLogger(PhaseJourney.class);
+
 
     public PhaseJourney() {
         IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
