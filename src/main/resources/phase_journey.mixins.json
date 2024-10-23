@@ -5,13 +5,8 @@
   "compatibilityLevel": "JAVA_8",
   "refmap": "phase_journey.refmap.json",
   "mixins": [
-    "BlockBehaviourMixin",
-    "ItemMixin"
   ],
   "client": [
-    "BlockModelsMixin",
-    "ItemModelShaperMixin",
-    "LevelRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1

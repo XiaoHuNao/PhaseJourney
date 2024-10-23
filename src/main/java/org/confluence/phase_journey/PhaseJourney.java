@@ -14,7 +14,7 @@ public class PhaseJourney {
     private static final Logger LOGGER = LogUtils.getLogger();
 
     public PhaseJourney(IEventBus eventBus, ModContainer container) {
-        NeoForge.EVENT_BUS.register(this);
+//        NeoForge.EVENT_BUS.register(this);
     }
 
     public static ResourceLocation asResource(String path) {
