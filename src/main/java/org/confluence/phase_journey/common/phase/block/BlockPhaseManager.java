@@ -17,49 +17,53 @@ public class BlockPhaseManager {
     public static final BlockPhaseManager INSTANCE = new BlockPhaseManager();
     private static final Logger log = LoggerFactory.getLogger(BlockPhaseManager.class);
 
-    private  final Multimap<ResourceLocation, BlockPhaseContext> BlockStatePhaseContexts = ArrayListMultimap.create();
-    private  final BiMap<BlockState,BlockPhaseContext> sourceBlockStatePhaseContexts = HashBiMap.create();
-    private  final BiMap<Block,BlockPhaseContext> sourceBlockPhaseContexts = HashBiMap.create();
+    private final Multimap<ResourceLocation, BlockPhaseContext> BlockStatePhaseContexts = ArrayListMultimap.create();
+    private final BiMap<BlockState, BlockPhaseContext> sourceBlockStatePhaseContexts = HashBiMap.create();
+    private final BiMap<Block, BlockPhaseContext> sourceBlockPhaseContexts = HashBiMap.create();
+
     public Multimap<ResourceLocation, BlockPhaseContext> getBlockPhaseContexts() {
         return BlockStatePhaseContexts;
     }
 
     public void registerBlockPhase(ResourceLocation phase, BlockPhaseContext blockPhaseContext) {
-        BlockStatePhaseContexts.put(phase,blockPhaseContext);
-        sourceBlockStatePhaseContexts.put(blockPhaseContext.getSourceBlock(),blockPhaseContext);
-        sourceBlockPhaseContexts.put(blockPhaseContext.getSourceBlock().getBlock(),blockPhaseContext);
-        registerBlockItemPhaseContext(phase,blockPhaseContext);
+        BlockStatePhaseContexts.put(phase, blockPhaseContext);
+        sourceBlockStatePhaseContexts.put(blockPhaseContext.getSourceBlock(), blockPhaseContext);
+        sourceBlockPhaseContexts.put(blockPhaseContext.getSourceBlock().getBlock(), blockPhaseContext);
+        registerBlockItemPhaseContext(phase, blockPhaseContext);
     }
-    public boolean checkReplaceBlock(BlockState blockState){
+
+    public boolean checkReplaceBlock(BlockState blockState) {
         return sourceBlockStatePhaseContexts.containsKey(blockState);
     }
-    public boolean checkReplaceBlock(Block block){
+
+    public boolean checkReplaceBlock(Block block) {
         return sourceBlockPhaseContexts.containsKey(block);
     }
 
-    public BlockPhaseContext getBlockPhaseContext(BlockState blockState){
+    public BlockPhaseContext getBlockPhaseContext(BlockState blockState) {
         return sourceBlockStatePhaseContexts.get(blockState);
     }
-    public BlockPhaseContext getBlockPhaseContext(Block block){
+
+    public BlockPhaseContext getBlockPhaseContext(Block block) {
         return sourceBlockPhaseContexts.get(block);
     }
 
-    public void registerBlockItemPhaseContext(ResourceLocation phase, BlockPhaseContext blockPhaseContext){
+    public void registerBlockItemPhaseContext(ResourceLocation phase, BlockPhaseContext blockPhaseContext) {
         Item sourceItem = blockPhaseContext.getSourceBlock().getBlock().asItem();
         Item replaceItem = blockPhaseContext.getReplaceBlock().getBlock().asItem();
         ItemPhaseContext itemPhaseContext = new ItemPhaseContext(phase, sourceItem, replaceItem);
         ItemPhaseManager.INSTANCE.registerBlockPhase(phase, itemPhaseContext);
     }
 
-    public void ReplaceBlockBlockBehaviour(ResourceLocation phase,boolean all) {
-        if (all){
+    public void ReplaceBlockBlockBehaviour(ResourceLocation phase, boolean all) {
+        if (all) {
             BlockStatePhaseContexts.forEach((phase1, blockPhaseContext) -> {
-                ReplaceBlockBlockBehaviour(phase1,false);
+                ReplaceBlockBlockBehaviour(phase1, false);
             });
         }
 
         BlockStatePhaseContexts.get(phase).forEach(context -> {
-            ReplaceBlockBlockBehaviour(context.getSourceBlock(),context.getReplaceBlock());
+            ReplaceBlockBlockBehaviour(context.getSourceBlock(), context.getReplaceBlock());
 //            try {
 //                Class<?> blockClass = context.getSourceBlock().getBlock().getClass();
 //
@@ -78,7 +82,7 @@ public class BlockPhaseManager {
     }
 //}
 
-    public void ReplaceBlockBlockBehaviour(BlockState sourceBlock, BlockState replaceBlock){
+    public void ReplaceBlockBlockBehaviour(BlockState sourceBlock, BlockState replaceBlock) {
         sourceBlock.getBlock().hasCollision = replaceBlock.getBlock().hasCollision;
         sourceBlock.getBlock().explosionResistance = replaceBlock.getBlock().explosionResistance;
         sourceBlock.getBlock().isRandomlyTicking = replaceBlock.getBlock().isRandomlyTicking;

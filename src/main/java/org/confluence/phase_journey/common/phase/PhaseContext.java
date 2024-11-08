@@ -13,6 +13,7 @@ public class PhaseContext implements IPhaseContext {
     public ResourceLocation getPhase() {
         return phase;
     }
+
     public String getPhaseName() {
         return phase.toString();
     }

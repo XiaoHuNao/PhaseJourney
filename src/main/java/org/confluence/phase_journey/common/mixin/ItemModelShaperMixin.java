@@ -18,14 +18,16 @@ import javax.annotation.Nullable;
 
 @Mixin(ItemModelShaper.class)
 public abstract class ItemModelShaperMixin {
-    @Shadow @Nullable public abstract BakedModel getItemModel(Item pItem);
+    @Shadow
+    @Nullable
+    public abstract BakedModel getItemModel(Item pItem);
 
     @Inject(at = @At("HEAD"), method = "getItemModel(Lnet/minecraft/world/item/ItemStack;)Lnet/minecraft/client/resources/model/BakedModel;", cancellable = true)
     private void getModel(ItemStack itemStack, CallbackInfoReturnable<BakedModel> callback) {
         LocalPlayer player = Minecraft.getInstance().player;
         if (player != null) {
             ItemPhaseManager.INSTANCE.getItemPhaseContexts().forEach((phase, phaseContext) -> {
-                if (PhaseUtils.ContainsPhase(phase,player) || PhaseUtils.ContainsPhase(phase,player.clientLevel)){
+                if (PhaseUtils.ContainsPhase(phase, player) || PhaseUtils.ContainsPhase(phase, player.clientLevel)) {
                     return;
                 }
                 if (ItemPhaseManager.INSTANCE.checkReplaceItem(itemStack.getItem())) {

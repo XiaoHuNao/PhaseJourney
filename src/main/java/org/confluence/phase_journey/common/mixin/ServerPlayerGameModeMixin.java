@@ -16,10 +16,10 @@ import java.util.concurrent.atomic.AtomicReference;
 @Mixin(ServerPlayerGameMode.class)
 public abstract class ServerPlayerGameModeMixin {
     @Redirect(method = "useItemOn", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/Level;getBlockState(Lnet/minecraft/core/BlockPos;)Lnet/minecraft/world/level/block/state/BlockState;"))
-    public BlockState onUseItemOn(Level level, BlockPos pos,ServerPlayer player){
+    public BlockState onUseItemOn(Level level, BlockPos pos, ServerPlayer player) {
         AtomicReference<BlockState> blockState = new AtomicReference<>(level.getBlockState(pos));
         BlockPhaseManager.INSTANCE.getBlockPhaseContexts().forEach((phase, blockPhaseContext) -> {
-            if (PhaseUtils.ContainsPhase(phase,player) || PhaseUtils.ContainsPhase(phase,level)){
+            if (PhaseUtils.ContainsPhase(phase, player) || PhaseUtils.ContainsPhase(phase, level)) {
                 return;
             }
             if (BlockPhaseManager.INSTANCE.checkReplaceBlock(blockState.get())) {

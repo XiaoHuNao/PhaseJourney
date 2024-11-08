@@ -20,28 +20,28 @@ import java.util.Map;
 
 @Mixin(BlockModelShaper.class)
 public abstract class BlockModelsMixin {
-	@Shadow
-	private Map<BlockState, BakedModel> modelByStateCache;
-	
-	@Shadow
-	@Final
-	private ModelManager modelManager;
-	
-	@Inject(at = @At("HEAD"), method = "getBlockModel", cancellable = true)
-	private void getBlockModel(BlockState blockState, CallbackInfoReturnable<BakedModel> callback) {
-		LocalPlayer player = Minecraft.getInstance().player;
-		if (player != null) {
-			BlockPhaseManager.INSTANCE.getBlockPhaseContexts().forEach((phase, blockPhaseContext) -> {
-				if (PhaseUtils.ContainsPhase(phase,player) || PhaseUtils.ContainsPhase(phase,player.clientLevel)){
-					return;
-				}
-				if (BlockPhaseManager.INSTANCE.checkReplaceBlock(blockState)) {
-					BlockState replaceBlock = blockPhaseContext.getReplaceBlock();
-					BakedModel orDefault = modelByStateCache.getOrDefault(replaceBlock, modelManager.getMissingModel());
-					callback.setReturnValue(orDefault);
-				}
-			});
-		}
-	}
-	
+    @Shadow
+    private Map<BlockState, BakedModel> modelByStateCache;
+
+    @Shadow
+    @Final
+    private ModelManager modelManager;
+
+    @Inject(at = @At("HEAD"), method = "getBlockModel", cancellable = true)
+    private void getBlockModel(BlockState blockState, CallbackInfoReturnable<BakedModel> callback) {
+        LocalPlayer player = Minecraft.getInstance().player;
+        if (player != null) {
+            BlockPhaseManager.INSTANCE.getBlockPhaseContexts().forEach((phase, blockPhaseContext) -> {
+                if (PhaseUtils.ContainsPhase(phase, player) || PhaseUtils.ContainsPhase(phase, player.clientLevel)) {
+                    return;
+                }
+                if (BlockPhaseManager.INSTANCE.checkReplaceBlock(blockState)) {
+                    BlockState replaceBlock = blockPhaseContext.getReplaceBlock();
+                    BakedModel orDefault = modelByStateCache.getOrDefault(replaceBlock, modelManager.getMissingModel());
+                    callback.setReturnValue(orDefault);
+                }
+            });
+        }
+    }
+
 }

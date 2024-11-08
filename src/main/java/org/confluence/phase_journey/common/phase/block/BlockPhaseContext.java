@@ -14,7 +14,7 @@ public class BlockPhaseContext extends PhaseContext {
             BlockState.CODEC.fieldOf("sourceBlock").forGetter(BlockPhaseContext::getSourceBlock),
             BlockState.CODEC.fieldOf("replaceBlock").forGetter(BlockPhaseContext::getReplaceBlock),
             Codec.BOOL.fieldOf("canDestroy").forGetter(BlockPhaseContext::canDestroy)
-    ).apply(instance,BlockPhaseContext::new));
+    ).apply(instance, BlockPhaseContext::new));
 
     private final BlockState sourceBlock;
     private final BlockState replaceBlock;
@@ -25,6 +25,7 @@ public class BlockPhaseContext extends PhaseContext {
         this.sourceBlock = sourceBlock.defaultBlockState();
         this.replaceBlock = replaceBlock.defaultBlockState();
     }
+
     public BlockPhaseContext(ResourceLocation phase, BlockState sourceBlockStack, BlockState replaceBlock) {
         super(phase);
         this.sourceBlock = sourceBlockStack;
@@ -38,21 +39,25 @@ public class BlockPhaseContext extends PhaseContext {
         this.canDestroy = canDestroy;
     }
 
-    public BlockPhaseContext canDestroy(boolean canDestroy){
+    public BlockPhaseContext canDestroy(boolean canDestroy) {
         this.canDestroy = canDestroy;
         return this;
     }
-    public PhaseRegisterContext register(){
-        BlockPhaseManager.INSTANCE.registerBlockPhase(phase,this);
+
+    public PhaseRegisterContext register() {
+        BlockPhaseManager.INSTANCE.registerBlockPhase(phase, this);
         return PhaseRegisterContext.INSTANCE;
     }
-    public boolean canDestroy(){
+
+    public boolean canDestroy() {
         return canDestroy;
     }
-    public BlockState getReplaceBlock(){
+
+    public BlockState getReplaceBlock() {
         return replaceBlock;
     }
-    public BlockState getSourceBlock(){
+
+    public BlockState getSourceBlock() {
         return sourceBlock;
     }
 }

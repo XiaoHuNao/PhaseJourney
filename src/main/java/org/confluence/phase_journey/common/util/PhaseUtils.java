@@ -22,7 +22,7 @@ public class PhaseUtils {
         return level.getData(ModAttachments.PHASE_CAPABILITY.get()).getPhases().contains(phase);
     }
 
-    public static ObjectArrayList<ItemStack> getReplaceBlockLoot(LootParams.Builder params,BlockState blockState) {
+    public static ObjectArrayList<ItemStack> getReplaceBlockLoot(LootParams.Builder params, BlockState blockState) {
         LootParams lootParams = params.withParameter(LootContextParams.BLOCK_STATE, blockState).create(LootContextParamSets.BLOCK);
         ServerLevel serverlevel = lootParams.getLevel();
         LootTable loottable = serverlevel.getServer().reloadableRegistries().getLootTable(blockState.getBlock().getLootTable());

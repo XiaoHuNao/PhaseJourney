@@ -14,18 +14,18 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Item.class)
 public abstract class ItemMixin {
-	@Inject(at = @At("HEAD"), method = "getName", cancellable = true)
-	public void getName(ItemStack itemStack, CallbackInfoReturnable<Component> callback) {
-		LocalPlayer player = Minecraft.getInstance().player;
-		if (player != null) {
-			ItemPhaseManager.INSTANCE.getItemPhaseContexts().forEach((phase, phaseContext) -> {
-				if (PhaseUtils.ContainsPhase(phase,player) || PhaseUtils.ContainsPhase(phase,player.clientLevel)){
-					return;
-				}
-				if (ItemPhaseManager.INSTANCE.checkReplaceItem(itemStack.getItem())) {
-					callback.setReturnValue(ItemPhaseManager.INSTANCE.getReplaceItemDescription(itemStack.getItem()));
-				}
-			});
-		}
-	}
+    @Inject(at = @At("HEAD"), method = "getName", cancellable = true)
+    public void getName(ItemStack itemStack, CallbackInfoReturnable<Component> callback) {
+        LocalPlayer player = Minecraft.getInstance().player;
+        if (player != null) {
+            ItemPhaseManager.INSTANCE.getItemPhaseContexts().forEach((phase, phaseContext) -> {
+                if (PhaseUtils.ContainsPhase(phase, player) || PhaseUtils.ContainsPhase(phase, player.clientLevel)) {
+                    return;
+                }
+                if (ItemPhaseManager.INSTANCE.checkReplaceItem(itemStack.getItem())) {
+                    callback.setReturnValue(ItemPhaseManager.INSTANCE.getReplaceItemDescription(itemStack.getItem()));
+                }
+            });
+        }
+    }
 }
