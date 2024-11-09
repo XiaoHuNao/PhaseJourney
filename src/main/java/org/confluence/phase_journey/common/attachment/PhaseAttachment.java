@@ -14,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
 
-public class PhaseAttachmemnt implements IPhaseCapability, INBTSerializable<ListTag> {
+public class PhaseAttachment implements IPhaseCapability, INBTSerializable<ListTag> {
     private final Set<ResourceLocation> phases = Sets.newHashSet();
 
     @Override

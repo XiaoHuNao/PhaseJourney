@@ -28,7 +28,6 @@ public class PhaseJourneyEvent extends Event {
     public static class Register extends PhaseJourneyEvent implements IModBusEvent {
         public void phaseRegister(Consumer<PhaseRegisterContext> consumer) {
             consumer.accept(PhaseRegisterContext.INSTANCE);
-            //BlockPhaseManager.INSTANCE.replaceBlockProperties(null, true);
         }
     }
 }

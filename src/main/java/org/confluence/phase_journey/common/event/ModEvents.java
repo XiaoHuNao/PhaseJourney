@@ -9,7 +9,7 @@ import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 import org.confluence.phase_journey.PhaseJourney;
 import org.confluence.phase_journey.api.PhaseJourneyEvent;
-import org.confluence.phase_journey.common.network.PhaseSyncS2CPack;
+import org.confluence.phase_journey.common.network.SyncPhasePacketS2C;
 
 @EventBusSubscriber(bus = EventBusSubscriber.Bus.MOD, modid = PhaseJourney.MODID)
 public final class ModEvents {
@@ -22,9 +22,9 @@ public final class ModEvents {
     public static void registerPayloadHandler(RegisterPayloadHandlersEvent event) {
         PayloadRegistrar registrar = event.registrar("1");
         registrar.playToClient(
-                PhaseSyncS2CPack.TYPE,
-                PhaseSyncS2CPack.STREAM_CODEC,
-                PhaseSyncS2CPack::handle
+                SyncPhasePacketS2C.TYPE,
+                SyncPhasePacketS2C.STREAM_CODEC,
+                SyncPhasePacketS2C::handle
         );
     }
 

@@ -44,11 +44,6 @@ public class BlockReplacement extends PhaseContext {
         return this;
     }
 
-    public PhaseRegisterContext register() {
-        BlockPhaseManager.INSTANCE.registerBlockPhase(phase, this);
-        return PhaseRegisterContext.INSTANCE;
-    }
-
     public boolean isDestroyAllowed() {
         return allowDestroy;
     }
@@ -59,5 +54,10 @@ public class BlockReplacement extends PhaseContext {
 
     public BlockState getSource() {
         return source;
+    }
+
+    public PhaseRegisterContext register() {
+        BlockPhaseManager.INSTANCE.registerBlockPhase(phase, this);
+        return PhaseRegisterContext.INSTANCE;
     }
 }
