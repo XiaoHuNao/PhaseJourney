@@ -5,95 +5,61 @@ import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import com.google.common.collect.Multimap;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import org.confluence.phase_journey.common.phase.item.ItemPhaseContext;
 import org.confluence.phase_journey.common.phase.item.ItemPhaseManager;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.confluence.phase_journey.common.phase.item.ItemReplacement;
+import org.confluence.phase_journey.common.util.PhaseUtils;
+
+import java.util.Collection;
+import java.util.Map;
+import java.util.function.Consumer;
 
 public class BlockPhaseManager {
     public static final BlockPhaseManager INSTANCE = new BlockPhaseManager();
-    private static final Logger log = LoggerFactory.getLogger(BlockPhaseManager.class);
 
-    private final Multimap<ResourceLocation, BlockPhaseContext> BlockStatePhaseContexts = ArrayListMultimap.create();
-    private final BiMap<BlockState, BlockPhaseContext> sourceBlockStatePhaseContexts = HashBiMap.create();
-    private final BiMap<Block, BlockPhaseContext> sourceBlockPhaseContexts = HashBiMap.create();
+    private final Multimap<ResourceLocation, BlockReplacement> phaseToContexts = ArrayListMultimap.create();
+    private final BiMap<BlockState, BlockReplacement> blockStateReplacements = HashBiMap.create();
 
-    public Multimap<ResourceLocation, BlockPhaseContext> getBlockPhaseContexts() {
-        return BlockStatePhaseContexts;
+    public void registerBlockPhase(ResourceLocation phase, BlockReplacement replacement) {
+        phaseToContexts.put(phase, replacement);
+        blockStateReplacements.put(replacement.getSource(), replacement);
+        registerBlockReplacement(phase, replacement);
     }
 
-    public void registerBlockPhase(ResourceLocation phase, BlockPhaseContext blockPhaseContext) {
-        BlockStatePhaseContexts.put(phase, blockPhaseContext);
-        sourceBlockStatePhaseContexts.put(blockPhaseContext.getSourceBlock(), blockPhaseContext);
-        sourceBlockPhaseContexts.put(blockPhaseContext.getSourceBlock().getBlock(), blockPhaseContext);
-        registerBlockItemPhaseContext(phase, blockPhaseContext);
-    }
-
-    public boolean checkReplaceBlock(BlockState blockState) {
-        return sourceBlockStatePhaseContexts.containsKey(blockState);
-    }
-
-    public boolean checkReplaceBlock(Block block) {
-        return sourceBlockPhaseContexts.containsKey(block);
-    }
-
-    public BlockPhaseContext getBlockPhaseContext(BlockState blockState) {
-        return sourceBlockStatePhaseContexts.get(blockState);
-    }
-
-    public BlockPhaseContext getBlockPhaseContext(Block block) {
-        return sourceBlockPhaseContexts.get(block);
-    }
-
-    public void registerBlockItemPhaseContext(ResourceLocation phase, BlockPhaseContext blockPhaseContext) {
-        Item sourceItem = blockPhaseContext.getSourceBlock().getBlock().asItem();
-        Item replaceItem = blockPhaseContext.getReplaceBlock().getBlock().asItem();
-        ItemPhaseContext itemPhaseContext = new ItemPhaseContext(phase, sourceItem, replaceItem);
-        ItemPhaseManager.INSTANCE.registerBlockPhase(phase, itemPhaseContext);
-    }
-
-    public void ReplaceBlockBlockBehaviour(ResourceLocation phase, boolean all) {
-        if (all) {
-            BlockStatePhaseContexts.forEach((phase1, blockPhaseContext) -> {
-                ReplaceBlockBlockBehaviour(phase1, false);
-            });
+    public void applyTargetIfPhaseIsNotAchieved(Player player, BlockState source, Consumer<BlockState> targetConsumer) {
+        for (Map.Entry<ResourceLocation, Collection<BlockReplacement>> entry : phaseToContexts.asMap().entrySet()) {
+            if (PhaseUtils.hadPlayerOrLevelAchievedPhase(entry.getKey(), player)) continue;
+            BlockState target = BlockPhaseManager.INSTANCE.getReplacedBlockState(source);
+            if (source != target) {
+                targetConsumer.accept(target);
+                return;
+            }
         }
-
-        BlockStatePhaseContexts.get(phase).forEach(context -> {
-            ReplaceBlockBlockBehaviour(context.getSourceBlock(), context.getReplaceBlock());
-//            try {
-//                Class<?> blockClass = context.getSourceBlock().getBlock().getClass();
-//
-//                for (Field field : blockClass.getDeclaredFields()) {
-//                    field.setAccessible(true);
-//                    Object replaceValue = field.get(context.getReplaceBlock().getBlock());
-//
-//                    field.set(context.getSourceBlock(), replaceValue);
-//                    field.set(context.getReplaceBlock().getBlock(), field.get(context.getSourceBlock().getBlock()));
-//                }
-//            } catch (IllegalAccessException e) {
-//                PhaseJourney.LOGGER.error("Failed to replace block behaviour", e);
-//            }
-        });
-
     }
-//}
 
-    public void ReplaceBlockBlockBehaviour(BlockState sourceBlock, BlockState replaceBlock) {
-        sourceBlock.getBlock().hasCollision = replaceBlock.getBlock().hasCollision;
-        sourceBlock.getBlock().explosionResistance = replaceBlock.getBlock().explosionResistance;
-        sourceBlock.getBlock().isRandomlyTicking = replaceBlock.getBlock().isRandomlyTicking;
-        sourceBlock.getBlock().soundType = replaceBlock.getBlock().soundType;
-        sourceBlock.getBlock().friction = replaceBlock.getBlock().friction;
-        sourceBlock.getBlock().speedFactor = replaceBlock.getBlock().speedFactor;
-        sourceBlock.getBlock().jumpFactor = replaceBlock.getBlock().jumpFactor;
-        sourceBlock.getBlock().dynamicShape = replaceBlock.getBlock().dynamicShape;
-        sourceBlock.getBlock().requiredFeatures = replaceBlock.getBlock().requiredFeatures;
-        sourceBlock.getBlock().properties = replaceBlock.getBlock().properties;
-        sourceBlock.getBlock().drops = replaceBlock.getBlock().drops;
-        sourceBlock.getBlock().lootTableSupplier = replaceBlock.getBlock().lootTableSupplier;
+    public BlockState replaceSourceIfPhaseIsNotAchieved(Player player, BlockState source) {
+        for (Map.Entry<ResourceLocation, Collection<BlockReplacement>> entry : phaseToContexts.asMap().entrySet()) {
+            if (PhaseUtils.hadPlayerOrLevelAchievedPhase(entry.getKey(), player)) continue;
+            BlockState target = BlockPhaseManager.INSTANCE.getReplacedBlockState(source);
+            if (source != target) {
+                return target;
+            }
+        }
+        return source;
+    }
+
+    public BlockState getReplacedBlockState(BlockState source) {
+        BlockReplacement replacement = blockStateReplacements.get(source);
+        if (replacement == null) return source;
+        return replacement.getTarget();
+    }
+
+    public void registerBlockReplacement(ResourceLocation phase, BlockReplacement blockReplacement) {
+        Item sourceItem = blockReplacement.getSource().getBlock().asItem();
+        Item targetItem = blockReplacement.getTarget().getBlock().asItem();
+        ItemReplacement itemReplacement = new ItemReplacement(phase, sourceItem, targetItem);
+        ItemPhaseManager.INSTANCE.registerItemReplacement(phase, itemReplacement);
     }
 }

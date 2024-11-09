@@ -5,7 +5,6 @@ import net.neoforged.bus.api.Event;
 import net.neoforged.bus.api.ICancellableEvent;
 import net.neoforged.fml.event.IModBusEvent;
 import org.confluence.phase_journey.common.phase.PhaseRegisterContext;
-import org.confluence.phase_journey.common.phase.block.BlockPhaseManager;
 
 import java.util.function.Consumer;
 
@@ -29,7 +28,7 @@ public class PhaseJourneyEvent extends Event {
     public static class Register extends PhaseJourneyEvent implements IModBusEvent {
         public void phaseRegister(Consumer<PhaseRegisterContext> consumer) {
             consumer.accept(PhaseRegisterContext.INSTANCE);
-            BlockPhaseManager.INSTANCE.ReplaceBlockBlockBehaviour(null, true);
+            //BlockPhaseManager.INSTANCE.replaceBlockProperties(null, true);
         }
     }
 }

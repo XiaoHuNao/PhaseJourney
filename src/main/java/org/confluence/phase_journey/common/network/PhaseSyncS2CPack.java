@@ -12,7 +12,7 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import org.confluence.phase_journey.PhaseJourney;
-import org.confluence.phase_journey.common.attachment.PhaseCapability;
+import org.confluence.phase_journey.common.attachment.PhaseAttachmemnt;
 import org.confluence.phase_journey.common.init.PJAttachments;
 import org.confluence.phase_journey.common.mixed.ILevelRenderer;
 import org.jetbrains.annotations.NotNull;
@@ -45,7 +45,7 @@ public record PhaseSyncS2CPack(ResourceLocation phase, boolean add) implements C
     public static class Client {
         public static void handle(PhaseSyncS2CPack packet, Player player) {
             Minecraft minecraft = Minecraft.getInstance();
-            PhaseCapability phaseCap = player.getData(PJAttachments.PHASE_CAPABILITY.get());
+            PhaseAttachmemnt phaseCap = player.getData(PJAttachments.PHASE.get());
             if (packet.add()) {
                 phaseCap.addPhase(packet.phase());
             } else {

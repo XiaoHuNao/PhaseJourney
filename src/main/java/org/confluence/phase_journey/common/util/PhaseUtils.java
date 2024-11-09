@@ -14,12 +14,16 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import org.confluence.phase_journey.common.init.PJAttachments;
 
 public class PhaseUtils {
-    public static boolean ContainsPhase(ResourceLocation phase, Player player) {
-        return player.getData(PJAttachments.PHASE_CAPABILITY.get()).getPhases().contains(phase);
+    public static boolean hadPlayerReachedPhase(ResourceLocation phase, Player player) {
+        return player.getData(PJAttachments.PHASE).getPhases().contains(phase);
     }
 
-    public static boolean ContainsPhase(ResourceLocation phase, Level level) {
-        return level.getData(PJAttachments.PHASE_CAPABILITY.get()).getPhases().contains(phase);
+    public static boolean hadLevelFinishedPhase(ResourceLocation phase, Level level) {
+        return level.getData(PJAttachments.PHASE).getPhases().contains(phase);
+    }
+
+    public static boolean hadPlayerOrLevelAchievedPhase(ResourceLocation phase, Player player) {
+        return hadPlayerReachedPhase(phase, player) || hadLevelFinishedPhase(phase, player.level());
     }
 
     public static ObjectArrayList<ItemStack> getReplaceBlockLoot(LootParams.Builder params, BlockState blockState) {
