@@ -10,8 +10,7 @@ import net.minecraft.commands.arguments.EntityArgument;
 
 public class PhaseJourneyCommands {
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext context, Commands.CommandSelection commandSelection) {
-        LiteralCommandNode<CommandSourceStack> phaseJourney = Commands.literal("phase_journey")
-                .requires(sourceStack -> sourceStack.hasPermission(4)).build();
+        LiteralCommandNode<CommandSourceStack> phaseJourney = Commands.literal("phase_journey").requires(sourceStack -> sourceStack.hasPermission(4)).build();
 
         dispatcher.getRoot().addChild(phaseJourney);
 
@@ -20,13 +19,10 @@ public class PhaseJourneyCommands {
         phaseJourney.addChild(player);
         phaseJourney.addChild(world);
 
-        Commands.literal("add")
-                .then(Commands.argument("phase", StringArgumentType.word()))
-                .executes(sourceStack -> {
-                    addPhase(sourceStack.getSource(), StringArgumentType.getString(sourceStack, "phase"));
-                    return 1;
-                }).build();
-
+        Commands.literal("add").then(Commands.argument("phase", StringArgumentType.word())).executes(sourceStack -> {
+            addPhase(sourceStack.getSource(), StringArgumentType.getString(sourceStack, "phase"));
+            return 1;
+        }).build();
 
         LiteralCommandNode<CommandSourceStack> build = Commands.literal("list")
                 .then(Commands.argument("targets", EntityArgument.entities())).build();
@@ -37,5 +33,4 @@ public class PhaseJourneyCommands {
     private static void addPhase(CommandSourceStack sourceStack, String phase) {
 
     }
-
 }

@@ -11,15 +11,15 @@ import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
-import org.confluence.phase_journey.common.init.ModAttachments;
+import org.confluence.phase_journey.common.init.PJAttachments;
 
 public class PhaseUtils {
     public static boolean ContainsPhase(ResourceLocation phase, Player player) {
-        return player.getData(ModAttachments.PHASE_CAPABILITY.get()).getPhases().contains(phase);
+        return player.getData(PJAttachments.PHASE_CAPABILITY.get()).getPhases().contains(phase);
     }
 
     public static boolean ContainsPhase(ResourceLocation phase, Level level) {
-        return level.getData(ModAttachments.PHASE_CAPABILITY.get()).getPhases().contains(phase);
+        return level.getData(PJAttachments.PHASE_CAPABILITY.get()).getPhases().contains(phase);
     }
 
     public static ObjectArrayList<ItemStack> getReplaceBlockLoot(LootParams.Builder params, BlockState blockState) {

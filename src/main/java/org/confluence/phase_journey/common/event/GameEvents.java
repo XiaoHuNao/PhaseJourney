@@ -6,17 +6,18 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.confluence.phase_journey.PhaseJourney;
 import org.confluence.phase_journey.api.PhaseJourneyEvent;
 import org.confluence.phase_journey.common.attachment.PhaseCapability;
-import org.confluence.phase_journey.common.init.ModAttachments;
+import org.confluence.phase_journey.common.command.PhaseJourneyCommands;
+import org.confluence.phase_journey.common.init.PJAttachments;
 import org.confluence.phase_journey.common.network.PhaseSyncS2CPack;
 import org.confluence.phase_journey.common.phase.block.BlockPhaseContext;
 import org.confluence.phase_journey.common.phase.block.BlockPhaseManager;
@@ -36,7 +37,7 @@ public final class GameEvents {
         }
 
         if (player.isShiftKeyDown()) {
-            PhaseCapability phaseCap = player.getData(ModAttachments.PHASE_CAPABILITY.get());
+            PhaseCapability phaseCap = player.getData(PJAttachments.PHASE_CAPABILITY.get());
             ResourceLocation phase1 = PhaseJourney.asResource("phase_1");
             phaseCap.addPhase(phase1);
             PacketDistributor.sendToPlayer((ServerPlayer) player, new PhaseSyncS2CPack(phase1, true));
@@ -46,13 +47,6 @@ public final class GameEvents {
     @SubscribeEvent
     public static void onPhaseJourneyAdd(PhaseJourneyEvent.Add event) {
         BlockPhaseManager.INSTANCE.ReplaceBlockBlockBehaviour(event.phase, false);
-    }
-
-    @SubscribeEvent
-    public static void onPhaseJourneyRegister(PhaseJourneyEvent.Register event) {
-        event.phaseRegister(context -> {
-            context.blockPhase(PhaseJourney.asResource("phase_1"), Blocks.STONE, Blocks.CRAFTING_TABLE).register();
-        });
     }
 
     @SubscribeEvent
@@ -72,5 +66,10 @@ public final class GameEvents {
         if (replaced != null) {
             event.setCanHarvest(!replaced.requiresCorrectToolForDrops() || player.getInventory().getSelected().isCorrectToolForDrops(replaced));
         }
+    }
+
+    @SubscribeEvent
+    public static void registerCommands(RegisterCommandsEvent event) {
+        PhaseJourneyCommands.register(event.getDispatcher(), event.getBuildContext(), event.getCommandSelection());
     }
 }

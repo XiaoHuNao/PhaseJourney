@@ -24,14 +24,16 @@ public class PhaseCapability implements IPhaseCapability, INBTSerializable<ListT
 
     @Override
     public void addPhase(ResourceLocation phase) {
-        phases.add(phase);
-        NeoForge.EVENT_BUS.post(new PhaseJourneyEvent.Add(phase));
+        if (!NeoForge.EVENT_BUS.post(new PhaseJourneyEvent.Add(phase)).isCanceled()) {
+            phases.add(phase);
+        }
     }
 
     @Override
     public void removePhase(ResourceLocation phase) {
-        phases.remove(phase);
-        NeoForge.EVENT_BUS.post(new PhaseJourneyEvent.Remove(phase));
+        if (!NeoForge.EVENT_BUS.post(new PhaseJourneyEvent.Remove(phase)).isCanceled()) {
+            phases.remove(phase);
+        }
     }
 
     @Override

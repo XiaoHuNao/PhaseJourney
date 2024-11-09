@@ -17,15 +17,17 @@ public class ItemPhaseManager {
     public Multimap<ResourceLocation, ItemPhaseContext> getItemPhaseContexts() {
         return itemPhaseContexts;
     }
+
     public void registerBlockPhase(ResourceLocation phase, ItemPhaseContext itemPhaseContext) {
         itemPhaseContexts.put(phase, itemPhaseContext);
         sourceItemPhaseContexts.put(itemPhaseContext.getSourceItem(), itemPhaseContext);
     }
-    public boolean checkReplaceItem(Item item){
+
+    public boolean checkReplaceItem(Item item) {
         return sourceItemPhaseContexts.containsKey(item);
     }
 
-    public Component getReplaceItemDescription(Item item){
+    public Component getReplaceItemDescription(Item item) {
         return sourceItemPhaseContexts.get(item).getReplaceItem().getDescription();
     }
 }

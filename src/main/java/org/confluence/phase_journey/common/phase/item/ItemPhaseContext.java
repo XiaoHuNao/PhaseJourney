@@ -16,28 +16,31 @@ public class ItemPhaseContext extends PhaseContext {
     private final Item sourceItem;
     private final Item replaceItem;
 
-    public ItemPhaseContext(ResourceLocation phase,int sourceItem, int replaceItem) {
+    public ItemPhaseContext(ResourceLocation phase, int sourceItem, int replaceItem) {
         super(phase);
         this.sourceItem = Item.byId(sourceItem);
         this.replaceItem = Item.byId(replaceItem);
     }
 
-    public ItemPhaseContext(ResourceLocation phase,Item sourceItem, Item replaceItem) {
+    public ItemPhaseContext(ResourceLocation phase, Item sourceItem, Item replaceItem) {
         super(phase);
         this.sourceItem = sourceItem;
         this.replaceItem = replaceItem;
     }
 
-    public Item getSourceItem(){
+    public Item getSourceItem() {
         return sourceItem;
     }
-    public Item getReplaceItem(){
+
+    public Item getReplaceItem() {
         return replaceItem;
     }
-    public int getSourceItemID(){
+
+    public int getSourceItemID() {
         return Item.getId(sourceItem);
     }
-    public int getReplaceItemID(){
+
+    public int getReplaceItemID() {
         return Item.getId(replaceItem);
     }
 }

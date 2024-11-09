@@ -8,7 +8,7 @@ import org.confluence.phase_journey.common.attachment.PhaseCapability;
 
 import java.util.function.Supplier;
 
-public final class ModAttachments {
+public final class PJAttachments {
     public static final DeferredRegister<AttachmentType<?>> TYPES = DeferredRegister.create(NeoForgeRegistries.Keys.ATTACHMENT_TYPES, PhaseJourney.MODID);
 
     public static final Supplier<AttachmentType<PhaseCapability>> PHASE_CAPABILITY = TYPES.register("phase_capability", () -> AttachmentType.serializable(PhaseCapability::new).copyOnDeath().build());
