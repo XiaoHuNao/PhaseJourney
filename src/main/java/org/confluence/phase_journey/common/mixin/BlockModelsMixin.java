@@ -29,7 +29,7 @@ public abstract class BlockModelsMixin {
     private void getBlockModel(BlockState source, CallbackInfoReturnable<BakedModel> callback) {
         LocalPlayer player = Minecraft.getInstance().player;
         if (player == null) return;
-        BlockPhaseManager.INSTANCE.applyTargetIfPhaseIsNotAchieved(player, source, target -> {
+        BlockPhaseManager.INSTANCE.applyTargetIfPlayerNotReachedPhase(player, source, target -> {
             callback.setReturnValue(modelByStateCache.getOrDefault(target, modelManager.getMissingModel()));
         });
     }

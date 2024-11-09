@@ -13,6 +13,6 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 public abstract class BlockBehaviourMixin {
     @ModifyVariable(method = "getDestroyProgress", at = @At("HEAD"), argsOnly = true)
     private BlockState replace(BlockState source, @Local(argsOnly = true) Player player) {
-        return BlockPhaseManager.INSTANCE.replaceSourceIfPhaseIsNotAchieved(player, source);
+        return BlockPhaseManager.INSTANCE.replaceSourceIfPlayerNotReachedPhase(player, source);
     }
 }

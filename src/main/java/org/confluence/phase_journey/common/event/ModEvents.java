@@ -31,7 +31,7 @@ public final class ModEvents {
     @SubscribeEvent
     public static void phaseJourney$register(PhaseJourneyEvent.Register event) {
         event.phaseRegister(context -> {
-            context.blockReplacement(PhaseJourney.asResource("phase_1"), Blocks.STONE, Blocks.CRAFTING_TABLE).register();
+            context.blockReplacement(PhaseJourney.asResource("phase_1"), Blocks.STONE, Blocks.DIRT).register();
         });
     }
 }

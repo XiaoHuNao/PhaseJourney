@@ -22,11 +22,11 @@ public abstract class ServerPlayerGameModeMixin {
 
     @WrapOperation(method = "useItemOn", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/Level;getBlockState(Lnet/minecraft/core/BlockPos;)Lnet/minecraft/world/level/block/state/BlockState;"))
     public BlockState onUseItemOn(Level instance, BlockPos blockPos, Operation<BlockState> original) {
-        return BlockPhaseManager.INSTANCE.replaceSourceIfPhaseIsNotAchieved(player, original.call(instance, blockPos));
+        return BlockPhaseManager.INSTANCE.replaceSourceIfPlayerNotReachedPhase(player, original.call(instance, blockPos));
     }
 
     @WrapOperation(method = "destroyBlock", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/level/ServerLevel;getBlockState(Lnet/minecraft/core/BlockPos;)Lnet/minecraft/world/level/block/state/BlockState;"))
     private BlockState replace(ServerLevel instance, BlockPos blockPos, Operation<BlockState> original) {
-        return BlockPhaseManager.INSTANCE.replaceSourceIfPhaseIsNotAchieved(player, original.call(instance, blockPos));
+        return BlockPhaseManager.INSTANCE.replaceSourceIfPlayerNotReachedPhase(player, original.call(instance, blockPos));
     }
 }

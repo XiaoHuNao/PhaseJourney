@@ -17,6 +17,6 @@ import org.spongepowered.asm.mixin.injection.At;
 public abstract class AbstractContainerMenuMixin {
     @WrapOperation(method = "lambda$stillValid$0", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/Level;getBlockState(Lnet/minecraft/core/BlockPos;)Lnet/minecraft/world/level/block/state/BlockState;"))
     private static BlockState replace(Level instance, BlockPos blockPos, Operation<BlockState> original, @Local(argsOnly = true) Player player, @Local(argsOnly = true) Block block) {
-        return BlockPhaseManager.INSTANCE.replaceSourceIfPhaseIsNotAchieved(player, original.call(instance, blockPos));
+        return BlockPhaseManager.INSTANCE.replaceSourceIfPlayerNotReachedPhase(player, original.call(instance, blockPos));
     }
 }

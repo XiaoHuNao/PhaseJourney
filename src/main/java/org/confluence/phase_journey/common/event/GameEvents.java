@@ -27,10 +27,18 @@ public final class GameEvents {
         if (level.isClientSide || hand != InteractionHand.MAIN_HAND) return;
 
         if (player.isShiftKeyDown()) { // todo just for test
-            PhaseAttachmemnt phaseCap = player.getData(PJAttachments.PHASE);
+            boolean remove = true;
+            PhaseAttachmemnt playerPhase = player.getData(PJAttachments.PHASE);
+            PhaseAttachmemnt levelPhase = level.getData(PJAttachments.PHASE);
             ResourceLocation phase1 = PhaseJourney.asResource("phase_1");
-            phaseCap.addPhase(phase1);
-            PacketDistributor.sendToPlayer((ServerPlayer) player, new PhaseSyncS2CPack(phase1, true));
+            if (remove) {
+                playerPhase.removePhase(phase1);
+                levelPhase.removePhase(phase1);
+            } else {
+                playerPhase.addPhase(phase1);
+                levelPhase.addPhase(phase1);
+            }
+            PacketDistributor.sendToPlayer((ServerPlayer) player, new PhaseSyncS2CPack(phase1, !remove));
         }
     }
 
