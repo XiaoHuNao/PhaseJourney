@@ -15,7 +15,11 @@ import org.confluence.phase_journey.common.network.SyncPhasePacketS2C;
 public final class ModEvents {
     @SubscribeEvent
     public static void loadComplete(FMLLoadCompleteEvent event) {
-        event.enqueueWork(() -> ModLoader.postEvent(new PhaseJourneyEvent.Register()));
+        event.enqueueWork(() -> {
+            PhaseJourneyEvent.Register register = new PhaseJourneyEvent.Register();
+            ModLoader.postEvent(register);
+            register.replaceBlockProperties();
+        });
     }
 
     @SubscribeEvent
@@ -30,8 +34,8 @@ public final class ModEvents {
 
     @SubscribeEvent
     public static void phaseJourney$register(PhaseJourneyEvent.Register event) {
-        event.phaseRegister(context -> {
-            context.blockReplacement(PhaseJourney.asResource("phase_1"), Blocks.STONE, Blocks.DIRT).register();
+        event.phaseRegister(PhaseJourney.asResource("phase_1"), context -> {
+            context.blockReplacement(Blocks.STONE, Blocks.DIRT);
         });
     }
 }

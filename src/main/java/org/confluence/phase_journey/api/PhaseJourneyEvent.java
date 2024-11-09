@@ -5,7 +5,11 @@ import net.neoforged.bus.api.Event;
 import net.neoforged.bus.api.ICancellableEvent;
 import net.neoforged.fml.event.IModBusEvent;
 import org.confluence.phase_journey.common.phase.PhaseRegisterContext;
+import org.confluence.phase_journey.common.phase.block.BlockPhaseManager;
+import org.jetbrains.annotations.ApiStatus;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.function.Consumer;
 
 public class PhaseJourneyEvent extends Event {
@@ -26,8 +30,16 @@ public class PhaseJourneyEvent extends Event {
     }
 
     public static class Register extends PhaseJourneyEvent implements IModBusEvent {
-        public void phaseRegister(Consumer<PhaseRegisterContext> consumer) {
-            consumer.accept(PhaseRegisterContext.INSTANCE);
+        private final Set<ResourceLocation> contexts = new HashSet<>();
+
+        public void phaseRegister(ResourceLocation phase, Consumer<PhaseRegisterContext> consumer) {
+            consumer.accept(new PhaseRegisterContext(phase));
+            contexts.add(phase);
+        }
+
+        @ApiStatus.Internal
+        public void replaceBlockProperties() {
+            contexts.forEach(BlockPhaseManager.INSTANCE::replaceBlockProperties);
         }
     }
 }

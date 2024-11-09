@@ -21,11 +21,11 @@ import java.util.function.Consumer;
 public class BlockPhaseManager {
     public static final BlockPhaseManager INSTANCE = new BlockPhaseManager();
 
-    private final Multimap<ResourceLocation, BlockReplacement> phaseToContexts = ArrayListMultimap.create();
+    private final Multimap<ResourceLocation, BlockReplacement> phaseToReplacements = ArrayListMultimap.create();
     private final BiMap<BlockState, BlockReplacement> blockStateReplacements = HashBiMap.create();
 
     public void registerBlockPhase(ResourceLocation phase, BlockReplacement replacement) {
-        phaseToContexts.put(phase, replacement);
+        phaseToReplacements.put(phase, replacement);
         blockStateReplacements.put(replacement.getSource(), replacement);
         Item sourceItem = replacement.getSource().getBlock().asItem();
         Item targetItem;
@@ -36,7 +36,7 @@ public class BlockPhaseManager {
     }
 
     public void applyTargetIfNotAchievedPhase(Player player, BlockState source, Consumer<BlockState> targetConsumer) {
-        for (Map.Entry<ResourceLocation, Collection<BlockReplacement>> entry : phaseToContexts.asMap().entrySet()) {
+        for (Map.Entry<ResourceLocation, Collection<BlockReplacement>> entry : phaseToReplacements.asMap().entrySet()) {
             if (PhaseUtils.hadPlayerOrLevelAchievedPhase(entry.getKey(), player)) continue;
             BlockState target = getReplacedBlockState(source);
             if (source != target) {
@@ -47,7 +47,7 @@ public class BlockPhaseManager {
     }
 
     public void applyTargetIfPlayerNotReachedPhase(Player player, BlockState source, Consumer<BlockState> targetConsumer) {
-        for (Map.Entry<ResourceLocation, Collection<BlockReplacement>> entry : phaseToContexts.asMap().entrySet()) {
+        for (Map.Entry<ResourceLocation, Collection<BlockReplacement>> entry : phaseToReplacements.asMap().entrySet()) {
             if (PhaseUtils.hadPlayerReachedPhase(entry.getKey(), player)) continue;
             BlockState target = getReplacedBlockState(source);
             if (source != target) {
@@ -58,7 +58,7 @@ public class BlockPhaseManager {
     }
 
     public void applyTargetIfLevelNotFinishedPhase(Level level, BlockState source, Consumer<BlockState> targetConsumer) {
-        for (Map.Entry<ResourceLocation, Collection<BlockReplacement>> entry : phaseToContexts.asMap().entrySet()) {
+        for (Map.Entry<ResourceLocation, Collection<BlockReplacement>> entry : phaseToReplacements.asMap().entrySet()) {
             if (PhaseUtils.hadLevelFinishedPhase(entry.getKey(), level)) continue;
             BlockState target = getReplacedBlockState(source);
             if (source != target) {
@@ -69,7 +69,7 @@ public class BlockPhaseManager {
     }
 
     public BlockState replaceSourceIfNotAchievedPhase(Player player, BlockState source) {
-        for (Map.Entry<ResourceLocation, Collection<BlockReplacement>> entry : phaseToContexts.asMap().entrySet()) {
+        for (Map.Entry<ResourceLocation, Collection<BlockReplacement>> entry : phaseToReplacements.asMap().entrySet()) {
             if (PhaseUtils.hadPlayerOrLevelAchievedPhase(entry.getKey(), player)) continue;
             BlockState target = getReplacedBlockState(source);
             if (source != target) {
@@ -80,7 +80,7 @@ public class BlockPhaseManager {
     }
 
     public BlockState replaceSourceIfPlayerNotReachedPhase(Player player, BlockState source) {
-        for (Map.Entry<ResourceLocation, Collection<BlockReplacement>> entry : phaseToContexts.asMap().entrySet()) {
+        for (Map.Entry<ResourceLocation, Collection<BlockReplacement>> entry : phaseToReplacements.asMap().entrySet()) {
             if (PhaseUtils.hadPlayerReachedPhase(entry.getKey(), player)) continue;
             BlockState target = getReplacedBlockState(source);
             if (source != target) {
@@ -91,7 +91,7 @@ public class BlockPhaseManager {
     }
 
     public BlockState replaceSourceIfLevelNotFinishedPhase(Level level, BlockState source) {
-        for (Map.Entry<ResourceLocation, Collection<BlockReplacement>> entry : phaseToContexts.asMap().entrySet()) {
+        for (Map.Entry<ResourceLocation, Collection<BlockReplacement>> entry : phaseToReplacements.asMap().entrySet()) {
             if (PhaseUtils.hadLevelFinishedPhase(entry.getKey(), level)) continue;
             BlockState target = getReplacedBlockState(source);
             if (source != target) {
@@ -105,5 +105,17 @@ public class BlockPhaseManager {
         BlockReplacement replacement = blockStateReplacements.get(source);
         if (replacement == null) return source;
         return replacement.getTarget();
+    }
+
+    public void replaceBlockProperties(ResourceLocation phase) {
+        for (BlockReplacement replacement : phaseToReplacements.get(phase)) {
+            replacement.replaceProperties();
+        }
+    }
+
+    public void rollbackBlockProperties(ResourceLocation phase) {
+        for (BlockReplacement replacement : phaseToReplacements.get(phase)) {
+            replacement.rollbackProperties();
+        }
     }
 }

@@ -16,16 +16,16 @@ import java.util.function.Consumer;
 public class ItemPhaseManager {
     public static final ItemPhaseManager INSTANCE = new ItemPhaseManager();
 
-    private final Multimap<ResourceLocation, ItemReplacement> phaseToContexts = ArrayListMultimap.create();
+    private final Multimap<ResourceLocation, ItemReplacement> phaseToReplacements = ArrayListMultimap.create();
     private final BiMap<Item, ItemReplacement> itemReplacements = HashBiMap.create();
 
     public void registerItemReplacement(ResourceLocation phase, ItemReplacement replacement) {
-        phaseToContexts.put(phase, replacement);
+        phaseToReplacements.put(phase, replacement);
         itemReplacements.put(replacement.getSource(), replacement);
     }
 
     public void applyTargetIfPhaseIsNotAchieved(Player player, Item source, Consumer<Item> targetConsumer) {
-        for (Map.Entry<ResourceLocation, Collection<ItemReplacement>> entry : phaseToContexts.asMap().entrySet()) {
+        for (Map.Entry<ResourceLocation, Collection<ItemReplacement>> entry : phaseToReplacements.asMap().entrySet()) {
             if (PhaseUtils.hadPlayerOrLevelAchievedPhase(entry.getKey(), player)) continue;
             Item target = getReplacedItem(source);
             if (source != target) {
@@ -36,7 +36,7 @@ public class ItemPhaseManager {
     }
 
     public Item replaceSourceIfPhaseIsNotAchieved(Player player, Item source) {
-        for (Map.Entry<ResourceLocation, Collection<ItemReplacement>> entry : phaseToContexts.asMap().entrySet()) {
+        for (Map.Entry<ResourceLocation, Collection<ItemReplacement>> entry : phaseToReplacements.asMap().entrySet()) {
             if (PhaseUtils.hadPlayerOrLevelAchievedPhase(entry.getKey(), player)) continue;
             Item target = getReplacedItem(source);
             if (source != target) {
