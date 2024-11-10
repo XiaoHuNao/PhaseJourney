@@ -1,0 +1,1 @@
+org.confluence.phase_journey.compat.kubejs.ModKubeJSPlugin
