@@ -9,13 +9,13 @@
         "BlockBehaviour$BlockStateBaseMixin",
         "BlockBehaviourAccessor",
         "BlockBehaviourMixin",
-        "ItemMixin",
         "ServerPlayerGameModeMixin"
     ],
     "client": [
-        "BlockModelsMixin",
-        "ItemModelShaperMixin",
-        "LevelRendererMixin"
+        "client.BlockModelsMixin",
+        "client.ClientItemMixin",
+        "client.ItemModelShaperMixin",
+        "client.LevelRendererMixin"
     ],
     "injectors": {
         "defaultRequire": 1

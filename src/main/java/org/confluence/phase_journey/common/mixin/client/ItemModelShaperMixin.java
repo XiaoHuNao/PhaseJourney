@@ -1,4 +1,4 @@
-package org.confluence.phase_journey.common.mixin;
+package org.confluence.phase_journey.common.mixin.client;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
