@@ -13,7 +13,7 @@ public class BlockReplacement extends PhaseContext {
             ResourceLocation.CODEC.fieldOf("phase").forGetter(BlockReplacement::getPhase),
             BlockState.CODEC.fieldOf("source").forGetter(BlockReplacement::getSource),
             BlockState.CODEC.fieldOf("target").forGetter(BlockReplacement::getTarget),
-            Codec.BOOL.fieldOf("allow_destroy").forGetter(BlockReplacement::isDestroyAllowed)
+            Codec.BOOL.fieldOf("allow_destroy").orElse(true).forGetter(BlockReplacement::isDestroyAllowed)
     ).apply(instance, BlockReplacement::new));
 
     private final BlockState source;
@@ -43,8 +43,8 @@ public class BlockReplacement extends PhaseContext {
         this.properties = BlockBehaviour.Properties.ofFullCopy(source.getBlock());
     }
 
-    public BlockReplacement isDestroyAllowed(boolean canDestroy) {
-        this.allowDestroy = canDestroy;
+    public BlockReplacement denyDestroy() {
+        this.allowDestroy = false;
         return this;
     }
 

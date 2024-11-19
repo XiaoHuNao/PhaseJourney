@@ -1,4 +1,4 @@
-package org.confluence.phase_journey.common.mixin;
+package org.confluence.phase_journey.mixin;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.ItemStack;

@@ -1,7 +1,7 @@
 {
     "required": true,
     "minVersion": "0.8",
-    "package": "org.confluence.phase_journey.common.mixin",
+    "package": "org.confluence.phase_journey.mixin",
     "compatibilityLevel": "JAVA_21",
     "refmap": "phase_journey.refmap.json",
     "mixins": [

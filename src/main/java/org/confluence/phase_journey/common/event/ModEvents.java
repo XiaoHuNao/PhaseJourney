@@ -1,6 +1,5 @@
 package org.confluence.phase_journey.common.event;
 
-import net.minecraft.world.level.block.Blocks;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModLoader;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -30,12 +29,5 @@ public final class ModEvents {
                 SyncPhasePacketS2C.STREAM_CODEC,
                 SyncPhasePacketS2C::handle
         );
-    }
-
-    @SubscribeEvent
-    public static void phaseJourney$register(PhaseJourneyEvent.Register event) {
-        event.phaseRegister(PhaseJourney.asResource("phase_1"), context -> {
-            context.blockReplacement(Blocks.STONE, Blocks.DIRT);
-        });
     }
 }

@@ -1,4 +1,4 @@
-package org.confluence.phase_journey.common.mixin;
+package org.confluence.phase_journey.mixin;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;

@@ -101,6 +101,15 @@ public class BlockPhaseManager {
         return source;
     }
 
+    public boolean denyDestroy(Player player, BlockState source) {
+        for (Map.Entry<ResourceLocation, Collection<BlockReplacement>> entry : phaseToReplacements.asMap().entrySet()) {
+            if (PhaseUtils.hadPlayerReachedPhase(entry.getKey(), player)) continue;
+            BlockReplacement replacement = blockStateReplacements.get(source);
+            if (replacement != null) return !replacement.isDestroyAllowed();
+        }
+        return false;
+    }
+
     public BlockState getReplacedBlockState(BlockState source) {
         BlockReplacement replacement = blockStateReplacements.get(source);
         if (replacement == null) return source;
