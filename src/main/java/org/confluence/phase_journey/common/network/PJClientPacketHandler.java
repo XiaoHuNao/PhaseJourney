@@ -6,8 +6,8 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import org.confluence.phase_journey.common.attachment.PhaseAttachment;
 import org.confluence.phase_journey.common.init.PJAttachments;
-import org.confluence.phase_journey.common.mixed.ILevelRenderer;
 import org.confluence.phase_journey.common.phase.block.BlockPhaseManager;
+import org.confluence.phase_journey.mixed.ILevelRenderer;
 
 @OnlyIn(Dist.CLIENT)
 public final class PJClientPacketHandler {
