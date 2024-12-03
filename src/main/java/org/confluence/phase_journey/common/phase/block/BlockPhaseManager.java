@@ -30,72 +30,80 @@ public class BlockPhaseManager {
         Item sourceItem = replacement.getSource().getBlock().asItem();
         Item targetItem;
         if (sourceItem != Items.AIR && (targetItem = replacement.getTarget().getBlock().asItem()) != Items.AIR) {
-            ItemReplacement itemReplacement = new ItemReplacement(phase, sourceItem, targetItem);
-            ItemPhaseManager.INSTANCE.registerItemReplacement(phase, itemReplacement);
+            if (!ItemPhaseManager.INSTANCE.hasReplacedItem(sourceItem)) { // 确保物品只注册一次
+                ItemReplacement itemReplacement = new ItemReplacement(phase, sourceItem, targetItem);
+                ItemPhaseManager.INSTANCE.registerItemReplacement(phase, itemReplacement);
+            }
         }
     }
 
     public void applyTargetIfNotAchievedPhase(Player player, BlockState source, Consumer<BlockState> targetConsumer) {
+        BlockReplacement replacement = blockStateReplacements.get(source);
+        if (replacement == null) return;
         for (Map.Entry<ResourceLocation, Collection<BlockReplacement>> entry : phaseToReplacements.asMap().entrySet()) {
             if (PhaseUtils.hadPlayerOrLevelAchievedPhase(entry.getKey(), player)) continue;
-            BlockState target = getReplacedBlockState(source);
-            if (source != target) {
-                targetConsumer.accept(target);
+            if (entry.getValue().contains(replacement)) {
+                targetConsumer.accept(replacement.getTarget());
                 return;
             }
         }
     }
 
     public void applyTargetIfPlayerNotReachedPhase(Player player, BlockState source, Consumer<BlockState> targetConsumer) {
+        BlockReplacement replacement = blockStateReplacements.get(source);
+        if (replacement == null) return;
         for (Map.Entry<ResourceLocation, Collection<BlockReplacement>> entry : phaseToReplacements.asMap().entrySet()) {
             if (PhaseUtils.hadPlayerReachedPhase(entry.getKey(), player)) continue;
-            BlockState target = getReplacedBlockState(source);
-            if (source != target) {
-                targetConsumer.accept(target);
+            if (entry.getValue().contains(replacement)) {
+                targetConsumer.accept(replacement.getTarget());
                 return;
             }
         }
     }
 
     public void applyTargetIfLevelNotFinishedPhase(Level level, BlockState source, Consumer<BlockState> targetConsumer) {
+        BlockReplacement replacement = blockStateReplacements.get(source);
+        if (replacement == null) return;
         for (Map.Entry<ResourceLocation, Collection<BlockReplacement>> entry : phaseToReplacements.asMap().entrySet()) {
             if (PhaseUtils.hadLevelFinishedPhase(entry.getKey(), level)) continue;
-            BlockState target = getReplacedBlockState(source);
-            if (source != target) {
-                targetConsumer.accept(target);
+            if (entry.getValue().contains(replacement)) {
+                targetConsumer.accept(replacement.getTarget());
                 return;
             }
         }
     }
 
     public BlockState replaceSourceIfNotAchievedPhase(Player player, BlockState source) {
+        BlockReplacement replacement = blockStateReplacements.get(source);
+        if (replacement == null) return source;
         for (Map.Entry<ResourceLocation, Collection<BlockReplacement>> entry : phaseToReplacements.asMap().entrySet()) {
             if (PhaseUtils.hadPlayerOrLevelAchievedPhase(entry.getKey(), player)) continue;
-            BlockState target = getReplacedBlockState(source);
-            if (source != target) {
-                return target;
+            if (entry.getValue().contains(replacement)) {
+                return replacement.getTarget();
             }
         }
         return source;
     }
 
     public BlockState replaceSourceIfPlayerNotReachedPhase(Player player, BlockState source) {
+        BlockReplacement replacement = blockStateReplacements.get(source);
+        if (replacement == null) return source;
         for (Map.Entry<ResourceLocation, Collection<BlockReplacement>> entry : phaseToReplacements.asMap().entrySet()) {
             if (PhaseUtils.hadPlayerReachedPhase(entry.getKey(), player)) continue;
-            BlockState target = getReplacedBlockState(source);
-            if (source != target) {
-                return target;
+            if (entry.getValue().contains(replacement)) {
+                return replacement.getTarget();
             }
         }
         return source;
     }
 
     public BlockState replaceSourceIfLevelNotFinishedPhase(Level level, BlockState source) {
+        BlockReplacement replacement = blockStateReplacements.get(source);
+        if (replacement == null) return source;
         for (Map.Entry<ResourceLocation, Collection<BlockReplacement>> entry : phaseToReplacements.asMap().entrySet()) {
             if (PhaseUtils.hadLevelFinishedPhase(entry.getKey(), level)) continue;
-            BlockState target = getReplacedBlockState(source);
-            if (source != target) {
-                return target;
+            if (entry.getValue().contains(replacement)) {
+                return replacement.getTarget();
             }
         }
         return source;

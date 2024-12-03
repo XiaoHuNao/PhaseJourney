@@ -25,22 +25,24 @@ public class ItemPhaseManager {
     }
 
     public void applyTargetIfPhaseIsNotAchieved(Player player, Item source, Consumer<Item> targetConsumer) {
+        ItemReplacement replacement = itemReplacements.get(source);
+        if (replacement == null) return;
         for (Map.Entry<ResourceLocation, Collection<ItemReplacement>> entry : phaseToReplacements.asMap().entrySet()) {
             if (PhaseUtils.hadPlayerOrLevelAchievedPhase(entry.getKey(), player)) continue;
-            Item target = getReplacedItem(source);
-            if (source != target) {
-                targetConsumer.accept(target);
+            if (entry.getValue().contains(replacement)) {
+                targetConsumer.accept(replacement.getTarget());
                 return;
             }
         }
     }
 
     public Item replaceSourceIfPhaseIsNotAchieved(Player player, Item source) {
+        ItemReplacement replacement = itemReplacements.get(source);
+        if (replacement == null) return source;
         for (Map.Entry<ResourceLocation, Collection<ItemReplacement>> entry : phaseToReplacements.asMap().entrySet()) {
             if (PhaseUtils.hadPlayerOrLevelAchievedPhase(entry.getKey(), player)) continue;
-            Item target = getReplacedItem(source);
-            if (source != target) {
-                return target;
+            if (entry.getValue().contains(replacement)) {
+                return replacement.getTarget();
             }
         }
         return source;
@@ -50,5 +52,9 @@ public class ItemPhaseManager {
         ItemReplacement replacement = itemReplacements.get(source);
         if (replacement == null) return source;
         return replacement.getTarget();
+    }
+
+    public boolean hasReplacedItem(Item source) {
+        return itemReplacements.containsKey(source);
     }
 }
