@@ -98,10 +98,21 @@ repositories {
         url = "https://maven.architectury.dev"
         content { includeGroup "dev.architectury" }
     }
+
     maven {
-        name = 'KubeJS and Rhino'
-        url = "https://maven.saps.dev/minecraft"
-        content { includeGroup "dev.latvian.mods" }
+        url = 'https://jitpack.io'
+        content {
+            includeGroup "com.github.rtyley"
+        }
+    }
+
+    maven {
+        // saps.dev Maven (KubeJS and Rhino)
+        url = "https://maven.saps.dev/releases"
+        content {
+            includeGroup "dev.latvian.mods"
+            includeGroup "dev.latvian.apps"
+        }
     }
 }
 
@@ -111,9 +122,8 @@ dependencies {
     compileOnly ("dev.latvian.mods:rhino:${rhino_version}")
     compileOnly ("dev.architectury:architectury-neoforge:${architectury_version}")
 
-//    runtimeOnly ("dev.latvian.mods:kubejs-neoforge:${kubejs_version}")
-//    runtimeOnly ("dev.latvian.mods:rhino:${rhino_version}")
-//    runtimeOnly ("dev.architectury:architectury-neoforge:${architectury_version}")
+    runtimeOnly ("dev.latvian.mods:kubejs-neoforge:${kubejs_version}")
+    runtimeOnly ("dev.latvian.mods:rhino:${rhino_version}")
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.
