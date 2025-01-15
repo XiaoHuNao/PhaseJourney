@@ -8,7 +8,7 @@ import net.neoforged.neoforge.network.PacketDistributor;
 import org.confluence.phase_journey.common.attachment.PhaseAttachment;
 import org.confluence.phase_journey.common.init.PJAttachments;
 import org.confluence.phase_journey.common.network.SyncPhasePacketS2C;
-import org.confluence.phase_journey.common.phase.block.BlockPhaseManager;
+import org.confluence.phase_journey.common.phase.PhaseManager;
 
 import java.util.List;
 
@@ -32,13 +32,13 @@ public class PhaseUtils {
             playerPhase.addPhase(phase);
             if (players.stream().allMatch(serverPlayer -> serverPlayer.getData(PJAttachments.PHASE).getPhases().contains(phase))) {
                 player.level().getData(PJAttachments.PHASE).addPhase(phase); // 当所有玩家抵达该阶段时，才更新服务端世界阶段
-                BlockPhaseManager.INSTANCE.rollbackBlockProperties(phase);
+                PhaseManager.BLOCK.rollbackBlockProperties(phase);
             }
         } else {
             playerPhase.removePhase(phase);
             if (players.stream().noneMatch(serverPlayer -> serverPlayer.getData(PJAttachments.PHASE).getPhases().contains(phase))) {
                 player.level().getData(PJAttachments.PHASE).removePhase(phase); // 当没有玩家抵达该阶段时，才更新服务端世界阶段
-                BlockPhaseManager.INSTANCE.replaceBlockProperties(phase);
+                PhaseManager.BLOCK.replaceBlockProperties(phase);
             }
         }
         PacketDistributor.sendToPlayer(player, new SyncPhasePacketS2C(phase, add));

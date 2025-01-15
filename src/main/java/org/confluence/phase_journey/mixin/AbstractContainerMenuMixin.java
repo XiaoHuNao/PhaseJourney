@@ -9,7 +9,7 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import org.confluence.phase_journey.common.phase.block.BlockPhaseManager;
+import org.confluence.phase_journey.common.phase.PhaseManager;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
@@ -17,6 +17,6 @@ import org.spongepowered.asm.mixin.injection.At;
 public abstract class AbstractContainerMenuMixin {
     @WrapOperation(method = "lambda$stillValid$0", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/Level;getBlockState(Lnet/minecraft/core/BlockPos;)Lnet/minecraft/world/level/block/state/BlockState;"))
     private static BlockState replace(Level instance, BlockPos blockPos, Operation<BlockState> original, @Local(argsOnly = true) Player player, @Local(argsOnly = true) Block block) {
-        return BlockPhaseManager.INSTANCE.replaceSourceIfPlayerNotReachedPhase(player, original.call(instance, blockPos));
+        return PhaseManager.BLOCK.replaceSourceIfPlayerNotReachedPhase(player, original.call(instance, blockPos));
     }
 }

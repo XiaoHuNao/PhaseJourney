@@ -4,8 +4,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.neoforged.bus.api.Event;
 import net.neoforged.bus.api.ICancellableEvent;
 import net.neoforged.fml.event.IModBusEvent;
+import org.confluence.phase_journey.common.phase.PhaseManager;
 import org.confluence.phase_journey.common.phase.PhaseRegisterContext;
-import org.confluence.phase_journey.common.phase.block.BlockPhaseManager;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.util.HashSet;
@@ -39,7 +39,7 @@ public class PhaseJourneyEvent extends Event {
 
         @ApiStatus.Internal
         public void replaceBlockProperties() {
-            contexts.forEach(BlockPhaseManager.INSTANCE::replaceBlockProperties);
+            contexts.forEach(PhaseManager.BLOCK::replaceBlockProperties);
         }
     }
 }

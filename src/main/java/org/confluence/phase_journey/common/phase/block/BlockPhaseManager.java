@@ -10,7 +10,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import org.confluence.phase_journey.common.phase.item.ItemPhaseManager;
+import org.confluence.phase_journey.common.phase.PhaseManager;
 import org.confluence.phase_journey.common.phase.item.ItemReplacement;
 import org.confluence.phase_journey.common.util.PhaseUtils;
 
@@ -19,8 +19,6 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 public class BlockPhaseManager {
-    public static final BlockPhaseManager INSTANCE = new BlockPhaseManager();
-
     private final Multimap<ResourceLocation, BlockReplacement> phaseToReplacements = ArrayListMultimap.create();
     private final BiMap<BlockState, BlockReplacement> blockStateReplacements = HashBiMap.create();
 
@@ -30,9 +28,9 @@ public class BlockPhaseManager {
         Item sourceItem = replacement.getSource().getBlock().asItem();
         Item targetItem;
         if (sourceItem != Items.AIR && (targetItem = replacement.getTarget().getBlock().asItem()) != Items.AIR) {
-            if (!ItemPhaseManager.INSTANCE.hasReplacedItem(sourceItem)) { // 确保物品只注册一次
+            if (!PhaseManager.ITEM.hasReplacedItem(sourceItem)) { // 确保物品只注册一次
                 ItemReplacement itemReplacement = new ItemReplacement(phase, sourceItem, targetItem);
-                ItemPhaseManager.INSTANCE.registerItemReplacement(phase, itemReplacement);
+                PhaseManager.ITEM.registerItemReplacement(phase, itemReplacement);
             }
         }
     }

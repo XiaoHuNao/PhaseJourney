@@ -13,7 +13,7 @@ import org.confluence.phase_journey.PhaseJourney;
 import org.confluence.phase_journey.common.command.PhaseJourneyCommands;
 import org.confluence.phase_journey.common.init.PJAttachments;
 import org.confluence.phase_journey.common.network.SyncPhasePacketS2C;
-import org.confluence.phase_journey.common.phase.block.BlockPhaseManager;
+import org.confluence.phase_journey.common.phase.PhaseManager;
 
 import java.util.Set;
 
@@ -30,7 +30,7 @@ public final class GameEvents {
         }
         if (player.server.getPlayerList().getPlayerCount() == 1) { // 新打开的世界需要初始化
             for (ResourceLocation phase : levelPhases) {
-                BlockPhaseManager.INSTANCE.rollbackBlockProperties(phase);
+                PhaseManager.BLOCK.rollbackBlockProperties(phase);
             }
         }
     }

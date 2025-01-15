@@ -6,7 +6,7 @@ import net.minecraft.client.renderer.block.BlockModelShaper;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.ModelManager;
 import net.minecraft.world.level.block.state.BlockState;
-import org.confluence.phase_journey.common.phase.block.BlockPhaseManager;
+import org.confluence.phase_journey.common.phase.PhaseManager;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -29,7 +29,7 @@ public abstract class BlockModelsMixin {
     private void getBlockModel(BlockState source, CallbackInfoReturnable<BakedModel> callback) {
         LocalPlayer player = Minecraft.getInstance().player;
         if (player == null) return;
-        BlockPhaseManager.INSTANCE.applyTargetIfPlayerNotReachedPhase(player, source, target -> {
+        PhaseManager.BLOCK.applyTargetIfPlayerNotReachedPhase(player, source, target -> {
             callback.setReturnValue(modelByStateCache.getOrDefault(target, modelManager.getMissingModel()));
         });
     }

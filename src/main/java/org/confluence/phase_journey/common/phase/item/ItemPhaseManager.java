@@ -14,8 +14,6 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 public class ItemPhaseManager {
-    public static final ItemPhaseManager INSTANCE = new ItemPhaseManager();
-
     private final Multimap<ResourceLocation, ItemReplacement> phaseToReplacements = ArrayListMultimap.create();
     private final BiMap<Item, ItemReplacement> itemReplacements = HashBiMap.create();
 
