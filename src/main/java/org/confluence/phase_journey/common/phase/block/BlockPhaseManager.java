@@ -122,6 +122,10 @@ public class BlockPhaseManager {
         return replacement.getTarget();
     }
 
+    public boolean hasReplacement(BlockState source) {
+        return blockStateReplacements.get(source) != null;
+    }
+
     public void replaceBlockProperties(ResourceLocation phase) {
         for (BlockReplacement replacement : phaseToReplacements.get(phase)) {
             replacement.replaceProperties();

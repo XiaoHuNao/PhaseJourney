@@ -21,13 +21,6 @@ public class BlockReplacement extends PhaseContext {
     private boolean allowDestroy = true;
     private final transient BlockBehaviour.Properties properties;
 
-    public BlockReplacement(ResourceLocation phase, Block source, Block target) {
-        super(phase);
-        this.source = source.defaultBlockState();
-        this.target = target.defaultBlockState();
-        this.properties = BlockBehaviour.Properties.ofFullCopy(source);
-    }
-
     public BlockReplacement(ResourceLocation phase, BlockState source, BlockState target) {
         super(phase);
         this.source = source;
