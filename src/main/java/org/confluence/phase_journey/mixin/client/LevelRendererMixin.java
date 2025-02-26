@@ -1,5 +1,6 @@
 package org.confluence.phase_journey.mixin.client;
 
+import net.caffeinemc.mods.sodium.client.render.SodiumWorldRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.LevelRenderer;
@@ -7,8 +8,6 @@ import net.minecraft.client.renderer.ViewArea;
 import net.minecraft.client.renderer.chunk.SectionRenderDispatcher;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.chunk.ChunkSource;
-import net.minecraft.world.level.chunk.LevelChunk;
 import org.confluence.phase_journey.mixed.ILevelRenderer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -46,14 +45,13 @@ public abstract class LevelRendererMixin implements ILevelRenderer {
         Level level = player.level();
         int startY = level.getMinSection();
         int endY = level.getMaxSection();
-        ChunkSource chunkSource = level.getChunkSource();
+        int cx, cz;
         for (int x = -viewDistance; x < viewDistance; ++x) {
+            cx = chunkPos.x + x;
             for (int z = -viewDistance; z < viewDistance; ++z) {
-                LevelChunk chunk = chunkSource.getChunk(chunkPos.x + x, chunkPos.z + z, false);
-                if (chunk != null && viewArea != null) {
-                    for (int y = startY; y <= endY; ++y) {
-                        viewArea.setDirty(chunk.getPos().x, y, chunk.getPos().z, false);
-                    }
+                cz = chunkPos.z + z;
+                for (int y = startY; y <= endY; ++y) {
+                    SodiumWorldRenderer.instance().scheduleRebuildForChunk(cx, y, cz, false);
                 }
             }
         }

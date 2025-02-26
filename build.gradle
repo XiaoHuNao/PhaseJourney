@@ -131,6 +131,8 @@ dependencies {
 
     //runtimeOnly ("dev.latvian.mods:kubejs-neoforge:${kubejs_version}")
     //runtimeOnly ("dev.latvian.mods:rhino:${rhino_version}")
+
+    compileOnly "curse.maven:sodium-394468:6211307"
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.
