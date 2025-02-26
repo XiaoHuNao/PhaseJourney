@@ -1,6 +1,5 @@
 package org.confluence.phase_journey.mixin.client;
 
-import net.caffeinemc.mods.sodium.client.render.SodiumWorldRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.LevelRenderer;
@@ -51,7 +50,7 @@ public abstract class LevelRendererMixin implements ILevelRenderer {
             for (int z = -viewDistance; z < viewDistance; ++z) {
                 cz = chunkPos.z + z;
                 for (int y = startY; y <= endY; ++y) {
-                    SodiumWorldRenderer.instance().scheduleRebuildForChunk(cx, y, cz, false);
+                    ILevelRenderer.scheduleRebuildForChunk(cx, y, cz);
                 }
             }
         }
