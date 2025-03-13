@@ -9,7 +9,8 @@
         "BlockBehaviour$BlockStateBaseMixin",
         "BlockBehaviourAccessor",
         "BlockBehaviourMixin",
-        "ServerPlayerGameModeMixin"
+        "ServerPlayerGameModeMixin",
+        "create.BlockHelperMixin"
     ],
     "client": [
         "client.BlockModelsMixin",

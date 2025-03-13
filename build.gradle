@@ -3,7 +3,7 @@ plugins {
     id 'eclipse'
     id 'idea'
     id 'maven-publish'
-    id 'net.neoforged.moddev' version '2.0.76'
+    id 'net.neoforged.moddev' version '2.0.78'
 }
 
 version = mod_version
@@ -118,6 +118,14 @@ repositories {
     maven {
         url = "https://www.cursemaven.com"
     }
+    maven { url = "https://maven.createmod.net" } // Create
+    maven {
+        name = "Fuzs Mod Resources"
+        url = "https://raw.githubusercontent.com/Fuzss/modresources/main/maven/"
+    }
+    maven { // Registrate
+        url "https://maven.ithundxr.dev/snapshots"
+    }
 }
 
 
@@ -133,6 +141,12 @@ dependencies {
     //runtimeOnly ("dev.latvian.mods:rhino:${rhino_version}")
 
     compileOnly "curse.maven:sodium-394468:6211307"
+
+    compileOnly("com.simibubi.create:create-${minecraft_version}:${create_version}:slim") { transitive = false }
+    //runtimeOnly("com.simibubi.create:create-${minecraft_version}:${create_version}:slim") { transitive = false }
+    //runtimeOnly("net.createmod.ponder:Ponder-NeoForge-${minecraft_version}:${ponder_version}")
+    //runtimeOnly("dev.engine-room.flywheel:flywheel-neoforge-${minecraft_version}:${flywheel_version}")
+    //runtimeOnly("com.tterrag.registrate:Registrate:${registrate_version}")
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.
