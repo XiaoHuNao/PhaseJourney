@@ -6,9 +6,8 @@
     "refmap": "phase_journey.refmap.json",
     "mixins": [
         "AbstractContainerMenuMixin",
-        "BlockBehaviour$BlockStateBaseMixin",
-        "BlockBehaviourAccessor",
         "BlockBehaviourMixin",
+        "BlockBehaviourMixin$BlockStateBaseMixin",
         "ServerPlayerGameModeMixin",
         "create.BlockHelperMixin"
     ],
