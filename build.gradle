@@ -92,6 +92,21 @@ neoForge {
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 repositories {
+    maven {
+        url "https://maven.latvian.dev/releases"
+        content {
+            includeGroup "dev.latvian.mods"
+            includeGroup "dev.latvian.apps"
+        }
+    }
+
+    maven {
+        url 'https://jitpack.io'
+        content {
+            includeGroup "com.github.rtyley"
+        }
+    }
+
     mavenLocal()
     maven {
         name = 'Architectury API'
@@ -99,21 +114,7 @@ repositories {
         content { includeGroup "dev.architectury" }
     }
 
-    maven {
-        url = 'https://jitpack.io'
-        content {
-            includeGroup "com.github.rtyley"
-        }
-    }
 
-    maven {
-        // saps.dev Maven (KubeJS and Rhino)
-        url = "https://maven.saps.dev/releases"
-        content {
-            includeGroup "dev.latvian.mods"
-            includeGroup "dev.latvian.apps"
-        }
-    }
 
     maven {
         url = "https://www.cursemaven.com"
@@ -130,7 +131,7 @@ repositories {
 
 
 dependencies {
-    compileOnly("dev.latvian.mods:kubejs-neoforge:${kubejs_version}")
+    api("dev.latvian.mods:kubejs-neoforge:$kubejs_version")
 
     compileOnly "curse.maven:jade-324717:6011258"
     runtimeOnly "curse.maven:jade-324717:6011258"
