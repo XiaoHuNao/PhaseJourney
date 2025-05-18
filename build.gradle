@@ -93,7 +93,8 @@ sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 repositories {
     maven {
-        url "https://maven.latvian.dev/releases"
+        name = "LatvianMaven"
+        url = "https://maven.latvian.dev/releases"
         content {
             includeGroup "dev.latvian.mods"
             includeGroup "dev.latvian.apps"
@@ -101,20 +102,11 @@ repositories {
     }
 
     maven {
-        url 'https://jitpack.io'
+        url = 'https://jitpack.io'
         content {
             includeGroup "com.github.rtyley"
         }
     }
-
-    mavenLocal()
-    maven {
-        name = 'Architectury API'
-        url = "https://maven.architectury.dev"
-        content { includeGroup "dev.architectury" }
-    }
-
-
 
     maven {
         url = "https://www.cursemaven.com"
@@ -132,6 +124,7 @@ repositories {
 
 dependencies {
     api("dev.latvian.mods:kubejs-neoforge:$kubejs_version")
+    interfaceInjectionData("dev.latvian.mods:kubejs-neoforge:$kubejs_version")
 
     compileOnly "curse.maven:jade-324717:6011258"
     runtimeOnly "curse.maven:jade-324717:6011258"
