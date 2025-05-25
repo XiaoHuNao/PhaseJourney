@@ -17,7 +17,7 @@ import net.neoforged.neoforge.network.PacketDistributor;
 import org.confluence.phase_journey.PhaseJourney;
 import org.confluence.phase_journey.common.command.PhaseJourneyCommands;
 import org.confluence.phase_journey.common.init.PJAttachments;
-import org.confluence.phase_journey.common.network.SyncPhasePacketS2C;
+import org.confluence.phase_journey.common.network.SyncPlayerPhasePacketS2C;
 import org.confluence.phase_journey.common.phase.PhaseManager;
 
 import java.util.Set;
@@ -31,7 +31,7 @@ public final class GameEvents {
         Set<ResourceLocation> levelPhases = player.level().getData(PJAttachments.PHASE).getPhases();
         allPhases.addAll(levelPhases);
         for (ResourceLocation phase : allPhases) {
-            PacketDistributor.sendToPlayer(player, new SyncPhasePacketS2C(phase, true)); // 新来的玩家沿袭已达成的阶段
+            PacketDistributor.sendToPlayer(player, new SyncPlayerPhasePacketS2C(phase, true)); // 新来的玩家沿袭已达成的阶段
         }
         if (player.server.getPlayerList().getPlayerCount() == 1) { // 新打开的世界需要初始化
             for (ResourceLocation phase : levelPhases) {
