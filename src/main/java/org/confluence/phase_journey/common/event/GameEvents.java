@@ -48,7 +48,7 @@ public final class GameEvents {
     @SubscribeEvent
     public static void blockDrops(BlockDropsEvent event) {
         BlockState source;
-        if (event.isCanceled() || !PhaseManager.BLOCK.hasReplacement(source = event.getState())) return;
+        if (!PhaseManager.BLOCK.hasReplacement(source = event.getState())) return;
         ServerLevel level = event.getLevel();
         if (event.getBreaker() instanceof Player player) {
             PhaseManager.BLOCK.applyTargetIfPlayerNotReachedPhase(player, source, target -> {
