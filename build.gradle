@@ -132,7 +132,7 @@ dependencies {
     //runtimeOnly ("dev.latvian.mods:kubejs-neoforge:${kubejs_version}")
     //runtimeOnly ("dev.latvian.mods:rhino:${rhino_version}")
 
-    compileOnly "curse.maven:sodium-394468:6211307"
+    compileOnly "curse.maven:sodium-394468:6382651"
 
     compileOnly("com.simibubi.create:create-${minecraft_version}:${create_version}") { transitive = false }
     //runtimeOnly("com.simibubi.create:create-${minecraft_version}:${create_version}:slim") { transitive = false }
