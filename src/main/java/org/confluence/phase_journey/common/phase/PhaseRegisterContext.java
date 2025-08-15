@@ -19,7 +19,7 @@ public class PhaseRegisterContext {
     }
 
     public @Nullable BlockReplacement blockReplacement(BlockState source, BlockState target) {
-        if (source.hasBlockEntity() || target.hasBlockEntity()) return null;
+        if (source.hasBlockEntity() || target.hasBlockEntity() || source.isAir() || target.isAir()) return null;
         BlockReplacement replacement = new BlockReplacement(phase, source, target);
         PhaseManager.BLOCK.registerBlockPhase(phase, replacement);
         return replacement;
