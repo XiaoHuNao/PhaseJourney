@@ -36,7 +36,7 @@ public class BlockPhaseManager {
     }
 
     public void applyTargetIfNotAchievedPhase(Player player, BlockState source, Consumer<BlockState> targetConsumer) {
-        if (source.isAir()) return;
+        if (source.hasBlockEntity() || source.isAir()) return;
         BlockReplacement replacement = blockStateReplacements.get(source);
         if (replacement == null) return;
         for (Map.Entry<ResourceLocation, Collection<BlockReplacement>> entry : phaseToReplacements.asMap().entrySet()) {
@@ -49,7 +49,7 @@ public class BlockPhaseManager {
     }
 
     public void applyTargetIfPlayerNotReachedPhase(Player player, BlockState source, Consumer<BlockState> targetConsumer) {
-        if (source.isAir()) return;
+        if (source.hasBlockEntity() || source.isAir()) return;
         BlockReplacement replacement = blockStateReplacements.get(source);
         if (replacement == null) return;
         for (Map.Entry<ResourceLocation, Collection<BlockReplacement>> entry : phaseToReplacements.asMap().entrySet()) {
@@ -62,7 +62,7 @@ public class BlockPhaseManager {
     }
 
     public void applyTargetIfLevelNotFinishedPhase(Level level, BlockState source, Consumer<BlockState> targetConsumer) {
-        if (source.isAir()) return;
+        if (source.hasBlockEntity() || source.isAir()) return;
         BlockReplacement replacement = blockStateReplacements.get(source);
         if (replacement == null) return;
         for (Map.Entry<ResourceLocation, Collection<BlockReplacement>> entry : phaseToReplacements.asMap().entrySet()) {
@@ -75,7 +75,7 @@ public class BlockPhaseManager {
     }
 
     public BlockState replaceSourceIfNotAchievedPhase(Player player, BlockState source) {
-        if (source.isAir()) return source;
+        if (source.hasBlockEntity() || source.isAir()) return source;
         BlockReplacement replacement = blockStateReplacements.get(source);
         if (replacement == null) return source;
         for (Map.Entry<ResourceLocation, Collection<BlockReplacement>> entry : phaseToReplacements.asMap().entrySet()) {
@@ -88,7 +88,7 @@ public class BlockPhaseManager {
     }
 
     public BlockState replaceSourceIfPlayerNotReachedPhase(Player player, BlockState source) {
-        if (source.isAir()) return source;
+        if (source.hasBlockEntity() || source.isAir()) return source;
         BlockReplacement replacement = blockStateReplacements.get(source);
         if (replacement == null) return source;
         for (Map.Entry<ResourceLocation, Collection<BlockReplacement>> entry : phaseToReplacements.asMap().entrySet()) {
@@ -101,7 +101,7 @@ public class BlockPhaseManager {
     }
 
     public BlockState replaceSourceIfLevelNotFinishedPhase(Level level, BlockState source) {
-        if (source.isAir()) return source;
+        if (source.hasBlockEntity() || source.isAir()) return source;
         BlockReplacement replacement = blockStateReplacements.get(source);
         if (replacement == null) return source;
         for (Map.Entry<ResourceLocation, Collection<BlockReplacement>> entry : phaseToReplacements.asMap().entrySet()) {
@@ -114,7 +114,7 @@ public class BlockPhaseManager {
     }
 
     public boolean denyDestroy(Player player, BlockState source) {
-        if (source.isAir()) return false;
+        if (source.hasBlockEntity() || source.isAir()) return false;
         for (Map.Entry<ResourceLocation, Collection<BlockReplacement>> entry : phaseToReplacements.asMap().entrySet()) {
             if (PhaseUtils.hadPlayerReachedPhase(entry.getKey(), player)) continue;
             BlockReplacement replacement = blockStateReplacements.get(source);
@@ -124,14 +124,14 @@ public class BlockPhaseManager {
     }
 
     public BlockState getReplacedBlockState(BlockState source) {
-        if (source.isAir()) return source;
+        if (source.hasBlockEntity() || source.isAir()) return source;
         BlockReplacement replacement = blockStateReplacements.get(source);
         if (replacement == null) return source;
         return replacement.getTarget();
     }
 
     public boolean hasReplacement(BlockState source) {
-        if (source.isAir()) return false;
+        if (source.hasBlockEntity() || source.isAir()) return false;
         return blockStateReplacements.get(source) != null;
     }
 
