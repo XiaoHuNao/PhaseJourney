@@ -14,6 +14,7 @@
     "client": [
         "client.BlockModelsMixin",
         "client.ClientItemMixin",
+        "client.DebugScreenOverlayMixin",
         "client.ItemModelShaperMixin",
         "client.LevelRendererMixin"
     ],
