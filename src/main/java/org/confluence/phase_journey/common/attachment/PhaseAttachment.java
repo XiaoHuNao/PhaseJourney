@@ -6,14 +6,20 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.common.util.INBTSerializable;
 import org.confluence.phase_journey.api.IPhaseCapability;
 import org.confluence.phase_journey.api.PhaseJourneyEvent;
-import org.jetbrains.annotations.NotNull;
+import org.confluence.phase_journey.common.init.PJAttachments;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Set;
 
+@ParametersAreNonnullByDefault
 public class PhaseAttachment implements IPhaseCapability, INBTSerializable<ListTag> {
     private final Set<ResourceLocation> phases = Sets.newHashSet();
 
@@ -37,7 +43,7 @@ public class PhaseAttachment implements IPhaseCapability, INBTSerializable<ListT
     }
 
     @Override
-    public ListTag serializeNBT(HolderLookup.@NotNull Provider provider) {
+    public ListTag serializeNBT(HolderLookup.Provider provider) {
         ListTag tags = new ListTag();
         for (ResourceLocation phase : phases) {
             ResourceLocation.CODEC.encodeStart(NbtOps.INSTANCE, phase).result().ifPresent(tags::add);
@@ -46,9 +52,25 @@ public class PhaseAttachment implements IPhaseCapability, INBTSerializable<ListT
     }
 
     @Override
-    public void deserializeNBT(HolderLookup.@NotNull Provider provider, ListTag nbt) {
+    public void deserializeNBT(HolderLookup.Provider provider, ListTag nbt) {
         for (Tag tag : nbt) {
             ResourceLocation.CODEC.parse(NbtOps.INSTANCE, tag).result().ifPresent(phases::add);
         }
+    }
+
+    public static PhaseAttachment of(Player player) {
+        return player.getData(PJAttachments.PHASE);
+    }
+
+    public static PhaseAttachment of(Level level) {
+        if (level.isClientSide) {
+            return level.getData(PJAttachments.PHASE); // 客户端世界直接获取
+        } else {
+            return ((ServerLevel) level).getServer().overworld().getData(PJAttachments.PHASE); // 服务端世界仅获取主世界的
+        }
+    }
+
+    public static PhaseAttachment of(MinecraftServer server) {
+        return of(server.overworld());
     }
 }
