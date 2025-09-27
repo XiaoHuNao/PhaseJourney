@@ -141,8 +141,20 @@ public class BlockPhaseManager {
         }
     }
 
+    public void replaceAllProperties() {
+        for (BlockReplacement replacement : phaseToReplacements.values()) {
+            replacement.replaceProperties();
+        }
+    }
+
     public void rollbackBlockProperties(ResourceLocation phase) {
         for (BlockReplacement replacement : phaseToReplacements.get(phase)) {
+            replacement.rollbackProperties();
+        }
+    }
+
+    public void rollbackAllProperties() {
+        for (BlockReplacement replacement : phaseToReplacements.values()) {
             replacement.rollbackProperties();
         }
     }

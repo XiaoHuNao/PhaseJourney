@@ -1,6 +1,5 @@
 package org.confluence.phase_journey.common.event;
 
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.Block;
@@ -9,22 +8,13 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.level.BlockDropsEvent;
-import net.neoforged.neoforge.event.server.ServerStartedEvent;
 import org.confluence.phase_journey.PhaseJourney;
-import org.confluence.phase_journey.common.attachment.PhaseAttachment;
 import org.confluence.phase_journey.common.command.PhaseJourneyCommands;
 import org.confluence.phase_journey.common.network.SyncPhasePacketS2C;
 import org.confluence.phase_journey.common.phase.PhaseManager;
 
 @EventBusSubscriber(bus = EventBusSubscriber.Bus.GAME, modid = PhaseJourney.MODID)
 public final class PJGameEvents {
-    @SubscribeEvent
-    public static void serverStarted(ServerStartedEvent event) {
-        for (ResourceLocation phase : PhaseAttachment.of(event.getServer()).getPhases()) {
-            PhaseManager.BLOCK.rollbackBlockProperties(phase);
-        }
-    }
-
     @SubscribeEvent
     public static void playerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
         SyncPhasePacketS2C.sync2Player4All((ServerPlayer) event.getEntity(), true);
