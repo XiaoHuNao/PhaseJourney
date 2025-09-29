@@ -1,0 +1,26 @@
+{
+  "commands.phase_journey.invalid_phase": "无效的阶段名称: %s",
+  "commands.phase_journey.phase_already_exists": "阶段已存在",
+  "commands.phase_journey.phase_not_found": "阶段不存在",
+  
+  "commands.phase_journey.player.add.success": "成功为 %2$d 个玩家添加了阶段 %1$s",
+  "commands.phase_journey.player.remove.success": "成功从 %2$d 个玩家移除了阶段 %1$s",
+  "commands.phase_journey.player.list.header": "玩家 %s 的阶段列表 (%d 个):",
+  "commands.phase_journey.player.list.empty": "玩家 %s 没有任何阶段",
+  "commands.phase_journey.player.clear.success": "成功清除了 %1$d 个玩家的所有阶段",
+  
+  "commands.phase_journey.world.add.success": "成功为世界添加了阶段 %s",
+  "commands.phase_journey.world.remove.success": "成功从世界移除了阶段 %s",
+  "commands.phase_journey.world.list.header": "世界阶段列表 (%d 个):",
+  "commands.phase_journey.world.list.empty": "世界没有任何阶段",
+  "commands.phase_journey.world.clear.success": "成功清除了世界的所有阶段",
+  
+  "phase_journey.dimension.enter_denied": "您还没有达到进入 %s 维度的阶段要求",
+  "phase_journey.dimension.leave_denied": "您还没有达到离开 %s 维度的阶段要求",
+  "phase_journey.dimension.visit_limit_reached": "您已达到 %s 维度的最大访问次数限制 (%d 次)",
+  "phase_journey.dimension.visit_limit_warning": "您还可以访问 %s 维度 %d 次",
+  "phase_journey.dimension.visit_count_reset": "已重置您对 %s 维度的访问次数",
+  "phase_journey.dimension.visit_count_set": "已将您对 %s 维度的访问次数设置为 %d",
+  "phase_journey.dimension.visit_count_cleared": "已清除您对所有维度的访问记录"
+}
+

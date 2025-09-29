@@ -1,0 +1,26 @@
+{
+  "commands.phase_journey.invalid_phase": "Invalid phase name: %s",
+  "commands.phase_journey.phase_already_exists": "Phase already exists",
+  "commands.phase_journey.phase_not_found": "Phase not found",
+  
+  "commands.phase_journey.player.add.success": "Successfully added phase %1$s to %2$d players",
+  "commands.phase_journey.player.remove.success": "Successfully removed phase %1$s from %2$d players",
+  "commands.phase_journey.player.list.header": "Player %s's phases (%d total):",
+  "commands.phase_journey.player.list.empty": "Player %s has no phases",
+  "commands.phase_journey.player.clear.success": "Successfully cleared all phases from %1$d players",
+  
+  "commands.phase_journey.world.add.success": "Successfully added phase %s to world",
+  "commands.phase_journey.world.remove.success": "Successfully removed phase %s from world",
+  "commands.phase_journey.world.list.header": "World phases (%d total):",
+  "commands.phase_journey.world.list.empty": "World has no phases",
+  "commands.phase_journey.world.clear.success": "Successfully cleared all phases from world",
+  
+  "phase_journey.dimension.enter_denied": "You have not reached the phase requirement to enter %s dimension",
+  "phase_journey.dimension.leave_denied": "You have not reached the phase requirement to leave %s dimension",
+  "phase_journey.dimension.visit_limit_reached": "You have reached the maximum visit limit for %s dimension (%d times)",
+  "phase_journey.dimension.visit_limit_warning": "You can still visit %s dimension %d more times",
+  "phase_journey.dimension.visit_count_reset": "Reset your visit count for %s dimension",
+  "phase_journey.dimension.visit_count_set": "Set your visit count for %s dimension to %d",
+  "phase_journey.dimension.visit_count_cleared": "Cleared all your dimension visit records"
+}
+
