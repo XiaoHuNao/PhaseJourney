@@ -2,7 +2,8 @@ package org.confluence.phase_journey.integration.jade;
 
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.state.BlockState;
-import org.confluence.phase_journey.common.phase.PhaseManager;
+import org.confluence.phase_journey.common.init.PJPhaseContextTypes;
+import org.confluence.phase_journey.common.phase.block.BlockPhaseManager;
 import snownee.jade.api.BlockAccessor;
 import snownee.jade.api.IWailaClientRegistration;
 import snownee.jade.api.IWailaPlugin;
@@ -16,7 +17,7 @@ public class ModJadePlugin implements IWailaPlugin {
             if (accessor instanceof BlockAccessor blockAccessor) {
                 Player player = accessor.getPlayer();
                 BlockState source = blockAccessor.getBlockState();
-                BlockState target = PhaseManager.BLOCK.replaceSourceIfPlayerNotReachedPhase(player, source);
+                BlockState target = BlockPhaseManager.MANAGER.replaceSourceIfPlayerNotReachedPhase(player, source);
                 if (source != target) {
                     return registration.blockAccessor().from(blockAccessor).blockState(target).build();
                 }

@@ -6,7 +6,7 @@ import net.minecraft.client.renderer.ItemModelShaper;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import org.confluence.phase_journey.common.phase.PhaseManager;
+import org.confluence.phase_journey.common.phase.item.ItemPhaseManager;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -25,7 +25,7 @@ public abstract class ItemModelShaperMixin {
     private void getModel(ItemStack itemStack, CallbackInfoReturnable<BakedModel> callback) {
         LocalPlayer player = Minecraft.getInstance().player;
         if (player == null) return;
-        PhaseManager.ITEM.applyTargetIfPhaseIsNotAchieved(player, itemStack.getItem(), target -> {
+        ItemPhaseManager.MANAGER.applyTargetIfPhaseIsNotAchieved(player, itemStack.getItem(), target -> {
             callback.setReturnValue(getItemModel(target));
         });
     }

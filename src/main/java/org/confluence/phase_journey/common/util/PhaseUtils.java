@@ -6,8 +6,10 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import org.confluence.phase_journey.common.attachment.PhaseAttachment;
+import org.confluence.phase_journey.common.init.PJRegistries;
 import org.confluence.phase_journey.common.network.SyncPhasePacketS2C;
-import org.confluence.phase_journey.common.phase.PhaseManager;
+import org.confluence.phase_journey.common.phase.PhaseContextType;
+import org.confluence.phase_journey.common.phase.block.BlockPhaseManager;
 
 import java.util.stream.Stream;
 
@@ -67,13 +69,17 @@ public class PhaseUtils {
             PhaseAttachment.of(player).addPhase(phase);
             if (players.allMatch(serverPlayer -> hadPlayerReachedPhase(phase, serverPlayer))) {
                 PhaseAttachment.of(player.level()).addPhase(phase);
-                PhaseManager.BLOCK.rollbackBlockProperties(phase);
+                for (PhaseContextType<?> type : PJRegistries.PHASE_CONTEXT_TYPE) {
+                    type.manager().broadcastPhaseChangeToClient(phase, true);
+                }
             }
         } else {
             PhaseAttachment.of(player).removePhase(phase);
             if (players.noneMatch(serverPlayer -> hadPlayerReachedPhase(phase, serverPlayer))) {
                 PhaseAttachment.of(player.level()).removePhase(phase);
-                PhaseManager.BLOCK.replaceBlockProperties(phase);
+                for (PhaseContextType<?> type : PJRegistries.PHASE_CONTEXT_TYPE) {
+                    type.manager().broadcastPhaseChangeToClient(phase, false);
+                }
             }
         }
         SyncPhasePacketS2C.sync2Player(player, add, phase);
@@ -91,13 +97,18 @@ public class PhaseUtils {
             for (ServerPlayer player : level.getServer().getPlayerList().getPlayers()) {
                 PhaseAttachment.of(player).addPhase(phase);
             }
-            PhaseManager.BLOCK.rollbackBlockProperties(phase);
+
+            for (PhaseContextType<?> type : PJRegistries.PHASE_CONTEXT_TYPE) {
+                type.manager().achieveLevelPhase(level,phase, true);
+            }
         } else {
             PhaseAttachment.of(level).removePhase(phase);
             for (ServerPlayer player : level.getServer().getPlayerList().getPlayers()) {
                 PhaseAttachment.of(player).removePhase(phase);
             }
-            PhaseManager.BLOCK.replaceBlockProperties(phase);
+            for (PhaseContextType<?> type : PJRegistries.PHASE_CONTEXT_TYPE) {
+                type.manager().achieveLevelPhase(level,phase, false);
+            }
         }
         SyncPhasePacketS2C.sync2All(add, phase);
     }

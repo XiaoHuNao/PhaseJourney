@@ -4,13 +4,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.neoforged.bus.api.Event;
 import net.neoforged.bus.api.ICancellableEvent;
 import net.neoforged.fml.event.IModBusEvent;
-import org.confluence.phase_journey.common.phase.PhaseManager;
-import org.confluence.phase_journey.common.phase.PhaseRegisterContext;
-import org.jetbrains.annotations.ApiStatus;
-
-import java.util.HashSet;
-import java.util.Set;
-import java.util.function.Consumer;
+import org.confluence.phase_journey.common.phase.*;
 
 public class PhaseJourneyEvent extends Event {
     public static class Add extends PhaseJourneyEvent implements ICancellableEvent {
@@ -30,16 +24,11 @@ public class PhaseJourneyEvent extends Event {
     }
 
     public static class Register extends PhaseJourneyEvent implements IModBusEvent {
-        private final Set<ResourceLocation> contexts = new HashSet<>();
 
-        public void phaseRegister(ResourceLocation phase, Consumer<PhaseRegisterContext> consumer) {
-            consumer.accept(new PhaseRegisterContext(phase));
-            contexts.add(phase);
+        public <T extends PhaseContext> void register(PhaseContextType<T> type, T  context) {
+            PhaseManager<T> manager = type.manager();
+            manager.register(context.getPhase(), context);
         }
 
-        @ApiStatus.Internal
-        public void replaceBlockProperties() {
-            contexts.forEach(PhaseManager.BLOCK::replaceBlockProperties);
-        }
     }
 }

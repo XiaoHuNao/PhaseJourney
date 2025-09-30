@@ -6,7 +6,8 @@ import net.minecraft.world.entity.player.Player;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import org.confluence.phase_journey.common.attachment.PhaseAttachment;
-import org.confluence.phase_journey.common.phase.PhaseManager;
+import org.confluence.phase_journey.common.init.PJRegistries;
+import org.confluence.phase_journey.common.phase.PhaseContextType;
 import org.confluence.phase_journey.mixed.ILevelRenderer;
 
 import java.util.List;
@@ -20,13 +21,17 @@ public final class PJClientPacketHandler {
             for (ResourceLocation phase : phases) {
                 p.addPhase(phase);
                 l.addPhase(phase);
-                PhaseManager.BLOCK.rollbackBlockProperties(phase); // 更新客户端世界
+                for (PhaseContextType<?> type : PJRegistries.PHASE_CONTEXT_TYPE) {
+                    type.manager().broadcastPhaseChangeToClient(phase, true);
+                }
             }
         } else {
             for (ResourceLocation phase : phases) {
                 p.removePhase(phase);
                 l.removePhase(phase);
-                PhaseManager.BLOCK.replaceBlockProperties(phase); // 更新客户端世界
+                for (PhaseContextType<?> type : PJRegistries.PHASE_CONTEXT_TYPE) {
+                    type.manager().broadcastPhaseChangeToClient(phase, false);
+                }
             }
         }
         ((ILevelRenderer) Minecraft.getInstance().levelRenderer).phase_journey$rebuildAllChunks();

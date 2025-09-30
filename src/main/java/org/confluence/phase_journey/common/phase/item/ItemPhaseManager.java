@@ -7,25 +7,30 @@ import com.google.common.collect.Multimap;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
+import org.confluence.phase_journey.common.phase.PhaseManager;
 import org.confluence.phase_journey.common.util.PhaseUtils;
 
 import java.util.Collection;
 import java.util.Map;
 import java.util.function.Consumer;
 
-public class ItemPhaseManager {
-    private final Multimap<ResourceLocation, ItemReplacement> phaseToReplacements = ArrayListMultimap.create();
-    private final BiMap<Item, ItemReplacement> itemReplacements = HashBiMap.create();
+public class ItemPhaseManager extends PhaseManager<ItemPhaseContext> {
+    public static final ItemPhaseManager MANAGER = new ItemPhaseManager();
 
-    public void registerItemReplacement(ResourceLocation phase, ItemReplacement replacement) {
-        phaseToReplacements.put(phase, replacement);
-        itemReplacements.put(replacement.getSource(), replacement);
+
+    private final BiMap<Item, ItemPhaseContext> itemReplacements = HashBiMap.create();
+
+    @Override
+    public void register(ResourceLocation phase, ItemPhaseContext phaseContext) {
+        super.register(phase, phaseContext);
+
+        itemReplacements.put(phaseContext.getSource(), phaseContext);
     }
 
     public void applyTargetIfPhaseIsNotAchieved(Player player, Item source, Consumer<Item> targetConsumer) {
-        ItemReplacement replacement = itemReplacements.get(source);
+        ItemPhaseContext replacement = itemReplacements.get(source);
         if (replacement == null) return;
-        for (Map.Entry<ResourceLocation, Collection<ItemReplacement>> entry : phaseToReplacements.asMap().entrySet()) {
+        for (Map.Entry<ResourceLocation, Collection<ItemPhaseContext>> entry : phaseContexts.asMap().entrySet()) {
             if (PhaseUtils.hadPlayerOrLevelAchievedPhase(entry.getKey(), player)) continue;
             if (entry.getValue().contains(replacement)) {
                 targetConsumer.accept(replacement.getTarget());
@@ -35,9 +40,9 @@ public class ItemPhaseManager {
     }
 
     public Item replaceSourceIfPhaseIsNotAchieved(Player player, Item source) {
-        ItemReplacement replacement = itemReplacements.get(source);
+        ItemPhaseContext replacement = itemReplacements.get(source);
         if (replacement == null) return source;
-        for (Map.Entry<ResourceLocation, Collection<ItemReplacement>> entry : phaseToReplacements.asMap().entrySet()) {
+        for (Map.Entry<ResourceLocation, Collection<ItemPhaseContext>> entry : phaseContexts.asMap().entrySet()) {
             if (PhaseUtils.hadPlayerOrLevelAchievedPhase(entry.getKey(), player)) continue;
             if (entry.getValue().contains(replacement)) {
                 return replacement.getTarget();
@@ -47,7 +52,7 @@ public class ItemPhaseManager {
     }
 
     public Item getReplacedItem(Item source) {
-        ItemReplacement replacement = itemReplacements.get(source);
+        ItemPhaseContext replacement = itemReplacements.get(source);
         if (replacement == null) return source;
         return replacement.getTarget();
     }
