@@ -12,6 +12,7 @@ import org.confluence.phase_journey.common.init.PJPhaseContextTypes;
 import org.confluence.phase_journey.common.init.PJRegistries;
 import org.confluence.phase_journey.common.phase.block.BlockPhaseManager;
 import org.confluence.phase_journey.common.phase.dimension.DimensionPhaseManager;
+import org.confluence.phase_journey.common.phase.interaction.EntityInteractionPhaseManager;
 import org.confluence.phase_journey.common.phase.item.ItemPhaseManager;
 import org.confluence.phase_journey.common.phase.enchantment.EnchantmentPhaseManager;
 import org.slf4j.Logger;
@@ -32,6 +33,7 @@ public class PhaseJourney {
 //        NeoForge.EVENT_BUS.register(ItemPhaseManager.MANAGER);
         NeoForge.EVENT_BUS.register(DimensionPhaseManager.MANAGER);
         NeoForge.EVENT_BUS.register(EnchantmentPhaseManager.MANAGER);
+        NeoForge.EVENT_BUS.register(EntityInteractionPhaseManager.MANAGER);
     }
 
     public static ResourceLocation asResource(String path) {

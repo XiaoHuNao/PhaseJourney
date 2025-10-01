@@ -1,13 +1,9 @@
 package org.confluence.phase_journey.common.event;
 
-import com.xiaohunao.xhn_lib.common.event.FlexibleRegisterEvent;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
-import net.neoforged.neoforge.event.LootTableLoadEvent;
 import org.confluence.phase_journey.PhaseJourney;
 import org.confluence.phase_journey.api.PhaseJourneyEvent;
 import org.confluence.phase_journey.common.init.PJPhaseContextTypes;
@@ -23,6 +19,7 @@ import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 import org.confluence.phase_journey.common.phase.PhaseContextType;
 import org.confluence.phase_journey.common.phase.dimension.DimensionPhaseContext;
 import org.confluence.phase_journey.common.phase.enchantment.EnchantmentPhaseContext;
+import org.confluence.phase_journey.common.phase.interaction.EntityInteractionPhaseContext;
 
 @EventBusSubscriber(bus = EventBusSubscriber.Bus.MOD, modid = PhaseJourney.MODID)
 public final class PJModEvents {
@@ -54,9 +51,15 @@ public final class PJModEvents {
         event.register(PJPhaseContextTypes.DIMENSION.get(), DimensionPhaseContext.denyLeave(PhaseJourney.asResource("test"), Level.NETHER));
 
         event.register(PJPhaseContextTypes.ENCHANTMENT.get(), new EnchantmentPhaseContext(
-            PhaseJourney.asResource("advanced_enchantment_lock"),
+                PhaseJourney.asResource("test"),
             PhaseJourney.asResourceKey(Registries.ENCHANTMENT, ResourceLocation.withDefaultNamespace("protection")),
             false, false
         ));
+
+        event.register(PJPhaseContextTypes.ENTITY_INTERACTION.get(), EntityInteractionPhaseContext.builder(PhaseJourney.asResource("test"), EntityType.HORSE)
+                .allowTame(false)
+                .build()
+        );
+
     }
 }

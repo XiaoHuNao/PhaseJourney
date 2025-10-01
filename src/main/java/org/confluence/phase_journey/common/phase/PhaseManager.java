@@ -11,9 +11,9 @@ import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import org.confluence.phase_journey.common.phase.block.BlockPhaseContext;
+import org.confluence.phase_journey.api.IPhaseContext;
 
-public class PhaseManager <T extends PhaseContext> {
+public class PhaseManager <T extends IPhaseContext> {
     protected final Multimap<ResourceLocation, T> phaseContexts = ArrayListMultimap.create();
 
     public void register(ResourceLocation phase, T phaseContext) {

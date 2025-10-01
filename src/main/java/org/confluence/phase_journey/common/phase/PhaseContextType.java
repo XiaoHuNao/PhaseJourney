@@ -1,4 +1,7 @@
 package org.confluence.phase_journey.common.phase;
 
-public record PhaseContextType<T extends PhaseContext>(Class<T> clazz, PhaseManager<T> manager) {
+import org.confluence.phase_journey.api.IPhaseContext;
+import org.confluence.phase_journey.common.phase.item.ItemPhaseContext;
+
+public record PhaseContextType<T extends IPhaseContext>(Class<T> clazz, PhaseManager<T> manager) {
 }

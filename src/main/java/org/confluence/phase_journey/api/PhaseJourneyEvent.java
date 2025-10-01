@@ -25,7 +25,7 @@ public class PhaseJourneyEvent extends Event {
 
     public static class Register extends PhaseJourneyEvent implements IModBusEvent {
 
-        public <T extends PhaseContext> void register(PhaseContextType<T> type, T  context) {
+        public <T extends IPhaseContext> void register(PhaseContextType<T> type, T  context) {
             PhaseManager<T> manager = type.manager();
             manager.register(context.getPhase(), context);
         }
