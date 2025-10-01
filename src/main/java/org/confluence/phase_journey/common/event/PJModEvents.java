@@ -1,6 +1,13 @@
 package org.confluence.phase_journey.common.event;
 
+import com.xiaohunao.xhn_lib.common.event.FlexibleRegisterEvent;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
+import net.neoforged.neoforge.event.LootTableLoadEvent;
 import org.confluence.phase_journey.PhaseJourney;
 import org.confluence.phase_journey.api.PhaseJourneyEvent;
 import org.confluence.phase_journey.common.init.PJPhaseContextTypes;
@@ -15,6 +22,7 @@ import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 import org.confluence.phase_journey.common.phase.PhaseContextType;
 import org.confluence.phase_journey.common.phase.dimension.DimensionPhaseContext;
+import org.confluence.phase_journey.common.phase.enchantment.EnchantmentPhaseContext;
 
 @EventBusSubscriber(bus = EventBusSubscriber.Bus.MOD, modid = PhaseJourney.MODID)
 public final class PJModEvents {
@@ -44,5 +52,11 @@ public final class PJModEvents {
     @SubscribeEvent
     public static void onPhaseJourney(PhaseJourneyEvent.Register event) {
         event.register(PJPhaseContextTypes.DIMENSION.get(), DimensionPhaseContext.denyLeave(PhaseJourney.asResource("test"), Level.NETHER));
+
+        event.register(PJPhaseContextTypes.ENCHANTMENT.get(), new EnchantmentPhaseContext(
+            PhaseJourney.asResource("advanced_enchantment_lock"),
+            PhaseJourney.asResourceKey(Registries.ENCHANTMENT, ResourceLocation.withDefaultNamespace("protection")),
+            false, false
+        ));
     }
 }

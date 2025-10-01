@@ -13,6 +13,7 @@ import org.confluence.phase_journey.common.init.PJRegistries;
 import org.confluence.phase_journey.common.phase.block.BlockPhaseManager;
 import org.confluence.phase_journey.common.phase.dimension.DimensionPhaseManager;
 import org.confluence.phase_journey.common.phase.item.ItemPhaseManager;
+import org.confluence.phase_journey.common.phase.enchantment.EnchantmentPhaseManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,6 +31,7 @@ public class PhaseJourney {
         NeoForge.EVENT_BUS.register(BlockPhaseManager.MANAGER);
 //        NeoForge.EVENT_BUS.register(ItemPhaseManager.MANAGER);
         NeoForge.EVENT_BUS.register(DimensionPhaseManager.MANAGER);
+        NeoForge.EVENT_BUS.register(EnchantmentPhaseManager.MANAGER);
     }
 
     public static ResourceLocation asResource(String path) {
@@ -46,5 +48,9 @@ public class PhaseJourney {
 
     public static <T> ResourceKey<Registry<T>> asResourceKey(String path) {
         return ResourceKey.createRegistryKey(asResource(path));
+    }
+
+    public static <T> ResourceKey<T> asResourceKey(ResourceKey<? extends Registry<T>> registryKey, ResourceLocation path) {
+        return ResourceKey.create(registryKey, path);
     }
 }

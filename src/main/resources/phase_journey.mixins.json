@@ -8,6 +8,7 @@
         "AbstractContainerMenuMixin",
         "BlockBehaviourMixin",
         "BlockBehaviourMixin$BlockStateBaseMixin",
+        "EnchantmentTableMenuMixin",
         "ServerPlayerGameModeMixin",
         "create.BlockHelperMixin"
     ],
