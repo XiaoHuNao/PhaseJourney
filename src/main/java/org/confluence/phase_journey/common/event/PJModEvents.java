@@ -1,25 +1,33 @@
 package org.confluence.phase_journey.common.event;
 
-import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.level.Level;
+import java.util.List;
+
 import org.confluence.phase_journey.PhaseJourney;
 import org.confluence.phase_journey.api.PhaseJourneyEvent;
 import org.confluence.phase_journey.common.init.PJPhaseContextTypes;
 import org.confluence.phase_journey.common.init.PJRegistries;
 import org.confluence.phase_journey.common.network.SyncPhasePacketS2C;
+import org.confluence.phase_journey.common.phase.PhaseContextType;
+import org.confluence.phase_journey.common.phase.dimension.DimensionPhaseContext;
+import org.confluence.phase_journey.common.phase.enchantment.EnchantmentPhaseContext;
+import org.confluence.phase_journey.common.phase.interaction.EntityInteractionPhaseContext;
+import org.confluence.phase_journey.common.phase.effect.MobEffectPhaseContext;
+import org.confluence.phase_journey.integration.immersiveengineering.IEHelper;
+import org.confluence.phase_journey.integration.immersiveengineering.phase.IEMultiblockPhaseContext;
+import org.confluence.phase_journey.integration.projecte.ProjecteHelper;
+import org.confluence.phase_journey.integration.projecte.phase.TransmutationPhaseContext;
 
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.level.Level;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModLoader;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
-import org.confluence.phase_journey.common.phase.PhaseContextType;
-import org.confluence.phase_journey.common.phase.dimension.DimensionPhaseContext;
-import org.confluence.phase_journey.common.phase.enchantment.EnchantmentPhaseContext;
-import org.confluence.phase_journey.common.phase.interaction.EntityInteractionPhaseContext;
 
 @EventBusSubscriber(bus = EventBusSubscriber.Bus.MOD, modid = PhaseJourney.MODID)
 public final class PJModEvents {
@@ -63,5 +71,12 @@ public final class PJModEvents {
 
         event.register(ProjecteHelper.TRANSMUTATION.get(), new TransmutationPhaseContext(PhaseJourney.asResource("test"), true, List.of(), true));
         event.register(IEHelper.MULTIBLOCK.get(), new IEMultiblockPhaseContext(PhaseJourney.asResource("test"), List.of(), true));
+
+        event.register(PJPhaseContextTypes.MOB_EFFECT.get(), new MobEffectPhaseContext(
+                PhaseJourney.asResource("test"),
+                List.of(PhaseJourney.asResourceKey(Registries.MOB_EFFECT, ResourceLocation.withDefaultNamespace("regeneration"))),
+                false
+        ));
+
     }
 }
