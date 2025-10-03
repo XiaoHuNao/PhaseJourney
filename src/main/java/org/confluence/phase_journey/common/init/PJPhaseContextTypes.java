@@ -17,6 +17,9 @@ import org.confluence.phase_journey.common.phase.effect.MobEffectPhaseContext;
 import org.confluence.phase_journey.common.phase.effect.MobEffectPhaseManager;
 import org.confluence.phase_journey.common.phase.interaction.EntityInteractionPhaseContext;
 import org.confluence.phase_journey.common.phase.interaction.EntityInteractionPhaseManager;
+import org.confluence.phase_journey.common.phase.growth.CropGrowthPhaseContext;
+import org.confluence.phase_journey.common.phase.growth.CropGrowthPhaseManager;
+
 public class PJPhaseContextTypes {
 
     public static final FlexibleRegister<PhaseContextType<?>> CONDITION_CODEC = MapCodecFlexibleRegister.create(PJRegistries.PHASE_CONTEXT_TYPE, PhaseJourney.MODID);
@@ -27,5 +30,6 @@ public class PJPhaseContextTypes {
     public static final FlexibleHolder<PhaseContextType<?>, PhaseContextType<EnchantmentPhaseContext>> ENCHANTMENT = CONDITION_CODEC.registerStatic("enchantment", () -> new PhaseContextType<>(EnchantmentPhaseContext.class, EnchantmentPhaseManager.MANAGER));
     public static final FlexibleHolder<PhaseContextType<?>, PhaseContextType<EntityInteractionPhaseContext>> ENTITY_INTERACTION = CONDITION_CODEC.registerStatic("entity_interaction", () -> new PhaseContextType<>(EntityInteractionPhaseContext.class, EntityInteractionPhaseManager.MANAGER));
     public static final FlexibleHolder<PhaseContextType<?>, PhaseContextType<MobEffectPhaseContext>> MOB_EFFECT = CONDITION_CODEC.registerStatic("mob_effect", () -> new PhaseContextType<>(MobEffectPhaseContext.class, MobEffectPhaseManager.MANAGER));
+    public static final FlexibleHolder<PhaseContextType<?>, PhaseContextType<CropGrowthPhaseContext>> CROP_GROWTH = CONDITION_CODEC.registerStatic("crop_growth", () -> new PhaseContextType<>(CropGrowthPhaseContext.class, CropGrowthPhaseManager.MANAGER));
 
 }
