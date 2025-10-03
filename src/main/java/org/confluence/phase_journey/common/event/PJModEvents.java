@@ -52,8 +52,8 @@ public final class PJModEvents {
 
         event.register(PJPhaseContextTypes.ENCHANTMENT.get(), new EnchantmentPhaseContext(
                 PhaseJourney.asResource("test"),
-            PhaseJourney.asResourceKey(Registries.ENCHANTMENT, ResourceLocation.withDefaultNamespace("protection")),
-            false, false
+                PhaseJourney.asResourceKey(Registries.ENCHANTMENT, ResourceLocation.withDefaultNamespace("protection")),
+                false, false
         ));
 
         event.register(PJPhaseContextTypes.ENTITY_INTERACTION.get(), EntityInteractionPhaseContext.builder(PhaseJourney.asResource("test"), EntityType.HORSE)
@@ -61,6 +61,7 @@ public final class PJModEvents {
                 .build()
         );
 
+        event.register(ProjecteHelper.TRANSMUTATION.get(), new TransmutationPhaseContext(PhaseJourney.asResource("test"), true, List.of(), true));
         event.register(IEHelper.MULTIBLOCK.get(), new IEMultiblockPhaseContext(PhaseJourney.asResource("test"), List.of(), true));
     }
 }

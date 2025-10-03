@@ -25,6 +25,7 @@ public class PhaseJourney {
 
     public PhaseJourney(IEventBus eventBus, ModContainer container) {
         eventBus.addListener(PJRegistries::registerRegistries);
+        LoadedCompat.register(eventBus);
 
         PJAttachments.TYPES.register(eventBus);
         PJPhaseContextTypes.CONDITION_CODEC.register(eventBus);

@@ -140,8 +140,14 @@ dependencies {
     compileOnly "curse.maven:sodium-394468:6382651"
 
     compileOnly("com.simibubi.create:create-${minecraft_version}:${create_version}") { transitive = false }
+
+    compileOnly "curse.maven:projecte-226410:6611984"
+    runtimeOnly "curse.maven:projecte-226410:6611984"
+
     compileOnly "curse.maven:immersive-engineering-231951:6733669"
     runtimeOnly "curse.maven:immersive-engineering-231951:6733669"
+
+
     //runtimeOnly("com.simibubi.create:create-${minecraft_version}:${create_version}:slim") { transitive = false }
     //runtimeOnly("net.createmod.ponder:Ponder-NeoForge-${minecraft_version}:${ponder_version}")
     //runtimeOnly("dev.engine-room.flywheel:flywheel-neoforge-${minecraft_version}:${flywheel_version}")
