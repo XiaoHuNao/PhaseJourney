@@ -61,5 +61,6 @@ public final class PJModEvents {
                 .build()
         );
 
+        event.register(IEHelper.MULTIBLOCK.get(), new IEMultiblockPhaseContext(PhaseJourney.asResource("test"), List.of(), true));
     }
 }

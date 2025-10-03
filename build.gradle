@@ -134,12 +134,14 @@ dependencies {
     compileOnly "curse.maven:jade-324717:6011258"
     runtimeOnly "curse.maven:jade-324717:6011258"
 
-    //runtimeOnly ("dev.latvian.mods:kubejs-neoforge:${kubejs_version}")
-    //runtimeOnly ("dev.latvian.mods:rhino:${rhino_version}")
+//    runtimeOnly ("dev.latvian.mods:kubejs-neoforge:${kubejs_version}")
+//    runtimeOnly ("dev.latvian.mods:rhino:${rhino_version}")
 
     compileOnly "curse.maven:sodium-394468:6382651"
 
     compileOnly("com.simibubi.create:create-${minecraft_version}:${create_version}") { transitive = false }
+    compileOnly "curse.maven:immersive-engineering-231951:6733669"
+    runtimeOnly "curse.maven:immersive-engineering-231951:6733669"
     //runtimeOnly("com.simibubi.create:create-${minecraft_version}:${create_version}:slim") { transitive = false }
     //runtimeOnly("net.createmod.ponder:Ponder-NeoForge-${minecraft_version}:${ponder_version}")
     //runtimeOnly("dev.engine-room.flywheel:flywheel-neoforge-${minecraft_version}:${flywheel_version}")
