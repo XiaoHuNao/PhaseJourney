@@ -170,6 +170,8 @@ dependencies {
     runtimeOnly "curse.maven:balm-531761:7047859"
 
 
+    implementation "curse.maven:touhou-little-maid-355044:6988538"
+
     //runtimeOnly("com.simibubi.create:create-${minecraft_version}:${create_version}:slim") { transitive = false }
     //runtimeOnly("net.createmod.ponder:Ponder-NeoForge-${minecraft_version}:${ponder_version}")
     //runtimeOnly("dev.engine-room.flywheel:flywheel-neoforge-${minecraft_version}:${flywheel_version}")

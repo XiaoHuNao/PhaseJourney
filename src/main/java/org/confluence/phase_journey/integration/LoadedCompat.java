@@ -15,6 +15,7 @@ public class LoadedCompat {
     public static final boolean CURIOS = isLoaded("curios");
     public static final boolean ISS = isLoaded(ISSHelper.MODID);
     public static final boolean WAYSTONES = isLoaded(org.confluence.phase_journey.integration.waystones.WaystonesHelper.MODID);
+    public static final boolean TOUHOU_LITTLE_MAID = isLoaded("touhou_little_maid");
 
     public static void register(IEventBus modEventBus) {
         if (KJS) {
@@ -40,6 +41,10 @@ public class LoadedCompat {
 
         if (WAYSTONES) {
             org.confluence.phase_journey.integration.waystones.WaystonesHelper.register(modEventBus);
+        }
+
+        if (TOUHOU_LITTLE_MAID) {
+            org.confluence.phase_journey.integration.touhou_little_maid.TouhouLittleMaidHelper.register(modEventBus);
         }
 
     }
