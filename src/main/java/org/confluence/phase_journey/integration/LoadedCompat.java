@@ -1,6 +1,7 @@
 package org.confluence.phase_journey.integration;
 
 import org.confluence.phase_journey.integration.curios.CuriosHelper;
+import org.confluence.phase_journey.integration.ironsspellbooks.ISSHelper;
 import org.confluence.phase_journey.integration.projecte.ProjecteHelper;
 
 import net.neoforged.bus.api.IEventBus;
@@ -12,6 +13,8 @@ public class LoadedCompat {
     public static final boolean IE = isLoaded("immersiveengineering");
     public static final boolean KJS = isLoaded("kubejs");
     public static final boolean CURIOS = isLoaded("curios");
+    public static final boolean ISS = isLoaded(ISSHelper.MODID);
+    public static final boolean WAYSTONES = isLoaded(org.confluence.phase_journey.integration.waystones.WaystonesHelper.MODID);
 
     public static void register(IEventBus modEventBus) {
         if (KJS) {
@@ -30,6 +33,15 @@ public class LoadedCompat {
         if (CURIOS) {
             CuriosHelper.register(modEventBus);
         }
+
+        if (ISS) {
+            ISSHelper.register(modEventBus);
+        }
+
+        if (WAYSTONES) {
+            org.confluence.phase_journey.integration.waystones.WaystonesHelper.register(modEventBus);
+        }
+
     }
 
     public static boolean isLoaded(String modid) {

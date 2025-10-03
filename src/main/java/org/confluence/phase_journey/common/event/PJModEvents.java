@@ -14,11 +14,11 @@ import org.confluence.phase_journey.common.phase.enchantment.EnchantmentPhaseCon
 import org.confluence.phase_journey.common.phase.interaction.EntityInteractionPhaseContext;
 import org.confluence.phase_journey.integration.curios.CuriosHelper;
 import org.confluence.phase_journey.integration.curios.phase.CuriosEquipPhaseContext;
+import org.confluence.phase_journey.common.phase.growth.CropGrowthPhaseContext;
 import org.confluence.phase_journey.integration.immersiveengineering.IEHelper;
 import org.confluence.phase_journey.integration.immersiveengineering.phase.IEMultiblockPhaseContext;
 import org.confluence.phase_journey.integration.projecte.ProjecteHelper;
 import org.confluence.phase_journey.integration.projecte.phase.TransmutationPhaseContext;
-
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
@@ -79,13 +79,18 @@ public final class PJModEvents {
                 false
         ));
 
+        event.register(PJPhaseContextTypes.CROP_GROWTH.get(), new CropGrowthPhaseContext(
+                PhaseJourney.asResource("test"),
+                List.of(PhaseJourney.asResourceKey(Registries.BLOCK, ResourceLocation.withDefaultNamespace("wheat"))),
+                false
+        ));
+
 //        // HeavenDestinyMoment: disallow moment creation for demonstration phase
 //        event.register(HDMHelper.MOMENT_CREATE.get(), new HDMMomentCreatePhaseContext(
 //                PhaseJourney.asResource("test"),
 //                false,
 //                List.of()
 //        ));
-
         if (org.confluence.phase_journey.integration.LoadedCompat.CURIOS) {
             event.register(CuriosHelper.EQUIPPING.get(), new CuriosEquipPhaseContext(
                     PhaseJourney.asResource("test"),

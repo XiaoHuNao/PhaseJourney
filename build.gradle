@@ -147,6 +147,12 @@ dependencies {
 
     compileOnly "curse.maven:sodium-394468:6382651"
 
+    compileOnly "curse.maven:placebo-283644:6926281"
+    runtimeOnly "curse.maven:placebo-283644:6926281"
+
+//    compileOnly "curse.maven:hostile-neural-networks-552574:6751495"
+//    runtimeOnly "curse.maven:hostile-neural-networks-552574:6751495"
+
     compileOnly("com.simibubi.create:create-${minecraft_version}:${create_version}") { transitive = false }
 
     compileOnly "curse.maven:projecte-226410:6611984"
@@ -154,6 +160,14 @@ dependencies {
 
     compileOnly "curse.maven:immersive-engineering-231951:6733669"
     runtimeOnly "curse.maven:immersive-engineering-231951:6733669"
+
+    implementation "curse.maven:irons-spells-n-spellbooks-855414:7036419"
+
+    compileOnly "curse.maven:waystones-245755:6976678"
+    runtimeOnly "curse.maven:waystones-245755:6976678"
+
+    compileOnly "curse.maven:balm-531761:7047859"
+    runtimeOnly "curse.maven:balm-531761:7047859"
 
 
     //runtimeOnly("com.simibubi.create:create-${minecraft_version}:${create_version}:slim") { transitive = false }
