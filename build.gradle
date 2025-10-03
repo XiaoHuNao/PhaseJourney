@@ -122,6 +122,11 @@ repositories {
     maven { // Registrate
         url "https://maven.ithundxr.dev/snapshots"
     }
+
+    maven {
+        name = "Curios"
+        url = uri("https://maven.theillusivec4.top/")
+    }
 }
 
 
@@ -136,6 +141,9 @@ dependencies {
 
 //    runtimeOnly ("dev.latvian.mods:kubejs-neoforge:${kubejs_version}")
 //    runtimeOnly ("dev.latvian.mods:rhino:${rhino_version}")
+
+    runtimeOnly "top.theillusivec4.curios:curios-neoforge:${curios_version}"
+    compileOnly "top.theillusivec4.curios:curios-neoforge:${curios_version}:api"
 
     compileOnly "curse.maven:sodium-394468:6382651"
 

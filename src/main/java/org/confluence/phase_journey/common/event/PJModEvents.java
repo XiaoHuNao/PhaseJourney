@@ -9,9 +9,11 @@ import org.confluence.phase_journey.common.init.PJRegistries;
 import org.confluence.phase_journey.common.network.SyncPhasePacketS2C;
 import org.confluence.phase_journey.common.phase.PhaseContextType;
 import org.confluence.phase_journey.common.phase.dimension.DimensionPhaseContext;
+import org.confluence.phase_journey.common.phase.effect.MobEffectPhaseContext;
 import org.confluence.phase_journey.common.phase.enchantment.EnchantmentPhaseContext;
 import org.confluence.phase_journey.common.phase.interaction.EntityInteractionPhaseContext;
-import org.confluence.phase_journey.common.phase.effect.MobEffectPhaseContext;
+import org.confluence.phase_journey.integration.curios.CuriosHelper;
+import org.confluence.phase_journey.integration.curios.phase.CuriosEquipPhaseContext;
 import org.confluence.phase_journey.integration.immersiveengineering.IEHelper;
 import org.confluence.phase_journey.integration.immersiveengineering.phase.IEMultiblockPhaseContext;
 import org.confluence.phase_journey.integration.projecte.ProjecteHelper;
@@ -20,7 +22,6 @@ import org.confluence.phase_journey.integration.projecte.phase.TransmutationPhas
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.level.Level;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModLoader;
@@ -77,6 +78,20 @@ public final class PJModEvents {
                 List.of(PhaseJourney.asResourceKey(Registries.MOB_EFFECT, ResourceLocation.withDefaultNamespace("regeneration"))),
                 false
         ));
+
+//        // HeavenDestinyMoment: disallow moment creation for demonstration phase
+//        event.register(HDMHelper.MOMENT_CREATE.get(), new HDMMomentCreatePhaseContext(
+//                PhaseJourney.asResource("test"),
+//                false,
+//                List.of()
+//        ));
+
+        if (org.confluence.phase_journey.integration.LoadedCompat.CURIOS) {
+            event.register(CuriosHelper.EQUIPPING.get(), new CuriosEquipPhaseContext(
+                    PhaseJourney.asResource("test"),
+                    List.of("ring", "belt")
+            ));
+        }
 
     }
 }
