@@ -1,26 +1,25 @@
 package org.confluence.phase_journey.integration.touhou_little_maid.phase;
 
+import java.util.List;
+import java.util.Set;
+
+import org.confluence.phase_journey.api.IPhaseCapability;
+import org.confluence.phase_journey.common.attachment.PhaseAttachment;
+import org.confluence.phase_journey.common.phase.PhaseManager;
+
 import com.github.tartaricacid.touhoulittlemaid.api.event.MaidTaskEnableEvent;
 import com.github.tartaricacid.touhoulittlemaid.api.task.IMaidTask;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.entity.task.TaskManager;
+
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.EventBusSubscriber;
-import org.confluence.phase_journey.PhaseJourney;
-import org.confluence.phase_journey.api.IPhaseCapability;
-import org.confluence.phase_journey.common.phase.PhaseManager;
-import org.confluence.phase_journey.common.util.PhaseUtils;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+public class TouhouLittleMaidPhaseManager extends PhaseManager<TouhouLittleMaidPhaseContext> {
 
-@EventBusSubscriber(modid = PhaseJourney.MODID)
-public class MaidTaskPhaseManager extends PhaseManager<MaidTaskPhaseContext> {
-    public static final MaidTaskPhaseManager MANAGER = new MaidTaskPhaseManager();
+    public static final TouhouLittleMaidPhaseManager MANAGER = new TouhouLittleMaidPhaseManager();
 
     /**
      * 检查女仆是否可以切换到指定任务
@@ -32,12 +31,12 @@ public class MaidTaskPhaseManager extends PhaseManager<MaidTaskPhaseContext> {
         }
 
         // 获取世界的阶段能力
-        IPhaseCapability phaseCapability = PhaseUtils.getPhaseCapability();
+        IPhaseCapability phaseCapability = PhaseAttachment.of(serverLevel);
 
         // 检查当前阶段是否允许该任务
         Set<ResourceLocation> currentPhases = phaseCapability.getPhases();
         for (ResourceLocation phase : currentPhases) {
-            MaidTaskPhaseContext context = getPhaseContext(phase);
+            TouhouLittleMaidPhaseContext context = getPhaseContext(phase);
             if (context != null && !context.isTaskAllowed(taskId)) {
                 return false;
             }
@@ -49,10 +48,10 @@ public class MaidTaskPhaseManager extends PhaseManager<MaidTaskPhaseContext> {
     /**
      * 获取指定阶段的上下文
      */
-    private MaidTaskPhaseContext getPhaseContext(ResourceLocation phase) {
+    private TouhouLittleMaidPhaseContext getPhaseContext(ResourceLocation phase) {
         return phaseContexts.get(phase).stream()
-                .filter(context -> context instanceof MaidTaskPhaseContext)
-                .map(context -> (MaidTaskPhaseContext) context)
+                .filter(context -> context instanceof TouhouLittleMaidPhaseContext)
+                .map(context -> (TouhouLittleMaidPhaseContext) context)
                 .findFirst()
                 .orElse(null);
     }
@@ -65,13 +64,13 @@ public class MaidTaskPhaseManager extends PhaseManager<MaidTaskPhaseContext> {
             return TaskManager.getTaskIndex(); // 客户端返回所有任务
         }
 
-        IPhaseCapability phaseCapability = PhaseUtils.getPhaseCapability();
+        IPhaseCapability phaseCapability = org.confluence.phase_journey.common.attachment.PhaseAttachment.of(serverLevel);
 
         Set<ResourceLocation> currentPhases = phaseCapability.getPhases();
         return TaskManager.getTaskIndex().stream()
                 .filter(task -> {
                     for (ResourceLocation phase : currentPhases) {
-                        MaidTaskPhaseContext context = getPhaseContext(phase);
+                        TouhouLittleMaidPhaseContext context = getPhaseContext(phase);
                         if (context != null && !context.isTaskAllowed(task.getUid())) {
                             return false;
                         }
@@ -88,18 +87,18 @@ public class MaidTaskPhaseManager extends PhaseManager<MaidTaskPhaseContext> {
     public void onMaidTaskEnable(MaidTaskEnableEvent event) {
         EntityMaid maid = event.getEntityMaid();
         IMaidTask task = event.getTargetTask();
-        
+
         if (!MANAGER.canSwitchToTask(maid, task.getUid())) {
             // 取消任务切换
             event.setCanceled(true);
-            
+
             // 发送消息给玩家
             if (maid.getOwner() instanceof ServerPlayer player) {
                 player.sendSystemMessage(
-                    net.minecraft.network.chat.Component.translatable(
-                        "message.phase_journey.maid_task_blocked", 
-                        task.getName()
-                    )
+                        net.minecraft.network.chat.Component.translatable(
+                                "message.phase_journey.maid_task_blocked",
+                                task.getName()
+                        )
                 );
             }
         }

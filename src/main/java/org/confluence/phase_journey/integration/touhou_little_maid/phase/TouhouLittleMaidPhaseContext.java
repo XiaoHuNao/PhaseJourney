@@ -7,18 +7,18 @@ import org.confluence.phase_journey.api.IPhaseContext;
 
 import java.util.List;
 
-public class MaidTaskPhaseContext implements IPhaseContext {
-    public static final MapCodec<MaidTaskPhaseContext> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-            ResourceLocation.CODEC.fieldOf("phase").forGetter(MaidTaskPhaseContext::getPhase),
-            ResourceLocation.CODEC.listOf().fieldOf("allowed_tasks").forGetter(MaidTaskPhaseContext::getAllowedTasks),
-            ResourceLocation.CODEC.listOf().fieldOf("blocked_tasks").forGetter(MaidTaskPhaseContext::getBlockedTasks)
-    ).apply(instance, MaidTaskPhaseContext::new));
+public class TouhouLittleMaidPhaseContext implements IPhaseContext {
+    public static final MapCodec<TouhouLittleMaidPhaseContext> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+            ResourceLocation.CODEC.fieldOf("phase").forGetter(TouhouLittleMaidPhaseContext::getPhase),
+            ResourceLocation.CODEC.listOf().fieldOf("allowed_tasks").forGetter(TouhouLittleMaidPhaseContext::getAllowedTasks),
+            ResourceLocation.CODEC.listOf().fieldOf("blocked_tasks").forGetter(TouhouLittleMaidPhaseContext::getBlockedTasks)
+    ).apply(instance, TouhouLittleMaidPhaseContext::new));
 
     protected ResourceLocation phase;
     protected List<ResourceLocation> allowedTasks;
     protected List<ResourceLocation> blockedTasks;
 
-    public MaidTaskPhaseContext(ResourceLocation phase, List<ResourceLocation> allowedTasks, List<ResourceLocation> blockedTasks) {
+    public TouhouLittleMaidPhaseContext(ResourceLocation phase, List<ResourceLocation> allowedTasks, List<ResourceLocation> blockedTasks) {
         this.phase = phase;
         this.allowedTasks = allowedTasks;
         this.blockedTasks = blockedTasks;

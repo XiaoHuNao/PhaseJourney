@@ -1,25 +1,24 @@
 {
-    "required": true,
-    "minVersion": "0.8",
-    "package": "org.confluence.phase_journey.mixin",
-    "compatibilityLevel": "JAVA_21",
-    "refmap": "phase_journey.refmap.json",
-    "mixins": [
-        "AbstractContainerMenuMixin",
-        "BlockBehaviourMixin",
-        "BlockBehaviourMixin$BlockStateBaseMixin",
-        "EnchantmentTableMenuMixin",
-        "ServerPlayerGameModeMixin",
-        "create.BlockHelperMixin"
-    ],
-    "client": [
-        "client.BlockModelsMixin",
-        "client.ClientItemMixin",
-        "client.DebugScreenOverlayMixin",
-        "client.ItemModelShaperMixin",
-        "client.LevelRendererMixin"
-    ],
-    "injectors": {
-        "defaultRequire": 1
+  "required": true,
+  "minVersion": "0.8",
+  "package": "org.confluence.phase_journey.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "refmap": "phase_journey.refmap.json",
+  "mixins": [
+    "AbstractContainerMenuMixin",
+    "BlockBehaviourMixin",
+    "EnchantmentTableMenuMixin",
+    "ServerPlayerGameModeMixin"
+  ],
+  "client": [
+    "client.BlockModelsMixin",
+    "client.ClientItemMixin",
+    "client.DebugScreenOverlayMixin",
+    "client.ItemModelShaperMixin",
+    "client.LevelRendererMixin"
+  ],
+  "server": [],
+  "injectors": {
+    "defaultRequire": 1
   }
 }
