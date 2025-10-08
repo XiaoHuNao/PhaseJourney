@@ -1,9 +1,10 @@
-package org.confluence.phase_journey.api;
+package org.confluence.phase_journey.api.event;
 
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.bus.api.Event;
 import net.neoforged.bus.api.ICancellableEvent;
 import net.neoforged.fml.event.IModBusEvent;
+import org.confluence.phase_journey.api.phase.IPhaseContext;
 import org.confluence.phase_journey.common.phase.*;
 
 public class PhaseJourneyEvent extends Event {
@@ -25,9 +26,12 @@ public class PhaseJourneyEvent extends Event {
 
     public static class Register extends PhaseJourneyEvent implements IModBusEvent {
 
-        public <T extends IPhaseContext> void register(PhaseContextType<T> type, T  context) {
+        public <T extends IPhaseContext> void register(PhaseType phaseType,PhaseContextType<T> type, T  context) {
             PhaseManager<T> manager = type.manager();
-            manager.register(context.getPhase(), context);
+            switch (phaseType){
+                case LEVEL -> LevelPhaseManager.MANAGER.register(type,context);
+                case PLAYER -> PlayerPhaseManager.MANAGER.register(type,context);
+            }
         }
 
     }

@@ -5,7 +5,7 @@ import dev.latvian.mods.kubejs.plugin.KubeJSPlugin;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModList;
 import org.confluence.phase_journey.PhaseJourney;
-import org.confluence.phase_journey.api.PhaseJourneyEvent;
+import org.confluence.phase_journey.api.event.PhaseJourneyEvent;
 
 public class ModKubeJSPlugin implements KubeJSPlugin {
     @Override

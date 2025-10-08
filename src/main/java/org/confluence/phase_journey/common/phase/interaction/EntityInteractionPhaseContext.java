@@ -1,15 +1,18 @@
 package org.confluence.phase_journey.common.phase.interaction;
 
+import java.util.Collection;
+import java.util.List;
+
+import org.confluence.phase_journey.api.phase.IPhaseContext;
+import org.confluence.phase_journey.common.phase.PhaseType;
+
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
-import org.confluence.phase_journey.api.IPhaseContext;
-import org.confluence.phase_journey.common.phase.PhaseContext;
 
 public record EntityInteractionPhaseContext(
         ResourceLocation phase,
@@ -24,7 +27,7 @@ public record EntityInteractionPhaseContext(
         boolean allowBlockInteract, //方块交互
         boolean allowItemUse, //使用物品
         boolean allowEntityAttack //攻击
-) implements IPhaseContext {
+        ) implements IPhaseContext {
 
     public static final MapCodec<EntityInteractionPhaseContext> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             ResourceLocation.CODEC.fieldOf("phase").forGetter(EntityInteractionPhaseContext::phase),
@@ -46,16 +49,21 @@ public record EntityInteractionPhaseContext(
         return CODEC;
     }
 
-	public static Builder builder(ResourceLocation phase, EntityType<?> entityType) {
-        return new Builder(phase,entityType);
+    public Collection<PhaseType> getSupportedPhaseTypes() {
+        return List.of(PhaseType.LEVEL, PhaseType.PLAYER);
     }
 
-	@Override
-	public ResourceLocation getPhase() {
-		return phase;
-	}
+    public static Builder builder(ResourceLocation phase, EntityType<?> entityType) {
+        return new Builder(phase, entityType);
+    }
 
-	public static final class Builder {
+    @Override
+    public ResourceLocation getPhase() {
+        return phase;
+    }
+
+    public static final class Builder {
+
         private final ResourceLocation phase;
         private final EntityType<?> entityType;
         private boolean allowTame = true;
@@ -69,26 +77,65 @@ public record EntityInteractionPhaseContext(
         private boolean allowItemUse = true;
         private boolean allowEntityAttack = true;
 
-		public Builder(ResourceLocation phase, EntityType<?> entityType) {
-			this.phase = phase;
-			this.entityType = entityType;
-		}
+        public Builder(ResourceLocation phase, EntityType<?> entityType) {
+            this.phase = phase;
+            this.entityType = entityType;
+        }
 
-		public Builder allowTame(boolean value) { this.allowTame = value; return this; }
-        public Builder allowBreed(boolean value) { this.allowBreed = value; return this; }
-        public Builder allowRide(boolean value) { this.allowRide = value; return this; }
-        public Builder allowFeed(boolean value) { this.allowFeed = value; return this; }
-        public Builder allowInteract(boolean value) { this.allowInteract = value; return this; }
-        public Builder allowBlockPlace(boolean value) { this.allowBlockPlace = value; return this; }
-        public Builder allowBlockBreak(boolean value) { this.allowBlockBreak = value; return this; }
-        public Builder allowBlockInteract(boolean value) { this.allowBlockInteract = value; return this; }
-        public Builder allowItemUse(boolean value) { this.allowItemUse = value; return this; }
-        public Builder allowEntityAttack(boolean value) { this.allowEntityAttack = value; return this; }
+        public Builder allowTame(boolean value) {
+            this.allowTame = value;
+            return this;
+        }
+
+        public Builder allowBreed(boolean value) {
+            this.allowBreed = value;
+            return this;
+        }
+
+        public Builder allowRide(boolean value) {
+            this.allowRide = value;
+            return this;
+        }
+
+        public Builder allowFeed(boolean value) {
+            this.allowFeed = value;
+            return this;
+        }
+
+        public Builder allowInteract(boolean value) {
+            this.allowInteract = value;
+            return this;
+        }
+
+        public Builder allowBlockPlace(boolean value) {
+            this.allowBlockPlace = value;
+            return this;
+        }
+
+        public Builder allowBlockBreak(boolean value) {
+            this.allowBlockBreak = value;
+            return this;
+        }
+
+        public Builder allowBlockInteract(boolean value) {
+            this.allowBlockInteract = value;
+            return this;
+        }
+
+        public Builder allowItemUse(boolean value) {
+            this.allowItemUse = value;
+            return this;
+        }
+
+        public Builder allowEntityAttack(boolean value) {
+            this.allowEntityAttack = value;
+            return this;
+        }
 
         public EntityInteractionPhaseContext build() {
             return new EntityInteractionPhaseContext(
                     phase,
-					entityType,
+                    entityType,
                     allowTame,
                     allowBreed,
                     allowRide,
@@ -103,5 +150,3 @@ public record EntityInteractionPhaseContext(
         }
     }
 }
-
-

@@ -1,12 +1,10 @@
 package org.confluence.phase_journey.common.init;
 
-import com.mojang.serialization.MapCodec;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.neoforged.neoforge.registries.NewRegistryEvent;
 import net.neoforged.neoforge.registries.RegistryBuilder;
 import org.confluence.phase_journey.PhaseJourney;
-import org.confluence.phase_journey.api.IPhaseContext;
 import org.confluence.phase_journey.common.phase.PhaseContextType;
 
 public class PJRegistries {

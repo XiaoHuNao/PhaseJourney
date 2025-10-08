@@ -1,6 +1,7 @@
 package org.confluence.phase_journey.integration;
 
 import org.confluence.phase_journey.integration.curios.CuriosHelper;
+import org.confluence.phase_journey.integration.hostilenetworks.HNNHelper;
 import org.confluence.phase_journey.integration.ironsspellbooks.ISSHelper;
 import org.confluence.phase_journey.integration.projecte.ProjecteHelper;
 
@@ -16,6 +17,7 @@ public class LoadedCompat {
     public static final boolean ISS = isLoaded(ISSHelper.MODID);
     public static final boolean WAYSTONES = isLoaded(org.confluence.phase_journey.integration.waystones.WaystonesHelper.MODID);
     public static final boolean TOUHOU_LITTLE_MAID = isLoaded("touhou_little_maid");
+    public static final boolean HOSTILE_NETWORKS = isLoaded("hostilenetworks");
 
     public static void register(IEventBus modEventBus) {
         if (KJS) {

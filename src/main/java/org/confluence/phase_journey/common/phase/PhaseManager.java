@@ -4,20 +4,37 @@ package org.confluence.phase_journey.common.phase;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
-import com.xiaohunao.xhn_lib.api.data.loader.BaseDynamicLoader;
-import com.xiaohunao.xhn_lib.common.serialization.IDynamicSerializer;
 
-import net.minecraft.core.Registry;
+import com.mojang.datafixers.util.Pair;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import org.confluence.phase_journey.api.IPhaseContext;
+import org.confluence.phase_journey.api.phase.IPhaseContext;
 
-public class PhaseManager <T extends IPhaseContext> {
-    protected final Multimap<ResourceLocation, T> phaseContexts = ArrayListMultimap.create();
+import java.util.Collection;
 
-    public void register(ResourceLocation phase, T phaseContext) {
-        this.phaseContexts.put(phase, phaseContext);
+public abstract class PhaseManager <T extends IPhaseContext> {
+    protected final Multimap<PhaseType, Pair<ResourceLocation, T>> phaseContexts = ArrayListMultimap.create();
+
+    public void register(PhaseType type,ResourceLocation phase, T phaseContext) {
+        phaseContexts.put(type, Pair.of(phase, phaseContext));
+    }
+
+    public Collection<Pair<ResourceLocation, T>> getPhases(PhaseType type) {
+        return phaseContexts.get(type);
+    }
+
+    public Collection<T> getPhaseContexts(PhaseType type, ResourceLocation phase){
+        return phaseContexts.get(type).stream()
+                .filter(pair -> pair.getFirst().equals(phase))
+                .map(Pair::getSecond)
+                .toList();
+    }
+
+    public Collection<T> getPhaseContexts(PhaseType type){
+        return phaseContexts.get(type).stream()
+                .map(Pair::getSecond)
+                .toList();
     }
 
     public void init() {

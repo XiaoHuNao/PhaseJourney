@@ -21,6 +21,11 @@
   "phase_journey.dimension.visit_limit_warning": "You can still visit %s dimension %d more times",
   "phase_journey.dimension.visit_count_reset": "Reset your visit count for %s dimension",
   "phase_journey.dimension.visit_count_set": "Set your visit count for %s dimension to %d",
-  "phase_journey.dimension.visit_count_cleared": "Cleared all your dimension visit records"
+  "phase_journey.dimension.visit_count_cleared": "Cleared all your dimension visit records",
+  
+  "message.phase_journey.maid_task_blocked": "The maid cannot switch to %s task in the current phase",
+  
+  "phase_journey.hostilenetworks.sim_chamber.phase_required": "You need to reach %s phase to use %s data model",
+  "phase_journey.hostilenetworks.sim_chamber.phase_denied": "Phase restriction: Cannot use this data model"
 }
 

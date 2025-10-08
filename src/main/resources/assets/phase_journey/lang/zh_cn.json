@@ -21,6 +21,11 @@
   "phase_journey.dimension.visit_limit_warning": "您还可以访问 %s 维度 %d 次",
   "phase_journey.dimension.visit_count_reset": "已重置您对 %s 维度的访问次数",
   "phase_journey.dimension.visit_count_set": "已将您对 %s 维度的访问次数设置为 %d",
-  "phase_journey.dimension.visit_count_cleared": "已清除您对所有维度的访问记录"
+  "phase_journey.dimension.visit_count_cleared": "已清除您对所有维度的访问记录",
+  
+  "message.phase_journey.maid_task_blocked": "在当前阶段，女仆无法切换到 %s 工作模式",
+  
+  "phase_journey.hostilenetworks.sim_chamber.phase_required": "您需要达到 %s 阶段才能使用 %s 的数据模型",
+  "phase_journey.hostilenetworks.sim_chamber.phase_denied": "阶段限制：无法使用此数据模型"
 }
 

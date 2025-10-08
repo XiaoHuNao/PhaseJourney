@@ -1,12 +1,10 @@
 package org.confluence.phase_journey.common.phase.item;
 
-import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
-import org.confluence.phase_journey.api.IPhaseContext;
 import org.confluence.phase_journey.common.phase.PhaseContext;
 
 public class ItemPhaseContext extends PhaseContext {

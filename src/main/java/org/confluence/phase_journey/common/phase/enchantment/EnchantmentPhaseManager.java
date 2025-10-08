@@ -1,13 +1,12 @@
 package org.confluence.phase_journey.common.phase.enchantment;
 
-import java.util.Collection;
 import java.util.Map;
 
+import org.confluence.phase_journey.common.attachment.PhaseAttachment;
 import org.confluence.phase_journey.common.phase.PhaseManager;
-import org.confluence.phase_journey.common.util.PhaseUtils;
+import org.confluence.phase_journey.common.phase.PhaseType;
 
-import com.google.common.collect.BiMap;
-import com.google.common.collect.HashBiMap;
+import com.mojang.datafixers.util.Pair;
 
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import net.minecraft.core.Holder;
@@ -26,42 +25,37 @@ public class EnchantmentPhaseManager extends PhaseManager<EnchantmentPhaseContex
 
     public static final EnchantmentPhaseManager MANAGER = new EnchantmentPhaseManager();
 
-    private final BiMap<ResourceKey<Enchantment>, EnchantmentPhaseContext> enchantmentRules = HashBiMap.create();
-
     @Override
-    public void register(ResourceLocation phase, EnchantmentPhaseContext phaseContext) {
-        super.register(phase, phaseContext);
-        enchantmentRules.put(phaseContext.getEnchantment(), phaseContext);
+    public void register(PhaseType type, ResourceLocation phase, EnchantmentPhaseContext phaseContext) {
+        super.register(type, phase, phaseContext);
     }
 
-    public boolean denyInTable(Player player, ResourceKey<Enchantment> enchantment) {
-        EnchantmentPhaseContext rule = enchantmentRules.get(enchantment);
-        if (rule == null) {
-            return false;
-        }
-        for (Map.Entry<ResourceLocation, Collection<EnchantmentPhaseContext>> entry : phaseContexts.asMap().entrySet()) {
-            if (PhaseUtils.hadPlayerOrLevelAchievedPhase(entry.getKey(), player)) {
-                continue;
-            }
-            if (entry.getValue().contains(rule)) {
-                return !rule.isAllowInEnchantmentTable();
-            }
-        }
-        return false;
-    }
+    public boolean isRestricted(Level level, Player player, ResourceKey<Enchantment> enchantment, boolean isEnchantmentTable) {
+        for (Map.Entry<PhaseType, Pair<ResourceLocation, EnchantmentPhaseContext>> entry : phaseContexts.entries()) {
+            PhaseType phaseType = entry.getKey();
+            EnchantmentPhaseContext phaseContext = entry.getValue().getSecond();
+            ResourceLocation phase = phaseContext.getPhase();
 
-    public boolean denyAnvil(Player player, ResourceKey<Enchantment> enchantment) {
-        EnchantmentPhaseContext rule = enchantmentRules.get(enchantment);
-        if (rule == null) {
-            return false;
-        }
-        for (Map.Entry<ResourceLocation, Collection<EnchantmentPhaseContext>> entry : phaseContexts.asMap().entrySet()) {
-            if (PhaseUtils.hadPlayerOrLevelAchievedPhase(entry.getKey(), player)) {
+            if (!phaseContext.getSupportedPhaseTypes().contains(phaseType)) {
                 continue;
             }
-            if (entry.getValue().contains(rule)) {
-                return !rule.isAllowAnvil();
+
+            if (!phaseContext.getEnchantment().equals(enchantment)) {
+                continue;
             }
+
+            PhaseAttachment phaseAttachment = phaseType.getPhaseAttachment(level, null, player);
+            if (phaseAttachment == null) {
+                return false;
+            }
+
+            return phaseAttachment.ifPhaseAbsent(phase, () -> {
+                if (isEnchantmentTable) {
+                    return !phaseContext.isAllowInEnchantmentTable();
+                } else {
+                    return !phaseContext.isAllowAnvil();
+                }
+            });
         }
         return false;
     }
@@ -77,7 +71,7 @@ public class EnchantmentPhaseManager extends PhaseManager<EnchantmentPhaseContex
 
         for (Object2IntMap.Entry<Holder<Enchantment>> holderEntry : leftItemEnchantments.entrySet()) {
             ResourceKey<Enchantment> key = holderEntry.getKey().getKey();
-            if (denyAnvil(player, key)) {
+            if (isRestricted(player.level(), player, key, false)) {
                 event.setCanceled(true);
                 return;
             }
@@ -85,7 +79,7 @@ public class EnchantmentPhaseManager extends PhaseManager<EnchantmentPhaseContex
 
         for (Object2IntMap.Entry<Holder<Enchantment>> holderEntry : rightItemEnchantments.entrySet()) {
             ResourceKey<Enchantment> key = holderEntry.getKey().getKey();
-            if (denyAnvil(player, key)) {
+            if (isRestricted(player.level(), player, key, false)) {
                 event.setCanceled(true);
                 return;
             }

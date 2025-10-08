@@ -36,7 +36,7 @@ public class EnchantmentTableMenuMixin {
         // 过滤掉被限制的附魔
         enchantments.removeIf(enchantmentInstance -> {
             ResourceKey<Enchantment> enchantmentKey = enchantmentInstance.enchantment.getKey();
-            return EnchantmentPhaseManager.MANAGER.denyInTable(player, enchantmentKey);
+            return EnchantmentPhaseManager.MANAGER.isRestricted(player.level(), player, enchantmentKey, true);
         });
 
         cir.setReturnValue(enchantments);

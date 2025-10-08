@@ -1,10 +1,12 @@
 package org.confluence.phase_journey.common.phase.growth;
 
-import java.util.Collection;
 import java.util.Map;
 
+import org.confluence.phase_journey.common.attachment.PhaseAttachment;
 import org.confluence.phase_journey.common.phase.PhaseManager;
-import org.confluence.phase_journey.common.util.PhaseUtils;
+import org.confluence.phase_journey.common.phase.PhaseType;
+
+import com.mojang.datafixers.util.Pair;
 
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -20,24 +22,40 @@ public class CropGrowthPhaseManager extends PhaseManager<CropGrowthPhaseContext>
 
     public static final CropGrowthPhaseManager MANAGER = new CropGrowthPhaseManager();
 
-    private boolean deny(Level level, BlockState state) {
+    @Override
+    public void register(PhaseType type, ResourceLocation phase, CropGrowthPhaseContext phaseContext) {
+        super.register(type, phase, phaseContext);
+    }
+
+    public boolean isRestricted(Level level, BlockState state) {
         if (!(state.getBlock() instanceof CropBlock)) {
             return false;
         }
-        for (Map.Entry<ResourceLocation, Collection<CropGrowthPhaseContext>> entry : phaseContexts.asMap().entrySet()) {
-            if (PhaseUtils.hadLevelFinishedPhase(entry.getKey(), level)) {
+        for (Map.Entry<PhaseType, Pair<ResourceLocation, CropGrowthPhaseContext>> entry : phaseContexts.entries()) {
+            PhaseType phaseType = entry.getKey();
+            CropGrowthPhaseContext phaseContext = entry.getValue().getSecond();
+            ResourceLocation phase = phaseContext.getPhase();
+
+            if (!phaseContext.getSupportedPhaseTypes().contains(phaseType)) {
                 continue;
             }
-            for (CropGrowthPhaseContext ctx : entry.getValue()) {
-                if (ctx.disableAll()) {
+
+            PhaseAttachment phaseAttachment = phaseType.getPhaseAttachment(level, null, null);
+            if (phaseAttachment == null) {
+                return false;
+            }
+
+            return phaseAttachment.ifPhaseAbsent(phase, () -> {
+                if (phaseContext.disableAll()) {
                     return true;
                 }
-                for (ResourceKey<Block> bannedBlock : ctx.bannedBlocks()) {
+                for (ResourceKey<Block> bannedBlock : phaseContext.bannedBlocks()) {
                     if (state.is(bannedBlock)) {
                         return true;
                     }
                 }
-            }
+                return false;
+            });
         }
         return false;
     }
@@ -48,7 +66,7 @@ public class CropGrowthPhaseManager extends PhaseManager<CropGrowthPhaseContext>
             return;
         }
         BlockState state = event.getState();
-        if (deny(level, state)) {
+        if (isRestricted(level, state)) {
             event.setResult(CropGrowEvent.Pre.Result.DO_NOT_GROW);
         }
     }

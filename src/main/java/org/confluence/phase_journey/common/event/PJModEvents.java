@@ -3,13 +3,13 @@ package org.confluence.phase_journey.common.event;
 import java.util.List;
 
 import org.confluence.phase_journey.PhaseJourney;
-import org.confluence.phase_journey.api.PhaseJourneyEvent;
+import org.confluence.phase_journey.api.event.PhaseJourneyEvent;
 import org.confluence.phase_journey.common.init.PJPhaseContextTypes;
 import org.confluence.phase_journey.common.init.PJRegistries;
 import org.confluence.phase_journey.common.network.SyncPhasePacketS2C;
 import org.confluence.phase_journey.common.phase.PhaseContextType;
-import org.confluence.phase_journey.common.phase.dimension.DimensionPhaseContext;
-import org.confluence.phase_journey.common.phase.effect.MobEffectPhaseContext;
+import org.confluence.phase_journey.common.phase.dimension.DimensionTravelRestrictedContext;
+import org.confluence.phase_journey.common.phase.effect.MobEffectApplicableContext;
 import org.confluence.phase_journey.common.phase.enchantment.EnchantmentPhaseContext;
 import org.confluence.phase_journey.common.phase.interaction.EntityInteractionPhaseContext;
 import org.confluence.phase_journey.integration.curios.CuriosHelper;
@@ -57,7 +57,7 @@ public final class PJModEvents {
 
     @SubscribeEvent
     public static void onPhaseJourney(PhaseJourneyEvent.Register event) {
-        event.register(PJPhaseContextTypes.DIMENSION.get(), DimensionPhaseContext.denyLeave(PhaseJourney.asResource("test"), Level.NETHER));
+        event.register(PJPhaseContextTypes.DIMENSION.get(), DimensionTravelRestrictedContext.denyLeave(PhaseJourney.asResource("test"), Level.NETHER));
 
         event.register(PJPhaseContextTypes.ENCHANTMENT.get(), new EnchantmentPhaseContext(
                 PhaseJourney.asResource("test"),
@@ -73,7 +73,7 @@ public final class PJModEvents {
         event.register(ProjecteHelper.TRANSMUTATION.get(), new TransmutationPhaseContext(PhaseJourney.asResource("test"), true, List.of(), true));
         event.register(IEHelper.MULTIBLOCK.get(), new IEMultiblockPhaseContext(PhaseJourney.asResource("test"), List.of(), true));
 
-        event.register(PJPhaseContextTypes.MOB_EFFECT.get(), new MobEffectPhaseContext(
+        event.register(PJPhaseContextTypes.MOB_EFFECT.get(), new MobEffectApplicableContext(
                 PhaseJourney.asResource("test"),
                 List.of(PhaseJourney.asResourceKey(Registries.MOB_EFFECT, ResourceLocation.withDefaultNamespace("regeneration"))),
                 false

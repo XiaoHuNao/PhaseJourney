@@ -8,7 +8,8 @@
     "AbstractContainerMenuMixin",
     "BlockBehaviourMixin",
     "EnchantmentTableMenuMixin",
-    "ServerPlayerGameModeMixin"
+    "ServerPlayerGameModeMixin",
+    "hostilenetworks.SimChamberTileEntityMixin"
   ],
   "client": [
     "client.BlockModelsMixin",

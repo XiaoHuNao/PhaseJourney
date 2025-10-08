@@ -12,8 +12,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.common.util.INBTSerializable;
-import org.confluence.phase_journey.api.IPhaseCapability;
-import org.confluence.phase_journey.api.PhaseJourneyEvent;
+import org.confluence.phase_journey.api.phase.IPhaseCapability;
+import org.confluence.phase_journey.api.event.PhaseJourneyEvent;
 import org.confluence.phase_journey.common.init.PJAttachments;
 
 import javax.annotation.ParametersAreNonnullByDefault;

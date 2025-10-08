@@ -16,6 +16,7 @@ import net.neoforged.neoforge.event.level.BlockDropsEvent;
 import net.neoforged.neoforge.event.server.ServerStartedEvent;
 import org.confluence.phase_journey.common.attachment.PhaseAttachment;
 import org.confluence.phase_journey.common.phase.PhaseManager;
+import org.confluence.phase_journey.common.phase.PhaseType;
 import org.confluence.phase_journey.common.phase.item.ItemPhaseContext;
 import org.confluence.phase_journey.common.phase.item.ItemPhaseManager;
 import org.confluence.phase_journey.common.util.PhaseUtils;
@@ -24,15 +25,15 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.function.Consumer;
 
-public class BlockPhaseManager extends PhaseManager<BlockPhaseContext> {
+public class BlockPhaseManager extends PhaseManager<BlockReplacementPhaseContext> {
     public static final BlockPhaseManager MANAGER = new BlockPhaseManager();
 
 
-    private final BiMap<BlockState, BlockPhaseContext> blockStateReplacements = HashBiMap.create();
+    private final BiMap<BlockState, BlockReplacementPhaseContext> blockStateReplacements = HashBiMap.create();
 
     @Override
-    public void register(ResourceLocation phase, BlockPhaseContext phaseContext) {
-        super.register(phase, phaseContext);
+    public void register(PhaseType type,ResourceLocation phase, BlockReplacementPhaseContext phaseContext) {
+        super.register(type,phase, phaseContext);
 
         blockStateReplacements.put(phaseContext.getSource(), phaseContext);
         Item sourceItem = phaseContext.getSource().getBlock().asItem();
@@ -101,9 +102,9 @@ public class BlockPhaseManager extends PhaseManager<BlockPhaseContext> {
 
     public void applyTargetIfNotAchievedPhase(Player player, BlockState source, Consumer<BlockState> targetConsumer) {
         if (source.hasBlockEntity() || source.isAir()) return;
-        BlockPhaseContext replacement = blockStateReplacements.get(source);
+        BlockReplacementPhaseContext replacement = blockStateReplacements.get(source);
         if (replacement == null) return;
-        for (Map.Entry<ResourceLocation, Collection<BlockPhaseContext>> entry : phaseContexts.asMap().entrySet()) {
+        for (Map.Entry<ResourceLocation, Collection<BlockReplacementPhaseContext>> entry : phaseContexts.asMap().entrySet()) {
             if (PhaseUtils.hadPlayerOrLevelAchievedPhase(entry.getKey(), player)) continue;
             if (entry.getValue().contains(replacement)) {
                 targetConsumer.accept(replacement.getTarget());
@@ -114,9 +115,9 @@ public class BlockPhaseManager extends PhaseManager<BlockPhaseContext> {
 
     public void applyTargetIfPlayerNotReachedPhase(Player player, BlockState source, Consumer<BlockState> targetConsumer) {
         if (source.hasBlockEntity() || source.isAir()) return;
-        BlockPhaseContext replacement = blockStateReplacements.get(source);
+        BlockReplacementPhaseContext replacement = blockStateReplacements.get(source);
         if (replacement == null) return;
-        for (Map.Entry<ResourceLocation, Collection<BlockPhaseContext>> entry : phaseContexts.asMap().entrySet()) {
+        for (Map.Entry<ResourceLocation, Collection<BlockReplacementPhaseContext>> entry : phaseContexts.asMap().entrySet()) {
             if (PhaseUtils.hadPlayerReachedPhase(entry.getKey(), player)) continue;
             if (entry.getValue().contains(replacement)) {
                 targetConsumer.accept(replacement.getTarget());
@@ -127,9 +128,9 @@ public class BlockPhaseManager extends PhaseManager<BlockPhaseContext> {
 
     public void applyTargetIfLevelNotFinishedPhase(Level level, BlockState source, Consumer<BlockState> targetConsumer) {
         if (source.hasBlockEntity() || source.isAir()) return;
-        BlockPhaseContext replacement = blockStateReplacements.get(source);
+        BlockReplacementPhaseContext replacement = blockStateReplacements.get(source);
         if (replacement == null) return;
-        for (Map.Entry<ResourceLocation, Collection<BlockPhaseContext>> entry : phaseContexts.asMap().entrySet()) {
+        for (Map.Entry<ResourceLocation, Collection<BlockReplacementPhaseContext>> entry : phaseContexts.asMap().entrySet()) {
             if (PhaseUtils.hadLevelFinishedPhase(entry.getKey(), level)) continue;
             if (entry.getValue().contains(replacement)) {
                 targetConsumer.accept(replacement.getTarget());
@@ -140,9 +141,9 @@ public class BlockPhaseManager extends PhaseManager<BlockPhaseContext> {
 
     public BlockState replaceSourceIfNotAchievedPhase(Player player, BlockState source) {
         if (source.hasBlockEntity() || source.isAir()) return source;
-        BlockPhaseContext replacement = blockStateReplacements.get(source);
+        BlockReplacementPhaseContext replacement = blockStateReplacements.get(source);
         if (replacement == null) return source;
-        for (Map.Entry<ResourceLocation, Collection<BlockPhaseContext>> entry : phaseContexts.asMap().entrySet()) {
+        for (Map.Entry<ResourceLocation, Collection<BlockReplacementPhaseContext>> entry : phaseContexts.asMap().entrySet()) {
             if (PhaseUtils.hadPlayerOrLevelAchievedPhase(entry.getKey(), player)) continue;
             if (entry.getValue().contains(replacement)) {
                 return replacement.getTarget();
@@ -153,9 +154,9 @@ public class BlockPhaseManager extends PhaseManager<BlockPhaseContext> {
 
     public BlockState replaceSourceIfPlayerNotReachedPhase(Player player, BlockState source) {
         if (source.hasBlockEntity() || source.isAir()) return source;
-        BlockPhaseContext replacement = blockStateReplacements.get(source);
+        BlockReplacementPhaseContext replacement = blockStateReplacements.get(source);
         if (replacement == null) return source;
-        for (Map.Entry<ResourceLocation, Collection<BlockPhaseContext>> entry : phaseContexts.asMap().entrySet()) {
+        for (Map.Entry<ResourceLocation, Collection<BlockReplacementPhaseContext>> entry : phaseContexts.asMap().entrySet()) {
             if (PhaseUtils.hadPlayerReachedPhase(entry.getKey(), player)) continue;
             if (entry.getValue().contains(replacement)) {
                 return replacement.getTarget();
@@ -166,9 +167,9 @@ public class BlockPhaseManager extends PhaseManager<BlockPhaseContext> {
 
     public BlockState replaceSourceIfLevelNotFinishedPhase(Level level, BlockState source) {
         if (source.hasBlockEntity() || source.isAir()) return source;
-        BlockPhaseContext replacement = blockStateReplacements.get(source);
+        BlockReplacementPhaseContext replacement = blockStateReplacements.get(source);
         if (replacement == null) return source;
-        for (Map.Entry<ResourceLocation, Collection<BlockPhaseContext>> entry : phaseContexts.asMap().entrySet()) {
+        for (Map.Entry<ResourceLocation, Collection<BlockReplacementPhaseContext>> entry : phaseContexts.asMap().entrySet()) {
             if (PhaseUtils.hadLevelFinishedPhase(entry.getKey(), level)) continue;
             if (entry.getValue().contains(replacement)) {
                 return replacement.getTarget();
@@ -179,9 +180,9 @@ public class BlockPhaseManager extends PhaseManager<BlockPhaseContext> {
 
     public boolean denyDestroy(Player player, BlockState source) {
         if (source.hasBlockEntity() || source.isAir()) return false;
-        for (Map.Entry<ResourceLocation, Collection<BlockPhaseContext>> entry : phaseContexts.asMap().entrySet()) {
+        for (Map.Entry<ResourceLocation, Collection<BlockReplacementPhaseContext>> entry : phaseContexts.asMap().entrySet()) {
             if (PhaseUtils.hadPlayerReachedPhase(entry.getKey(), player)) continue;
-            BlockPhaseContext replacement = blockStateReplacements.get(source);
+            BlockReplacementPhaseContext replacement = blockStateReplacements.get(source);
             if (replacement != null) return !replacement.isDestroyAllowed();
         }
         return false;
@@ -189,7 +190,7 @@ public class BlockPhaseManager extends PhaseManager<BlockPhaseContext> {
 
     public BlockState getReplacedBlockState(BlockState source) {
         if (source.hasBlockEntity() || source.isAir()) return source;
-        BlockPhaseContext replacement = blockStateReplacements.get(source);
+        BlockReplacementPhaseContext replacement = blockStateReplacements.get(source);
         if (replacement == null) return source;
         return replacement.getTarget();
     }
@@ -200,13 +201,13 @@ public class BlockPhaseManager extends PhaseManager<BlockPhaseContext> {
     }
 
     public void replaceBlockProperties(ResourceLocation phase) {
-        for (BlockPhaseContext replacement : phaseContexts.get(phase)) {
+        for (BlockReplacementPhaseContext replacement : phaseContexts.get(phase)) {
             replacement.replaceProperties();
         }
     }
 
     public void rollbackBlockProperties(ResourceLocation phase) {
-        for (BlockPhaseContext replacement : phaseContexts.get(phase)) {
+        for (BlockReplacementPhaseContext replacement : phaseContexts.get(phase)) {
             replacement.rollbackProperties();
         }
     }
