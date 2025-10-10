@@ -4,7 +4,9 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.resources.ResourceLocation;
 import org.confluence.phase_journey.api.phase.IPhaseContext;
+import org.confluence.phase_journey.common.phase.PhaseType;
 
+import java.util.Collection;
 import java.util.List;
 
 public class TouhouLittleMaidPhaseContext implements IPhaseContext {
@@ -26,6 +28,11 @@ public class TouhouLittleMaidPhaseContext implements IPhaseContext {
 
     public ResourceLocation getPhase() {
         return phase;
+    }
+
+    @Override
+    public Collection<PhaseType> getSupportedPhaseTypes() {
+        return List.of(PhaseType.LEVEL, PhaseType.PLAYER);
     }
 
     public List<ResourceLocation> getAllowedTasks() {

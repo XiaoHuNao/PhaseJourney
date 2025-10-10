@@ -28,10 +28,7 @@ public class PhaseJourneyEvent extends Event {
 
         public <T extends IPhaseContext> void register(PhaseType phaseType,PhaseContextType<T> type, T  context) {
             PhaseManager<T> manager = type.manager();
-            switch (phaseType){
-                case LEVEL -> LevelPhaseManager.MANAGER.register(type,context);
-                case PLAYER -> PlayerPhaseManager.MANAGER.register(type,context);
-            }
+            manager.register(phaseType,context.getPhase(),context);
         }
 
     }

@@ -16,6 +16,7 @@ import org.confluence.phase_journey.common.phase.effect.MobEffectPhaseManager;
 import org.confluence.phase_journey.common.phase.interaction.EntityInteractionPhaseManager;
 import org.confluence.phase_journey.common.phase.enchantment.EnchantmentPhaseManager;
 import org.confluence.phase_journey.common.phase.growth.CropGrowthPhaseManager;
+import org.confluence.phase_journey.common.phase.recipe.RecipePhaseManager;
 import org.confluence.phase_journey.integration.LoadedCompat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,6 +40,7 @@ public class PhaseJourney {
         NeoForge.EVENT_BUS.register(EntityInteractionPhaseManager.MANAGER);
         NeoForge.EVENT_BUS.register(MobEffectPhaseManager.MANAGER);
         NeoForge.EVENT_BUS.register(CropGrowthPhaseManager.MANAGER);
+//        NeoForge.EVENT_BUS.register(RecipePhaseManager.MANAGER);
     }
 
     public static ResourceLocation asResource(String path) {

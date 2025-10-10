@@ -21,19 +21,19 @@ import net.minecraft.world.level.Level;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.event.AnvilUpdateEvent;
 
-public class EnchantmentPhaseManager extends PhaseManager<EnchantmentPhaseContext> {
+public class EnchantmentPhaseManager extends PhaseManager<EnchantmentRestrictedContext> {
 
     public static final EnchantmentPhaseManager MANAGER = new EnchantmentPhaseManager();
 
     @Override
-    public void register(PhaseType type, ResourceLocation phase, EnchantmentPhaseContext phaseContext) {
+    public void register(PhaseType type, ResourceLocation phase, EnchantmentRestrictedContext phaseContext) {
         super.register(type, phase, phaseContext);
     }
 
     public boolean isRestricted(Level level, Player player, ResourceKey<Enchantment> enchantment, boolean isEnchantmentTable) {
-        for (Map.Entry<PhaseType, Pair<ResourceLocation, EnchantmentPhaseContext>> entry : phaseContexts.entries()) {
+        for (Map.Entry<PhaseType, Pair<ResourceLocation, EnchantmentRestrictedContext>> entry : phaseContexts.entries()) {
             PhaseType phaseType = entry.getKey();
-            EnchantmentPhaseContext phaseContext = entry.getValue().getSecond();
+            EnchantmentRestrictedContext phaseContext = entry.getValue().getSecond();
             ResourceLocation phase = phaseContext.getPhase();
 
             if (!phaseContext.getSupportedPhaseTypes().contains(phaseType)) {

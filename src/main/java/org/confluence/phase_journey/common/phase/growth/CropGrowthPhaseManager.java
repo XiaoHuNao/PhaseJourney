@@ -18,12 +18,12 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.event.level.block.CropGrowEvent;
 
-public class CropGrowthPhaseManager extends PhaseManager<CropGrowthPhaseContext> {
+public class CropGrowthPhaseManager extends PhaseManager<CropGrowthInhibitionContext> {
 
     public static final CropGrowthPhaseManager MANAGER = new CropGrowthPhaseManager();
 
     @Override
-    public void register(PhaseType type, ResourceLocation phase, CropGrowthPhaseContext phaseContext) {
+    public void register(PhaseType type, ResourceLocation phase, CropGrowthInhibitionContext phaseContext) {
         super.register(type, phase, phaseContext);
     }
 
@@ -31,9 +31,9 @@ public class CropGrowthPhaseManager extends PhaseManager<CropGrowthPhaseContext>
         if (!(state.getBlock() instanceof CropBlock)) {
             return false;
         }
-        for (Map.Entry<PhaseType, Pair<ResourceLocation, CropGrowthPhaseContext>> entry : phaseContexts.entries()) {
+        for (Map.Entry<PhaseType, Pair<ResourceLocation, CropGrowthInhibitionContext>> entry : phaseContexts.entries()) {
             PhaseType phaseType = entry.getKey();
-            CropGrowthPhaseContext phaseContext = entry.getValue().getSecond();
+            CropGrowthInhibitionContext phaseContext = entry.getValue().getSecond();
             ResourceLocation phase = phaseContext.getPhase();
 
             if (!phaseContext.getSupportedPhaseTypes().contains(phaseType)) {

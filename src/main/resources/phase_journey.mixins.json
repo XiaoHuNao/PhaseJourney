@@ -7,6 +7,8 @@
   "mixins": [
     "AbstractContainerMenuMixin",
     "BlockBehaviourMixin",
+    "recipe.vanilla.CraftingMenuMixin",
+    "recipe.vanilla.AbstractFurnaceBlockEntityMixin",
     "EnchantmentTableMenuMixin",
     "ServerPlayerGameModeMixin",
     "hostilenetworks.SimChamberTileEntityMixin"

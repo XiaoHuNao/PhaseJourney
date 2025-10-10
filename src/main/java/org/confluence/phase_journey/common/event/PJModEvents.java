@@ -1,28 +1,15 @@
 package org.confluence.phase_journey.common.event;
 
-import java.util.List;
-
+import net.minecraft.world.item.crafting.RecipeType;
 import org.confluence.phase_journey.PhaseJourney;
 import org.confluence.phase_journey.api.event.PhaseJourneyEvent;
 import org.confluence.phase_journey.common.init.PJPhaseContextTypes;
 import org.confluence.phase_journey.common.init.PJRegistries;
 import org.confluence.phase_journey.common.network.SyncPhasePacketS2C;
 import org.confluence.phase_journey.common.phase.PhaseContextType;
-import org.confluence.phase_journey.common.phase.dimension.DimensionTravelRestrictedContext;
-import org.confluence.phase_journey.common.phase.effect.MobEffectApplicableContext;
-import org.confluence.phase_journey.common.phase.enchantment.EnchantmentPhaseContext;
-import org.confluence.phase_journey.common.phase.interaction.EntityInteractionPhaseContext;
-import org.confluence.phase_journey.integration.curios.CuriosHelper;
-import org.confluence.phase_journey.integration.curios.phase.CuriosEquipPhaseContext;
-import org.confluence.phase_journey.common.phase.growth.CropGrowthPhaseContext;
-import org.confluence.phase_journey.integration.immersiveengineering.IEHelper;
-import org.confluence.phase_journey.integration.immersiveengineering.phase.IEMultiblockPhaseContext;
-import org.confluence.phase_journey.integration.projecte.ProjecteHelper;
-import org.confluence.phase_journey.integration.projecte.phase.TransmutationPhaseContext;
-import net.minecraft.core.registries.Registries;
+import org.confluence.phase_journey.common.phase.PhaseType;
+import org.confluence.phase_journey.common.phase.recipe.RecipeLockContext;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.level.Level;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModLoader;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -30,7 +17,7 @@ import net.neoforged.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 
-@EventBusSubscriber(bus = EventBusSubscriber.Bus.MOD, modid = PhaseJourney.MODID)
+@EventBusSubscriber(modid = PhaseJourney.MODID)
 public final class PJModEvents {
 
     @SubscribeEvent
@@ -57,46 +44,47 @@ public final class PJModEvents {
 
     @SubscribeEvent
     public static void onPhaseJourney(PhaseJourneyEvent.Register event) {
-        event.register(PJPhaseContextTypes.DIMENSION.get(), DimensionTravelRestrictedContext.denyLeave(PhaseJourney.asResource("test"), Level.NETHER));
-
-        event.register(PJPhaseContextTypes.ENCHANTMENT.get(), new EnchantmentPhaseContext(
-                PhaseJourney.asResource("test"),
-                PhaseJourney.asResourceKey(Registries.ENCHANTMENT, ResourceLocation.withDefaultNamespace("protection")),
-                false, false
-        ));
-
-        event.register(PJPhaseContextTypes.ENTITY_INTERACTION.get(), EntityInteractionPhaseContext.builder(PhaseJourney.asResource("test"), EntityType.HORSE)
-                .allowTame(false)
-                .build()
-        );
-
-        event.register(ProjecteHelper.TRANSMUTATION.get(), new TransmutationPhaseContext(PhaseJourney.asResource("test"), true, List.of(), true));
-        event.register(IEHelper.MULTIBLOCK.get(), new IEMultiblockPhaseContext(PhaseJourney.asResource("test"), List.of(), true));
-
-        event.register(PJPhaseContextTypes.MOB_EFFECT.get(), new MobEffectApplicableContext(
-                PhaseJourney.asResource("test"),
-                List.of(PhaseJourney.asResourceKey(Registries.MOB_EFFECT, ResourceLocation.withDefaultNamespace("regeneration"))),
-                false
-        ));
-
-        event.register(PJPhaseContextTypes.CROP_GROWTH.get(), new CropGrowthPhaseContext(
-                PhaseJourney.asResource("test"),
-                List.of(PhaseJourney.asResourceKey(Registries.BLOCK, ResourceLocation.withDefaultNamespace("wheat"))),
-                false
-        ));
-
-//        // HeavenDestinyMoment: disallow moment creation for demonstration phase
-//        event.register(HDMHelper.MOMENT_CREATE.get(), new HDMMomentCreatePhaseContext(
+        event.register(PhaseType.LEVEL,PJPhaseContextTypes.RECIPE.get(), new RecipeLockContext(PhaseJourney.asResource("tset"),ResourceLocation.withDefaultNamespace("stone"), RecipeType.SMELTING));
+//        event.register(PJPhaseContextTypes.DIMENSION.get(), DimensionTravelRestrictedContext.denyLeave(PhaseJourney.asResource("test"), Level.NETHER));
+//
+//        event.register(PJPhaseContextTypes.ENCHANTMENT.get(), new EnchantmentPhaseContext(
 //                PhaseJourney.asResource("test"),
-//                false,
-//                List.of()
+//                PhaseJourney.asResourceKey(Registries.ENCHANTMENT, ResourceLocation.withDefaultNamespace("protection")),
+//                false, false
 //        ));
-        if (org.confluence.phase_journey.integration.LoadedCompat.CURIOS) {
-            event.register(CuriosHelper.EQUIPPING.get(), new CuriosEquipPhaseContext(
-                    PhaseJourney.asResource("test"),
-                    List.of("ring", "belt")
-            ));
-        }
+//
+//        event.register(PJPhaseContextTypes.ENTITY_INTERACTION.get(), EntityInteractionPhaseContext.builder(PhaseJourney.asResource("test"), EntityType.HORSE)
+//                .allowTame(false)
+//                .build()
+//        );
+//
+//        event.register(ProjecteHelper.TRANSMUTATION.get(), new TransmutationPhaseContext(PhaseJourney.asResource("test"), true, List.of(), true));
+//        event.register(IEHelper.MULTIBLOCK.get(), new IEMultiblockPhaseContext(PhaseJourney.asResource("test"), List.of(), true));
+//
+//        event.register(PJPhaseContextTypes.MOB_EFFECT.get(), new MobEffectApplicableContext(
+//                PhaseJourney.asResource("test"),
+//                List.of(PhaseJourney.asResourceKey(Registries.MOB_EFFECT, ResourceLocation.withDefaultNamespace("regeneration"))),
+//                false
+//        ));
+//
+//        event.register(PJPhaseContextTypes.CROP_GROWTH.get(), new CropGrowthPhaseContext(
+//                PhaseJourney.asResource("test"),
+//                List.of(PhaseJourney.asResourceKey(Registries.BLOCK, ResourceLocation.withDefaultNamespace("wheat"))),
+//                false
+//        ));
+//
+////        // HeavenDestinyMoment: disallow moment creation for demonstration phase
+////        event.register(HDMHelper.MOMENT_CREATE.get(), new HDMMomentCreatePhaseContext(
+////                PhaseJourney.asResource("test"),
+////                false,
+////                List.of()
+////        ));
+//        if (org.confluence.phase_journey.integration.LoadedCompat.CURIOS) {
+//            event.register(CuriosHelper.EQUIPPING.get(), new CuriosEquipPhaseContext(
+//                    PhaseJourney.asResource("test"),
+//                    List.of("ring", "belt")
+//            ));
+//        }
 
     }
 }
