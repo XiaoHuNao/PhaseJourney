@@ -127,12 +127,23 @@ repositories {
         name = "Curios"
         url = uri("https://maven.theillusivec4.top/")
     }
+
+    maven {
+        // location of the maven that hosts JEI files since January 2023
+        name = "Jared's maven"
+        url = "https://maven.blamejared.com/"
+    }
+    maven {
+        // location of a maven mirror for JEI files, as a fallback
+        name = "ModMaven"
+        url = "https://modmaven.dev"
+    }
 }
 
 
 dependencies {
-//    api("dev.latvian.mods:kubejs-neoforge:$kubejs_version")
-//    interfaceInjectionData("dev.latvian.mods:kubejs-neoforge:$kubejs_version")
+    compileOnly("mezz.jei:jei-${minecraft_version}-neoforge-api:${jei_version}")
+    runtimeOnly("mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}")
 
     implementation jarJar(project(":XHN-Lib"))
 

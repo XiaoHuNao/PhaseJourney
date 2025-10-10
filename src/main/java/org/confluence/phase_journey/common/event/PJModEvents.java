@@ -44,7 +44,31 @@ public final class PJModEvents {
 
     @SubscribeEvent
     public static void onPhaseJourney(PhaseJourneyEvent.Register event) {
-        event.register(PhaseType.LEVEL,PJPhaseContextTypes.RECIPE.get(), new RecipeLockContext(PhaseJourney.asResource("tset"),ResourceLocation.withDefaultNamespace("stone"), RecipeType.SMELTING));
+        event.register(PhaseType.LEVEL,PJPhaseContextTypes.RECIPE.get(),
+                new RecipeLockContext(
+                    PhaseJourney.asResource("tset"),
+                    ResourceLocation.withDefaultNamespace("stone"),
+                    RecipeType.SMELTING
+                )
+        );
+        event.register(PhaseType.LEVEL,PJPhaseContextTypes.RECIPE.get(), new RecipeLockContext(
+                    PhaseJourney.asResource("tset"),
+                    ResourceLocation.withDefaultNamespace("diamond_from_blasting_diamond_ore"),
+                    RecipeType.BLASTING
+                )
+        );
+        event.register(PhaseType.LEVEL,PJPhaseContextTypes.RECIPE.get(), new RecipeLockContext(
+                PhaseJourney.asResource("tset"),
+                ResourceLocation.withDefaultNamespace("quartz_slab_from_stonecutting"),
+                RecipeType.STONECUTTING
+            )
+        );
+        event.register(PhaseType.LEVEL,PJPhaseContextTypes.RECIPE.get(), new RecipeLockContext(
+                PhaseJourney.asResource("tset"),
+                ResourceLocation.withDefaultNamespace("netherite_sword_smithing"),
+                RecipeType.SMITHING
+            )
+        );
 //        event.register(PJPhaseContextTypes.DIMENSION.get(), DimensionTravelRestrictedContext.denyLeave(PhaseJourney.asResource("test"), Level.NETHER));
 //
 //        event.register(PJPhaseContextTypes.ENCHANTMENT.get(), new EnchantmentPhaseContext(

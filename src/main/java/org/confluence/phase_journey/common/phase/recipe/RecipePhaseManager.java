@@ -2,6 +2,7 @@ package org.confluence.phase_journey.common.phase.recipe;
 
 import java.util.Map;
 
+import net.minecraft.world.entity.player.Player;
 import org.confluence.phase_journey.common.attachment.PhaseAttachment;
 import org.confluence.phase_journey.common.phase.PhaseManager;
 import org.confluence.phase_journey.common.phase.PhaseType;
@@ -18,11 +19,11 @@ public class RecipePhaseManager extends PhaseManager<RecipeLockContext> {
 
     public static final RecipePhaseManager MANAGER = new RecipePhaseManager();
 
-    public boolean isRestricted(Level level, ServerPlayer player, RecipeHolder<?> recipeHolder) {
+    public boolean isRestricted(Level level, Player player, RecipeHolder<?> recipeHolder) {
         return isRestricted(level, null, player, recipeHolder);
     }
 
-    public boolean isRestricted(Level level, BlockPos pos, ServerPlayer player, RecipeHolder<?> recipeHolder) {
+    public boolean isRestricted(Level level, BlockPos pos, Player player, RecipeHolder<?> recipeHolder) {
         for (Map.Entry<PhaseType, Pair<ResourceLocation, RecipeLockContext>> entry : phaseContexts.entries()) {
             PhaseType phaseType = entry.getKey();
             ResourceLocation phase = entry.getValue().getFirst();

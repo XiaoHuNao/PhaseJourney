@@ -7,11 +7,13 @@
   "mixins": [
     "AbstractContainerMenuMixin",
     "BlockBehaviourMixin",
-    "recipe.vanilla.CraftingMenuMixin",
-    "recipe.vanilla.AbstractFurnaceBlockEntityMixin",
     "EnchantmentTableMenuMixin",
     "ServerPlayerGameModeMixin",
-    "hostilenetworks.SimChamberTileEntityMixin"
+    "hostilenetworks.SimChamberTileEntityMixin",
+    "recipe.vanilla.AbstractFurnaceBlockEntityMixin",
+    "recipe.vanilla.CraftingMenuMixin",
+    "recipe.vanilla.SmithingMenuMixin",
+    "recipe.vanilla.StonecutterMenuMixin"
   ],
   "client": [
     "client.BlockModelsMixin",
