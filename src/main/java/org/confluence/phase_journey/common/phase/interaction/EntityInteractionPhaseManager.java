@@ -59,7 +59,7 @@ public class EntityInteractionPhaseManager extends PhaseManager<EntityInteractio
                 return false;
             }
 
-            return phaseAttachment.ifPhaseAbsent(phase, () -> !allowExtractor.apply(phaseContext));
+            return phaseAttachment.ifPhaseAbsent(phase, () -> !allowExtractor.apply(phaseContext),false);
         }
         return false;
     }

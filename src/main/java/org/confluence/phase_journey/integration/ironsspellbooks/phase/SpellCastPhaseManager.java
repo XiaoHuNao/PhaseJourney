@@ -54,7 +54,7 @@ public class SpellCastPhaseManager extends PhaseManager<SpellCastPhaseContext> {
                     }
                 }
                 return false;
-            });
+            },false);
         }
         return false;
     }

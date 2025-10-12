@@ -2,7 +2,6 @@ package org.confluence.phase_journey.common.command;
 
 import java.util.Collection;
 
-import org.confluence.phase_journey.PhaseJourney;
 import org.confluence.phase_journey.common.attachment.PhaseAttachment;
 
 import com.mojang.brigadier.CommandDispatcher;
@@ -39,11 +38,11 @@ public class PhaseJourneyCommands {
         var player = Commands.literal("player")
                 .then(Commands.literal("add")
                         .then(Commands.argument("targets", EntityArgument.players())
-                                .then(Commands.argument("phase", StringArgumentType.word())
+                                .then(Commands.argument("phase", StringArgumentType.greedyString())
                                         .executes(PhaseJourneyCommands::addPlayerPhase))))
                 .then(Commands.literal("remove")
                         .then(Commands.argument("targets", EntityArgument.players())
-                                .then(Commands.argument("phase", StringArgumentType.word())
+                                .then(Commands.argument("phase", StringArgumentType.greedyString())
                                         .executes(PhaseJourneyCommands::removePlayerPhase))))
                 .then(Commands.literal("list")
                         .then(Commands.argument("targets", EntityArgument.players())
@@ -54,13 +53,13 @@ public class PhaseJourneyCommands {
                 .build();
 
         // 世界阶段管理
-        var world = Commands.literal("world")
+        var level = Commands.literal("level")
                 .then(Commands.literal("add")
-                        .then(Commands.argument("phase", StringArgumentType.word())
-                                .executes(PhaseJourneyCommands::addWorldPhase)))
+                        .then(Commands.argument("phase", StringArgumentType.greedyString())
+                                .executes(PhaseJourneyCommands::addLevelPhase)))
                 .then(Commands.literal("remove")
-                        .then(Commands.argument("phase", StringArgumentType.word())
-                                .executes(PhaseJourneyCommands::removeWorldPhase)))
+                        .then(Commands.argument("phase", StringArgumentType.greedyString())
+                                .executes(PhaseJourneyCommands::removeLevelPhase)))
                 .then(Commands.literal("list")
                         .executes(PhaseJourneyCommands::listWorldPhases))
                 .then(Commands.literal("clear")
@@ -68,7 +67,7 @@ public class PhaseJourneyCommands {
                 .build();
 
         phaseJourney.addChild(player);
-        phaseJourney.addChild(world);
+        phaseJourney.addChild(level);
     }
 
     // 玩家阶段管理方法
@@ -157,7 +156,7 @@ public class PhaseJourneyCommands {
     }
 
     // 世界阶段管理方法
-    private static int addWorldPhase(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
+    private static int addLevelPhase(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
         String phaseName = StringArgumentType.getString(context, "phase");
         ResourceLocation phase = ResourceLocation.parse(phaseName);
 
@@ -167,12 +166,10 @@ public class PhaseJourneyCommands {
         if (!attachment.addPhaseIfAbsent(phase)) {
             throw PHASE_ALREADY_EXISTS.create();
         }
-
-        context.getSource().sendSuccess(() -> Component.translatable("commands.phase_journey.world.add.success", phase), true);
         return 1;
     }
 
-    private static int removeWorldPhase(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
+    private static int removeLevelPhase(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
         String phaseName = StringArgumentType.getString(context, "phase");
         ResourceLocation phase = ResourceLocation.parse(phaseName);
 

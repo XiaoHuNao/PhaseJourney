@@ -38,7 +38,7 @@ public class IEMultiblockPhaseManager extends PhaseManager<IEMultiblockPhaseCont
                     return true;
                 }
                 return phaseContext.bannedMultiblocks().contains(multiblockId);
-            });
+            },false);
         }
         return false;
     }

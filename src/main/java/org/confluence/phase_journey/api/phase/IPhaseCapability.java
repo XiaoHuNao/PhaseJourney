@@ -43,11 +43,12 @@ public interface IPhaseCapability {
      * 检查特定阶段是否已解锁，如果未解锁则执行提供的操作
      * @param phase 要检查的阶段标识符
      * @param action 如果阶段未解锁要执行的操作
+     * @param defaultValue 如果阶段未解锁则返回的默认值
      * @return 如果阶段已解锁并执行了操作则返回true，否则返回false
      */
-    default<T> T ifPhaseAbsent(ResourceLocation phase, Supplier<T> action) {
+    default<T> T ifPhaseAbsent(ResourceLocation phase, Supplier<T> action,T defaultValue) {
         if (getPhases().contains(phase)) {
-            return null;
+            return defaultValue;
         }
         return action.get();
     }

@@ -36,7 +36,7 @@ public class TouhouLittleMaidPhaseManager extends PhaseManager<TouhouLittleMaidP
                 return false;
             }
 
-            return phaseAttachment.ifPhaseAbsent(phase, () -> !phaseContext.isTaskAllowed(taskId));
+            return phaseAttachment.ifPhaseAbsent(phase, () -> !phaseContext.isTaskAllowed(taskId),false);
         }
         return false;
     }

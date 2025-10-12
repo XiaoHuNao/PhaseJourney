@@ -138,6 +138,9 @@ repositories {
         name = "ModMaven"
         url = "https://modmaven.dev"
     }
+
+    maven { url = "https://raw.githubusercontent.com/Fuzss/modresources/main/maven/" }
+    maven { url = "https://maven.createmod.net" }
 }
 
 
@@ -193,7 +196,8 @@ dependencies {
     runtimeOnly "curse.maven:create-328085:6641610"
 
     //runtimeOnly("com.simibubi.create:create-${minecraft_version}:${create_version}:slim") { transitive = false }
-    //runtimeOnly("net.createmod.ponder:Ponder-NeoForge-${minecraft_version}:${ponder_version}")
+    compileOnly("net.createmod.ponder:Ponder-NeoForge-${minecraft_version}:${ponder_version}")
+    runtimeOnly("net.createmod.ponder:Ponder-NeoForge-${minecraft_version}:${ponder_version}")
     //runtimeOnly("dev.engine-room.flywheel:flywheel-neoforge-${minecraft_version}:${flywheel_version}")
     //runtimeOnly("com.tterrag.registrate:Registrate:${registrate_version}")
 }

@@ -94,7 +94,7 @@ public class ItemPhaseManager extends PhaseManager<ItemReplacementContext> {
                 return false;
             }
 
-            return attachment.ifPhaseAbsent(phase, () -> true);
+            return attachment.ifPhaseAbsent(phase, () -> true,false);
         }
         return false;
     }

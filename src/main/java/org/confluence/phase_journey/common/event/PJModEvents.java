@@ -1,6 +1,9 @@
 package org.confluence.phase_journey.common.event;
 
+import com.simibubi.create.AllRecipeTypes;
 import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.Fluids;
 import org.confluence.phase_journey.PhaseJourney;
 import org.confluence.phase_journey.api.event.PhaseJourneyEvent;
 import org.confluence.phase_journey.common.init.PJPhaseContextTypes;
@@ -16,6 +19,8 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
+import org.confluence.phase_journey.integration.create.CreateHelper;
+import org.confluence.phase_journey.integration.create.phase.InfiniteFluidPoolContext;
 
 @EventBusSubscriber(modid = PhaseJourney.MODID)
 public final class PJModEvents {
@@ -69,6 +74,16 @@ public final class PJModEvents {
                 RecipeType.SMITHING
             )
         );
+
+        event.register(PhaseType.LEVEL,PJPhaseContextTypes.RECIPE.get(), new RecipeLockContext(
+                PhaseJourney.asResource("tset"),
+                ResourceLocation.tryParse("create:milling/cobblestone"),
+                AllRecipeTypes.MILLING.getType()
+            )
+        );
+
+        event.register(PhaseType.LEVEL, CreateHelper.INFINITE_FLUID_POOL.get(), new InfiniteFluidPoolContext(PhaseJourney.asResource("tset"), Fluids.LAVA));
+
 //        event.register(PJPhaseContextTypes.DIMENSION.get(), DimensionTravelRestrictedContext.denyLeave(PhaseJourney.asResource("test"), Level.NETHER));
 //
 //        event.register(PJPhaseContextTypes.ENCHANTMENT.get(), new EnchantmentPhaseContext(

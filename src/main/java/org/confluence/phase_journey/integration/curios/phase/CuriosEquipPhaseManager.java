@@ -36,7 +36,7 @@ public class CuriosEquipPhaseManager extends PhaseManager<CuriosEquipPhaseContex
                 return false;
             }
 
-            return phaseAttachment.ifPhaseAbsent(phase, () -> phaseContext.bannedSlots().contains(slotIdentifier));
+            return phaseAttachment.ifPhaseAbsent(phase, () -> phaseContext.bannedSlots().contains(slotIdentifier),false);
         }
         return false;
     }

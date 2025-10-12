@@ -27,9 +27,8 @@ public abstract class AbstractFurnaceBlockEntityMixin {
     @Inject(method = "canBurn", at = @At("HEAD"), cancellable = true)
     private static void phasejourney$canBurn(RegistryAccess registryAccess, RecipeHolder<?> recipeHolder, NonNullList<ItemStack> inventory, int maxStackSize, AbstractFurnaceBlockEntity furnace, CallbackInfoReturnable<Boolean> cir) {
         Level level = furnace.getLevel();
-        BlockPos pos = furnace.getBlockPos();
         if (level != null && !level.isClientSide && recipeHolder != null) {
-            if (RecipePhaseManager.MANAGER.isRestricted(level, pos, null, recipeHolder)) {
+            if (RecipePhaseManager.MANAGER.isRestricted(furnace, recipeHolder)) {
                 cir.setReturnValue(false);
             }
         }

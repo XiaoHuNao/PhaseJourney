@@ -1,4 +1,4 @@
-package org.confluence.phase_journey.mixin.hostilenetworks;
+package org.confluence.phase_journey.mixin.integration.hostilenetworks;
 
 
 import dev.shadowsoffire.hostilenetworks.data.DataModel;

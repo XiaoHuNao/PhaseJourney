@@ -43,7 +43,7 @@ public class MobEffectPhaseManager extends PhaseManager<MobEffectApplicableConte
                     return phaseContext.bannedEffects().contains(effect);
                 }
                 return false;
-            });
+            },false);
         }
         return false;
     }

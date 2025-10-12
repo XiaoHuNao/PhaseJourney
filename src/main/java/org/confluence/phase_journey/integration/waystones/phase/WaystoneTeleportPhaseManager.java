@@ -37,7 +37,7 @@ public class WaystoneTeleportPhaseManager extends PhaseManager<WaystoneTeleportP
                 return false;
             }
 
-            return attachment.ifPhaseAbsent(phaseId, () -> violatesContext(ctx, player, event));
+            return attachment.ifPhaseAbsent(phaseId, () -> violatesContext(ctx, player, event),false);
         }
         return false;
     }

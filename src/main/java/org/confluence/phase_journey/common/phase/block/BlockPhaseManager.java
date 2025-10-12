@@ -280,7 +280,7 @@ public class BlockPhaseManager extends PhaseManager<BlockReplacementPhaseContext
                 return false;
             }
 
-            return attachment.ifPhaseAbsent(phase, () -> true);
+            return attachment.ifPhaseAbsent(phase, () -> true,false);
         }
         return false;
     }

@@ -36,7 +36,7 @@ public class TransmutationPhaseManager extends PhaseManager<TransmutationPhaseCo
                 return false;
             }
 
-            return phaseAttachment.ifPhaseAbsent(phase, () -> phaseContext.disableAllItems() || phaseContext.bannedItems().contains(item));
+            return phaseAttachment.ifPhaseAbsent(phase, () -> phaseContext.disableAllItems() || phaseContext.bannedItems().contains(item), false);
         }
         return false;
     }
@@ -56,7 +56,7 @@ public class TransmutationPhaseManager extends PhaseManager<TransmutationPhaseCo
                 return false;
             }
 
-            if (phaseAttachment.ifPhaseAbsent(phase, phaseContext::allowEmcGainButNoLearn)) {
+            if (phaseAttachment.ifPhaseAbsent(phase, phaseContext::allowEmcGainButNoLearn,false)) {
                 return true;
             }
         }

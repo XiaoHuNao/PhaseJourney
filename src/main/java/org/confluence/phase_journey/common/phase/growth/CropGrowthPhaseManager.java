@@ -55,7 +55,7 @@ public class CropGrowthPhaseManager extends PhaseManager<CropGrowthInhibitionCon
                     }
                 }
                 return false;
-            });
+            },false);
         }
         return false;
     }

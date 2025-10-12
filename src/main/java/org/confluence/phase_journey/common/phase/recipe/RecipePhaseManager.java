@@ -3,6 +3,7 @@ package org.confluence.phase_journey.common.phase.recipe;
 import java.util.Map;
 
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import org.confluence.phase_journey.common.attachment.PhaseAttachment;
 import org.confluence.phase_journey.common.phase.PhaseManager;
 import org.confluence.phase_journey.common.phase.PhaseType;
@@ -19,8 +20,15 @@ public class RecipePhaseManager extends PhaseManager<RecipeLockContext> {
 
     public static final RecipePhaseManager MANAGER = new RecipePhaseManager();
 
+    public boolean isRestricted(BlockEntity entity, RecipeHolder<?> recipeHolder) {
+        return isRestricted(entity.getLevel(), entity.getBlockPos(), null, recipeHolder);
+    }
+
     public boolean isRestricted(Level level, Player player, RecipeHolder<?> recipeHolder) {
         return isRestricted(level, null, player, recipeHolder);
+    }
+    public boolean isRestricted(Level level, BlockPos pos, RecipeHolder<?> recipeHolder) {
+        return isRestricted(level, pos, null, recipeHolder);
     }
 
     public boolean isRestricted(Level level, BlockPos pos, Player player, RecipeHolder<?> recipeHolder) {
@@ -46,7 +54,7 @@ public class RecipePhaseManager extends PhaseManager<RecipeLockContext> {
                 return false;
             }
 
-            return attachment.ifPhaseAbsent(phase, () -> true);
+            return attachment.ifPhaseAbsent(phase, () -> true,false);
         }
         return false;
     }

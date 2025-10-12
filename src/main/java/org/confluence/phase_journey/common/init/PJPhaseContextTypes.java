@@ -22,6 +22,7 @@ import org.confluence.phase_journey.common.phase.recipe.RecipePhaseManager;
 import com.xiaohunao.xhn_lib.api.register.holder.FlexibleHolder;
 import com.xiaohunao.xhn_lib.api.register.register.FlexibleRegister;
 import com.xiaohunao.xhn_lib.api.register.register.MapCodecFlexibleRegister;
+import org.confluence.phase_journey.integration.create.phase.InfiniteFluidPoolContext;
 
 public class PJPhaseContextTypes {
 
@@ -35,5 +36,4 @@ public class PJPhaseContextTypes {
     public static final FlexibleHolder<PhaseContextType<?>, PhaseContextType<MobEffectApplicableContext>> MOB_EFFECT = CONDITION_CODEC.registerStatic("mob_effect", () -> new PhaseContextType<>(MobEffectApplicableContext.class, MobEffectPhaseManager.MANAGER));
     public static final FlexibleHolder<PhaseContextType<?>, PhaseContextType<CropGrowthInhibitionContext>> CROP_GROWTH = CONDITION_CODEC.registerStatic("crop_growth", () -> new PhaseContextType<>(CropGrowthInhibitionContext.class, CropGrowthPhaseManager.MANAGER));
     public static final FlexibleHolder<PhaseContextType<?>, PhaseContextType<RecipeLockContext>> RECIPE = CONDITION_CODEC.registerStatic("recipe", () -> new PhaseContextType<>(RecipeLockContext.class, RecipePhaseManager.MANAGER));
-
 }

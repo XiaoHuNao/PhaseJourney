@@ -51,7 +51,7 @@ public class DimensionPhaseManager extends PhaseManager<DimensionTravelRestricte
                 }else {
                     return phaseContext.isLeaveAllowed() && canEntityTravelToDimension(entity.getUUID(), targetDimension, phaseContext, false);
                 }
-            });
+            },false);
         }
         return false;
     }

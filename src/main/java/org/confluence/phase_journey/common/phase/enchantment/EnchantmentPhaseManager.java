@@ -55,7 +55,7 @@ public class EnchantmentPhaseManager extends PhaseManager<EnchantmentRestrictedC
                 } else {
                     return !phaseContext.isAllowAnvil();
                 }
-            });
+            },false);
         }
         return false;
     }
