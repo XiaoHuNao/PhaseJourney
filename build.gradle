@@ -181,7 +181,11 @@ dependencies {
     compileOnly "curse.maven:immersive-engineering-231951:6733669"
     runtimeOnly "curse.maven:immersive-engineering-231951:6733669"
 
-    implementation "curse.maven:irons-spells-n-spellbooks-855414:7036419"
+    compileOnly "curse.maven:irons-spells-n-spellbooks-855414:7036419"
+    runtimeOnly "curse.maven:irons-spells-n-spellbooks-855414:7036419"
+
+    compileOnly "curse.maven:mekanism-268560:7017663"
+    runtimeOnly "curse.maven:mekanism-268560:7017663"
 
     compileOnly "curse.maven:waystones-245755:6976678"
     runtimeOnly "curse.maven:waystones-245755:6976678"
@@ -194,6 +198,12 @@ dependencies {
 
     compileOnly "curse.maven:create-328085:6641610"
     runtimeOnly "curse.maven:create-328085:6641610"
+
+    compileOnly "curse.maven:industrial-foregoing-266515:7073719"
+    runtimeOnly "curse.maven:industrial-foregoing-266515:7073719"
+
+    compileOnly "curse.maven:titanium-287342:6875285"
+    runtimeOnly "curse.maven:titanium-287342:6875285"
 
     //runtimeOnly("com.simibubi.create:create-${minecraft_version}:${create_version}:slim") { transitive = false }
     compileOnly("net.createmod.ponder:Ponder-NeoForge-${minecraft_version}:${ponder_version}")

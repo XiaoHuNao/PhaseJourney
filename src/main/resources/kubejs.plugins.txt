@@ -1,1 +1,1 @@
-org.confluence.phase_journey.integration.kubejs.ModKubeJSPlugin
+com.xiaohunao.phase_journey.integration.kubejs.ModKubeJSPlugin
