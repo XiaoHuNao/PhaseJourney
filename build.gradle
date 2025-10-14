@@ -148,7 +148,8 @@ dependencies {
     compileOnly("mezz.jei:jei-${minecraft_version}-neoforge-api:${jei_version}")
     runtimeOnly("mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}")
 
-    implementation jarJar(project(":XHN-Lib"))
+//    implementation jarJar(project(":XHN-Lib"))
+    implementation(jarJar(group: 'com.xiaohunao', name: 'xhn_lib', version: '1.21.1-0.0.2'))
 
     compileOnly "curse.maven:geckolib-388172:7023453"
     runtimeOnly "curse.maven:geckolib-388172:7023453"
