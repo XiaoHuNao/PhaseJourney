@@ -195,7 +195,7 @@ dependencies {
     runtimeOnly "curse.maven:balm-531761:7047859"
 
     compileOnly "curse.maven:touhou-little-maid-355044:6988538"
-    runtimeOnly "curse.maven:touhou-little-maid-355044:6988538"
+//    runtimeOnly "curse.maven:touhou-little-maid-355044:6988538"
 
     compileOnly "curse.maven:create-328085:6641610"
     runtimeOnly "curse.maven:create-328085:6641610"
