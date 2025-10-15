@@ -16,7 +16,9 @@ import com.xiaohunao.phase_journey.common.phase.interaction.EntityInteractionPha
 import com.xiaohunao.phase_journey.common.phase.interaction.EntityInteractionPhaseManager;
 import com.xiaohunao.phase_journey.common.phase.item.ItemPhaseManager;
 import com.xiaohunao.phase_journey.common.phase.item.ItemReplacementContext;
+import com.xiaohunao.phase_journey.common.phase.recipe.IRecipeContext;
 import com.xiaohunao.phase_journey.common.phase.recipe.RecipeLockContext;
+import com.xiaohunao.phase_journey.common.phase.recipe.RecipeModLockContext;
 import com.xiaohunao.phase_journey.common.phase.recipe.RecipePhaseManager;
 import com.xiaohunao.xhn_lib.api.register.holder.FlexibleHolder;
 import com.xiaohunao.xhn_lib.api.register.register.FlexibleRegister;
@@ -33,5 +35,5 @@ public class PJPhaseContextTypes {
     public static final FlexibleHolder<PhaseContextType<?>, PhaseContextType<EntityInteractionPhaseContext>> ENTITY_INTERACTION = CONDITION_CODEC.registerStatic("entity_interaction", () -> new PhaseContextType<>(EntityInteractionPhaseContext.class, EntityInteractionPhaseManager.MANAGER));
     public static final FlexibleHolder<PhaseContextType<?>, PhaseContextType<MobEffectApplicableContext>> MOB_EFFECT = CONDITION_CODEC.registerStatic("mob_effect", () -> new PhaseContextType<>(MobEffectApplicableContext.class, MobEffectPhaseManager.MANAGER));
     public static final FlexibleHolder<PhaseContextType<?>, PhaseContextType<CropGrowthInhibitionContext>> CROP_GROWTH = CONDITION_CODEC.registerStatic("crop_growth", () -> new PhaseContextType<>(CropGrowthInhibitionContext.class, CropGrowthPhaseManager.MANAGER));
-    public static final FlexibleHolder<PhaseContextType<?>, PhaseContextType<RecipeLockContext>> RECIPE = CONDITION_CODEC.registerStatic("recipe", () -> new PhaseContextType<>(RecipeLockContext.class, RecipePhaseManager.MANAGER));
+    public static final FlexibleHolder<PhaseContextType<?>, PhaseContextType<IRecipeContext>> RECIPE = CONDITION_CODEC.registerStatic("recipe", () -> new PhaseContextType<>(IRecipeContext.class, RecipePhaseManager.MANAGER));
 }

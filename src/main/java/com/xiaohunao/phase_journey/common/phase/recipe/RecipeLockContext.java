@@ -7,7 +7,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.RecipeType;
 
-public class RecipeLockContext extends PhaseContext {
+public class RecipeLockContext extends PhaseContext implements IRecipeContext{
 
     public static final MapCodec<RecipeLockContext> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             ResourceLocation.CODEC.fieldOf("phase").forGetter(RecipeLockContext::getPhase),
@@ -31,5 +31,11 @@ public class RecipeLockContext extends PhaseContext {
     @Override
     public MapCodec<RecipeLockContext> codec() {
         return CODEC;
+    }
+
+
+    @Override
+    public boolean isRestricted(RecipeType<?> recipeType, ResourceLocation recipeID) {
+        return this.recipeType == recipeType && this.recipeID.equals(recipeID);
     }
 }
