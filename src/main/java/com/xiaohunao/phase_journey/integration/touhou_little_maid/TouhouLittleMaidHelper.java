@@ -7,6 +7,7 @@ import com.xiaohunao.phase_journey.integration.touhou_little_maid.phase.TouhouLi
 import com.xiaohunao.xhn_lib.api.register.holder.FlexibleHolder;
 import com.xiaohunao.xhn_lib.api.register.register.FlexibleRegister;
 import com.xiaohunao.xhn_lib.api.register.register.MapCodecFlexibleRegister;
+import dev.latvian.mods.kubejs.script.BindingRegistry;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.common.NeoForge;
 
@@ -19,5 +20,10 @@ public class TouhouLittleMaidHelper {
     public static void register(IEventBus modEventBus) {
         NeoForge.EVENT_BUS.register(TouhouLittleMaidPhaseManager.MANAGER);
         PHASE_CONTEXT_TYPE.register(modEventBus);
+    }
+
+    public static void registerKubeJSBindings(BindingRegistry bindings) {
+        bindings.add("TouhouLittleMaidPhaseContext", TouhouLittleMaidPhaseContext.class);
+        bindings.add("TouhouLittleMaidPhaseManager", TouhouLittleMaidPhaseManager.MANAGER);
     }
 }

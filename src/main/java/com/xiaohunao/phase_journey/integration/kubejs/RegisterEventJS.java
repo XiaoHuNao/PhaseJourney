@@ -8,18 +8,21 @@ import com.xiaohunao.phase_journey.common.phase.PhaseType;
 import dev.latvian.mods.kubejs.event.KubeStartupEvent;
 
 public class RegisterEventJS implements KubeStartupEvent {
-    private final PhaseJourneyEvent.Register event;
-
-    public RegisterEventJS(PhaseJourneyEvent.Register event) {
-        this.event = event;
+    public RegisterEventJS() {
     }
 
     public <T extends IPhaseContext> void register(PhaseType phaseType, PhaseContextType<T> type, T  context) {
-        event.register(phaseType,type,context);
+        PhaseManager<T> manager = type.manager();
+        manager.register(phaseType,context.getPhase(),context);
     }
 
     @SafeVarargs
     public final <T extends IPhaseContext> void register(PhaseType phaseType, PhaseContextType<T> type, T... contexts) {
-        event.register(phaseType,type,contexts);
+        PhaseManager<T> manager = type.manager();
+        for (T ctx : contexts) {
+            manager.register(phaseType,ctx.getPhase(),ctx);
+        }
     }
+
+
 }

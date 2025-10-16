@@ -1,5 +1,6 @@
 package com.xiaohunao.phase_journey.integration.immersiveengineering;
 
+import blusunrize.immersiveengineering.api.crafting.IERecipeTypes;
 import com.xiaohunao.phase_journey.common.init.PJRegistries;
 import com.xiaohunao.phase_journey.common.phase.PhaseContextType;
 import com.xiaohunao.phase_journey.integration.immersiveengineering.phase.IEMultiblockPhaseContext;
@@ -7,6 +8,7 @@ import com.xiaohunao.phase_journey.integration.immersiveengineering.phase.IEMult
 import com.xiaohunao.xhn_lib.api.register.holder.FlexibleHolder;
 import com.xiaohunao.xhn_lib.api.register.register.FlexibleRegister;
 import com.xiaohunao.xhn_lib.api.register.register.MapCodecFlexibleRegister;
+import dev.latvian.mods.kubejs.script.BindingRegistry;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.common.NeoForge;
 
@@ -19,5 +21,11 @@ public class IEHelper {
     public static void register(IEventBus modEventBus) {
         NeoForge.EVENT_BUS.register(IEMultiblockPhaseManager.MANAGER);
         CONDITION_CODEC.register(modEventBus);
+    }
+
+    public static void registerKubeJSBindings(BindingRegistry bindings) {
+        bindings.add("IEMultiblockPhaseManager", IEMultiblockPhaseManager.MANAGER);
+        bindings.add("IEMultiblockPhaseContext", IEMultiblockPhaseContext.class);
+        bindings.add("IERecipeTypes", IERecipeTypes.class);
     }
 }

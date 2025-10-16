@@ -161,7 +161,8 @@ dependencies {
     runtimeOnly "curse.maven:playeranimator-658587:6024462"
 
     implementation "curse.maven:rhino-416294:6886923"
-    implementation "curse.maven:kubejs-238086:5810100"
+    implementation "curse.maven:kubejs-238086:7107528"
+    runtimeOnly "curse.maven:probejs-585406:7105159"
 
     runtimeOnly "top.theillusivec4.curios:curios-neoforge:${curios_version}"
     compileOnly "top.theillusivec4.curios:curios-neoforge:${curios_version}:api"

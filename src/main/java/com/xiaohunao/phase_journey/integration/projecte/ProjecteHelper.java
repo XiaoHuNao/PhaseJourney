@@ -7,6 +7,7 @@ import com.xiaohunao.phase_journey.integration.projecte.phase.TransmutationPhase
 import com.xiaohunao.xhn_lib.api.register.holder.FlexibleHolder;
 import com.xiaohunao.xhn_lib.api.register.register.FlexibleRegister;
 import com.xiaohunao.xhn_lib.api.register.register.MapCodecFlexibleRegister;
+import dev.latvian.mods.kubejs.script.BindingRegistry;
 import moze_intel.projecte.api.ProjectEAPI;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.common.NeoForge;
@@ -20,5 +21,10 @@ public class ProjecteHelper {
     public static void register(IEventBus modEventBus) {
         NeoForge.EVENT_BUS.register(TransmutationPhaseManager.MANAGER);
         CONDITION_CODEC.register(modEventBus);
+    }
+
+    public static void registerKubeJSBindings(BindingRegistry bindings) {
+        bindings.add("TransmutationPhaseManager", TransmutationPhaseManager.MANAGER);
+        bindings.add("TransmutationPhaseContext", TransmutationPhaseContext.class);
     }
 }

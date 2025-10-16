@@ -6,5 +6,5 @@ import dev.latvian.mods.kubejs.event.EventHandler;
 public interface PhaseJourneyEvents {
     EventGroup GROUP = EventGroup.of("PhaseJourney");
 
-    EventHandler REGISTER = GROUP.startup("register", () -> RegisterEventJS.class);
+    EventHandler REGISTER = GROUP.server("register", () -> RegisterEventJS.class);
 }
