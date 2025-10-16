@@ -1,22 +1,10 @@
 package com.xiaohunao.phase_journey.common.event;
 
-import blusunrize.immersiveengineering.api.crafting.IERecipeTypes;
-import com.buuz135.industrial.module.ModuleCore;
-import com.simibubi.create.AllRecipeTypes;
 import com.xiaohunao.phase_journey.PhaseJourney;
 import com.xiaohunao.phase_journey.api.event.PhaseJourneyEvent;
-import com.xiaohunao.phase_journey.common.init.PJPhaseContextTypes;
 import com.xiaohunao.phase_journey.common.init.PJRegistries;
 import com.xiaohunao.phase_journey.common.network.SyncPhasePacketS2C;
 import com.xiaohunao.phase_journey.common.phase.PhaseContextType;
-import com.xiaohunao.phase_journey.common.phase.PhaseType;
-import com.xiaohunao.phase_journey.common.phase.recipe.RecipeLockContext;
-import com.xiaohunao.phase_journey.integration.create.CreateHelper;
-import com.xiaohunao.phase_journey.integration.create.phase.InfiniteFluidPoolContext;
-import mekanism.common.recipe.MekanismRecipeType;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.crafting.RecipeType;
-import net.minecraft.world.level.material.Fluids;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModLoader;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -58,75 +46,75 @@ public final class PJModEvents {
 //                    RecipeType.SMELTING
 //                )
 //        );
-        event.register(PhaseType.LEVEL,PJPhaseContextTypes.RECIPE.get(), new RecipeLockContext(
-                    PhaseJourney.asResource("test"),
-                    ResourceLocation.withDefaultNamespace("diamond_from_blasting_diamond_ore"),
-                    RecipeType.BLASTING
-                )
-        );
-        event.register(PhaseType.LEVEL,PJPhaseContextTypes.RECIPE.get(), new RecipeLockContext(
-                PhaseJourney.asResource("test"),
-                ResourceLocation.withDefaultNamespace("quartz_slab_from_stonecutting"),
-                RecipeType.STONECUTTING
-            )
-        );
-        event.register(PhaseType.LEVEL,PJPhaseContextTypes.RECIPE.get(), new RecipeLockContext(
-                PhaseJourney.asResource("test"),
-                ResourceLocation.withDefaultNamespace("netherite_sword_smithing"),
-                RecipeType.SMITHING
-            )
-        );
-
-        event.register(PhaseType.LEVEL,PJPhaseContextTypes.RECIPE.get(), new RecipeLockContext(
-                PhaseJourney.asResource("test"),
-                ResourceLocation.tryParse("create:milling/cobblestone"),
-                AllRecipeTypes.MILLING.getType()
-            )
-        );
-
-        event.register(PhaseType.LEVEL, CreateHelper.INFINITE_FLUID_POOL.get(), new InfiniteFluidPoolContext(PhaseJourney.asResource("tset"), Fluids.LAVA));
-
-        event.register(PhaseType.LEVEL, PJPhaseContextTypes.RECIPE.get(), new RecipeLockContext(
-                PhaseJourney.asResource("test"),
-                ResourceLocation.tryParse("industrialforegoing:dissolution_chamber/pink_slime_ball"),
-                ModuleCore.DISSOLUTION_TYPE.get()
-        ));
-
-        event.register(PhaseType.LEVEL, PJPhaseContextTypes.RECIPE.get(), new RecipeLockContext(
-                PhaseJourney.asResource("test"),
-                ResourceLocation.tryParse("minecraft:/mekanism_generated/charcoal"),
-                ModuleCore.LASER_DRILL_TYPE.get()
-        ));
-
-        event.register(PhaseType.LEVEL, PJPhaseContextTypes.RECIPE.get(), new RecipeLockContext(
-                PhaseJourney.asResource("test"),
-                ResourceLocation.tryParse("minecraft:/mekanism_generated/charcoal"),
-                MekanismRecipeType.SMELTING.getRecipeType()
-        ));
-
-        event.register(PhaseType.LEVEL, PJPhaseContextTypes.RECIPE.get(), new RecipeLockContext(
-                PhaseJourney.asResource("test"),
-                ResourceLocation.tryParse("immersiveengineering:alloysmelter/constantan"),
-                IERecipeTypes.ALLOY.get()
-        ));
-
-        event.register(PhaseType.LEVEL, PJPhaseContextTypes.RECIPE.get(), new RecipeLockContext(
-                PhaseJourney.asResource("test"),
-                ResourceLocation.tryParse("immersiveengineering:arcfurnace/alloy_constantan"),
-                IERecipeTypes.ARC_FURNACE.get()
-        ));
-
-        event.register(PhaseType.LEVEL, PJPhaseContextTypes.RECIPE.get(), new RecipeLockContext(
-                PhaseJourney.asResource("test"),
-                ResourceLocation.tryParse("immersiveengineering:cokeoven/coke_block"),
-                IERecipeTypes.COKE_OVEN.get()
-        ));
-
-        event.register(PhaseType.LEVEL, PJPhaseContextTypes.RECIPE.get(), new RecipeLockContext(
-                PhaseJourney.asResource("test"),
-                ResourceLocation.tryParse("immersiveengineering:crusher/ingot_iron"),
-                IERecipeTypes.CRUSHER.get()
-        ));
+//        event.register(PhaseType.LEVEL,PJPhaseContextTypes.RECIPE.get(), new RecipeLockContext(
+//                    PhaseJourney.asResource("test"),
+//                    ResourceLocation.withDefaultNamespace("diamond_from_blasting_diamond_ore"),
+//                    RecipeType.BLASTING
+//                )
+//        );
+//        event.register(PhaseType.LEVEL,PJPhaseContextTypes.RECIPE.get(), new RecipeLockContext(
+//                PhaseJourney.asResource("test"),
+//                ResourceLocation.withDefaultNamespace("quartz_slab_from_stonecutting"),
+//                RecipeType.STONECUTTING
+//            )
+//        );
+//        event.register(PhaseType.LEVEL,PJPhaseContextTypes.RECIPE.get(), new RecipeLockContext(
+//                PhaseJourney.asResource("test"),
+//                ResourceLocation.withDefaultNamespace("netherite_sword_smithing"),
+//                RecipeType.SMITHING
+//            )
+//        );
+//
+//        event.register(PhaseType.LEVEL,PJPhaseContextTypes.RECIPE.get(), new RecipeLockContext(
+//                PhaseJourney.asResource("test"),
+//                ResourceLocation.tryParse("create:milling/cobblestone"),
+//                AllRecipeTypes.MILLING.getType()
+//            )
+//        );
+//
+//        event.register(PhaseType.LEVEL, CreateHelper.INFINITE_FLUID_POOL.get(), new InfiniteFluidPoolContext(PhaseJourney.asResource("tset"), Fluids.LAVA));
+//
+//        event.register(PhaseType.LEVEL, PJPhaseContextTypes.RECIPE.get(), new RecipeLockContext(
+//                PhaseJourney.asResource("test"),
+//                ResourceLocation.tryParse("industrialforegoing:dissolution_chamber/pink_slime_ball"),
+//                ModuleCore.DISSOLUTION_TYPE.get()
+//        ));
+//
+//        event.register(PhaseType.LEVEL, PJPhaseContextTypes.RECIPE.get(), new RecipeLockContext(
+//                PhaseJourney.asResource("test"),
+//                ResourceLocation.tryParse("minecraft:/mekanism_generated/charcoal"),
+//                ModuleCore.LASER_DRILL_TYPE.get()
+//        ));
+//
+//        event.register(PhaseType.LEVEL, PJPhaseContextTypes.RECIPE.get(), new RecipeLockContext(
+//                PhaseJourney.asResource("test"),
+//                ResourceLocation.tryParse("minecraft:/mekanism_generated/charcoal"),
+//                MekanismRecipeType.SMELTING.getRecipeType()
+//        ));
+//
+//        event.register(PhaseType.LEVEL, PJPhaseContextTypes.RECIPE.get(), new RecipeLockContext(
+//                PhaseJourney.asResource("test"),
+//                ResourceLocation.tryParse("immersiveengineering:alloysmelter/constantan"),
+//                IERecipeTypes.ALLOY.get()
+//        ));
+//
+//        event.register(PhaseType.LEVEL, PJPhaseContextTypes.RECIPE.get(), new RecipeLockContext(
+//                PhaseJourney.asResource("test"),
+//                ResourceLocation.tryParse("immersiveengineering:arcfurnace/alloy_constantan"),
+//                IERecipeTypes.ARC_FURNACE.get()
+//        ));
+//
+//        event.register(PhaseType.LEVEL, PJPhaseContextTypes.RECIPE.get(), new RecipeLockContext(
+//                PhaseJourney.asResource("test"),
+//                ResourceLocation.tryParse("immersiveengineering:cokeoven/coke_block"),
+//                IERecipeTypes.COKE_OVEN.get()
+//        ));
+//
+//        event.register(PhaseType.LEVEL, PJPhaseContextTypes.RECIPE.get(), new RecipeLockContext(
+//                PhaseJourney.asResource("test"),
+//                ResourceLocation.tryParse("immersiveengineering:crusher/ingot_iron"),
+//                IERecipeTypes.CRUSHER.get()
+//        ));
 //        event.register(PJPhaseContextTypes.DIMENSION.get(), DimensionTravelRetrictedContext.denyLeave(PhaseJourney.asResource("test"), Level.NETHER));
 //
 //        event.register(PJPhaseContextTypes.ENCHANTMENT.get(), new EnchantmentPhaseContext(
@@ -155,12 +143,12 @@ public final class PJModEvents {
 //                false
 //        ));
 //
-////        // HeavenDestinyMoment: disallow moment creation for demonstration phase
-////        event.register(HDMHelper.MOMENT_CREATE.get(), new HDMMomentCreatePhaseContext(
-////                PhaseJourney.asResource("test"),
-////                false,
-////                List.of()
-////        ));
+//        // HeavenDestinyMoment: disallow moment creation for demonstration phase
+//        event.register(HDMHelper.MOMENT_CREATE.get(), new HDMMomentCreatePhaseContext(
+//                PhaseJourney.asResource("test"),
+//                false,
+//                List.of()
+//        ));
 //        if (org.confluence.phase_journey.integration.LoadedCompat.CURIOS) {
 //            event.register(CuriosHelper.EQUIPPING.get(), new CuriosEquipPhaseContext(
 //                    PhaseJourney.asResource("test"),

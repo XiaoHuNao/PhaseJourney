@@ -146,69 +146,69 @@ repositories {
 
 dependencies {
     compileOnly("mezz.jei:jei-${minecraft_version}-neoforge-api:${jei_version}")
-    runtimeOnly("mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}")
+    //runtimeOnly("mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}")
 
 //    implementation jarJar(project(":XHN-Lib"))
     implementation(jarJar(group: 'com.xiaohunao', name: 'xhn_lib', version: '1.21.1-0.0.2'))
 
     compileOnly "curse.maven:geckolib-388172:7023453"
-    runtimeOnly "curse.maven:geckolib-388172:7023453"
+    //runtimeOnly "curse.maven:geckolib-388172:7023453"
 
     compileOnly "curse.maven:jade-324717:6011258"
-    runtimeOnly "curse.maven:jade-324717:6011258"
+    //runtimeOnly "curse.maven:jade-324717:6011258"
 
     compileOnly "curse.maven:playeranimator-658587:6024462"
-    runtimeOnly "curse.maven:playeranimator-658587:6024462"
+    //runtimeOnly "curse.maven:playeranimator-658587:6024462"
 
-    implementation "curse.maven:rhino-416294:6886923"
-    implementation "curse.maven:kubejs-238086:5810100"
+    compileOnly "curse.maven:rhino-416294:6886923"
+    compileOnly "curse.maven:kubejs-238086:5810100"
 
-    runtimeOnly "top.theillusivec4.curios:curios-neoforge:${curios_version}"
+    //runtimeOnly "top.theillusivec4.curios:curios-neoforge:${curios_version}"
     compileOnly "top.theillusivec4.curios:curios-neoforge:${curios_version}:api"
 
     compileOnly "curse.maven:sodium-394468:6382651"
 
     compileOnly "curse.maven:placebo-283644:6926281"
-    runtimeOnly "curse.maven:placebo-283644:6926281"
+    //runtimeOnly "curse.maven:placebo-283644:6926281"
 
     compileOnly "curse.maven:hostile-neural-networks-552574:6751495"
-    runtimeOnly "curse.maven:hostile-neural-networks-552574:6751495"
+    //runtimeOnly "curse.maven:hostile-neural-networks-552574:6751495"
 
     compileOnly("com.simibubi.create:create-${minecraft_version}:${create_version}") { transitive = false }
 
     compileOnly "curse.maven:projecte-226410:6611984"
-    runtimeOnly "curse.maven:projecte-226410:6611984"
+    //runtimeOnly "curse.maven:projecte-226410:6611984"
 
     compileOnly "curse.maven:immersive-engineering-231951:6733669"
-    runtimeOnly "curse.maven:immersive-engineering-231951:6733669"
+    //runtimeOnly "curse.maven:immersive-engineering-231951:6733669"
 
     compileOnly "curse.maven:irons-spells-n-spellbooks-855414:7036419"
-    runtimeOnly "curse.maven:irons-spells-n-spellbooks-855414:7036419"
+    //runtimeOnly "curse.maven:irons-spells-n-spellbooks-855414:7036419"
 
     compileOnly "curse.maven:mekanism-268560:7017663"
-    runtimeOnly "curse.maven:mekanism-268560:7017663"
+    //runtimeOnly "curse.maven:mekanism-268560:7017663"
 
     compileOnly "curse.maven:waystones-245755:6976678"
-    runtimeOnly "curse.maven:waystones-245755:6976678"
+    //runtimeOnly "curse.maven:waystones-245755:6976678"
 
     compileOnly "curse.maven:balm-531761:7047859"
-    runtimeOnly "curse.maven:balm-531761:7047859"
+    //runtimeOnly "curse.maven:balm-531761:7047859"
 
     compileOnly "curse.maven:touhou-little-maid-355044:6988538"
 //    runtimeOnly "curse.maven:touhou-little-maid-355044:6988538"
 
     compileOnly "curse.maven:create-328085:6641610"
-    runtimeOnly "curse.maven:create-328085:6641610"
+    //runtimeOnly "curse.maven:create-328085:6641610"
 
     compileOnly "curse.maven:industrial-foregoing-266515:7073719"
-    runtimeOnly "curse.maven:industrial-foregoing-266515:7073719"
+    //runtimeOnly "curse.maven:industrial-foregoing-266515:7073719"
 
     compileOnly "curse.maven:titanium-287342:6875285"
-    runtimeOnly "curse.maven:titanium-287342:6875285"
+    //runtimeOnly "curse.maven:titanium-287342:6875285"
 
     //runtimeOnly("com.simibubi.create:create-${minecraft_version}:${create_version}:slim") { transitive = false }
     compileOnly("net.createmod.ponder:Ponder-NeoForge-${minecraft_version}:${ponder_version}")
-    runtimeOnly("net.createmod.ponder:Ponder-NeoForge-${minecraft_version}:${ponder_version}")
+    //runtimeOnly("net.createmod.ponder:Ponder-NeoForge-${minecraft_version}:${ponder_version}")
     //runtimeOnly("dev.engine-room.flywheel:flywheel-neoforge-${minecraft_version}:${flywheel_version}")
     //runtimeOnly("com.tterrag.registrate:Registrate:${registrate_version}")
 }

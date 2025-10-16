@@ -17,8 +17,6 @@ import com.xiaohunao.phase_journey.common.phase.interaction.EntityInteractionPha
 import com.xiaohunao.phase_journey.common.phase.item.ItemPhaseManager;
 import com.xiaohunao.phase_journey.common.phase.item.ItemReplacementContext;
 import com.xiaohunao.phase_journey.common.phase.recipe.IRecipeContext;
-import com.xiaohunao.phase_journey.common.phase.recipe.RecipeLockContext;
-import com.xiaohunao.phase_journey.common.phase.recipe.RecipeModLockContext;
 import com.xiaohunao.phase_journey.common.phase.recipe.RecipePhaseManager;
 import com.xiaohunao.xhn_lib.api.register.holder.FlexibleHolder;
 import com.xiaohunao.xhn_lib.api.register.register.FlexibleRegister;

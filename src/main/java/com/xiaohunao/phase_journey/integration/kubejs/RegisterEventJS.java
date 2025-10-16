@@ -3,7 +3,6 @@ package com.xiaohunao.phase_journey.integration.kubejs;
 import com.xiaohunao.phase_journey.api.event.PhaseJourneyEvent;
 import com.xiaohunao.phase_journey.api.phase.IPhaseContext;
 import com.xiaohunao.phase_journey.common.phase.PhaseContextType;
-import com.xiaohunao.phase_journey.common.phase.PhaseManager;
 import com.xiaohunao.phase_journey.common.phase.PhaseType;
 import dev.latvian.mods.kubejs.event.KubeStartupEvent;
 

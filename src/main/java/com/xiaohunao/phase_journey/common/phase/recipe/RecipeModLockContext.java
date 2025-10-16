@@ -3,7 +3,6 @@ package com.xiaohunao.phase_journey.common.phase.recipe;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.xiaohunao.phase_journey.common.phase.PhaseContext;
-
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.ExtraCodecs;
