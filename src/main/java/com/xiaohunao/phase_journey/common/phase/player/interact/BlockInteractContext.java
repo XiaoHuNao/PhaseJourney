@@ -1,6 +1,9 @@
 package com.xiaohunao.phase_journey.common.phase.player.interact;
 
 import com.google.common.collect.Lists;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.xiaohunao.phase_journey.api.phase.IPhaseContext;
 import com.xiaohunao.phase_journey.common.phase.InteractType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
@@ -9,6 +12,12 @@ import net.minecraft.world.level.block.Block;
 import java.util.List;
 
 public class BlockInteractContext extends InteractContext {
+    public static final MapCodec<BlockInteractContext> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+            ResourceLocation.CODEC.fieldOf("phase").forGetter(BlockInteractContext::getPhase),
+            InteractType.CODEC.listOf().fieldOf("interact_types").forGetter(BlockInteractContext::getInteractTypes),
+            Block.CODEC.fieldOf("block").forGetter(BlockInteractContext::getBlock)
+    ).apply(instance, BlockInteractContext::new));
+
     public final Block block;
 
     public BlockInteractContext(ResourceLocation phase, List<InteractType> interactTypes, Block block) {
@@ -22,6 +31,11 @@ public class BlockInteractContext extends InteractContext {
 
     public static Builder builder(ResourceLocation phase, Block block) {
         return new Builder(phase, block);
+    }
+
+    @Override
+    public MapCodec<? extends IPhaseContext> codec() {
+        return CODEC;
     }
 
     public static final class Builder {

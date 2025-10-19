@@ -14,19 +14,6 @@ import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 
 @EventBusSubscriber(modid = PhaseJourney.MODID)
 public final class PJModEvents {
-
-    @SubscribeEvent
-    public static void loadComplete(FMLLoadCompleteEvent event) {
-        event.enqueueWork(() -> {
-            PhaseJourneyEvent.Register register = new PhaseJourneyEvent.Register();
-            ModLoader.postEvent(register);
-
-            for (PhaseContextType<?> type : PJRegistries.PHASE_CONTEXT_TYPE) {
-                type.manager().init();
-            }
-        });
-    }
-
     @SubscribeEvent
     public static void registerPayloadHandler(RegisterPayloadHandlersEvent event) {
         PayloadRegistrar registrar = event.registrar("1");

@@ -3,6 +3,7 @@ package com.xiaohunao.phase_journey.integration.projecte.phase;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.xiaohunao.phase_journey.api.phase.IPhaseContext;
 import com.xiaohunao.phase_journey.common.phase.PhaseContext;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
@@ -45,6 +46,11 @@ public class TransmutationPhaseContext extends PhaseContext {
 
     public boolean allowEmcGainButNoLearn() {
         return allowEmcGainButNoLearn;
+    }
+
+    @Override
+    public MapCodec<? extends IPhaseContext> codec() {
+        return CODEC;
     }
 }
 

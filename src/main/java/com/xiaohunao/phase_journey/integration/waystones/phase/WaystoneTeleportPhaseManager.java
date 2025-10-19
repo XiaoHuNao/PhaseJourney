@@ -1,22 +1,16 @@
 package com.xiaohunao.phase_journey.integration.waystones.phase;
 
-import com.mojang.datafixers.util.Pair;
-import com.xiaohunao.phase_journey.common.attachment.PhaseAttachment;
-import com.xiaohunao.phase_journey.common.phase.PhaseManager;
-import com.xiaohunao.phase_journey.common.phase.PhaseType;
+import com.xiaohunao.phase_journey.api.phase.PhaseManager;
 import net.blay09.mods.waystones.api.Waystone;
 import net.blay09.mods.waystones.api.WaystoneTeleportContext;
 import net.blay09.mods.waystones.api.event.WaystoneTeleportEvent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.SubscribeEvent;
-
-import java.util.Map;
 
 public class WaystoneTeleportPhaseManager extends PhaseManager<WaystoneTeleportPhaseContext> {
 

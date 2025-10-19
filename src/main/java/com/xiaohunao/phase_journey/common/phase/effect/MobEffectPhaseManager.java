@@ -1,11 +1,7 @@
 package com.xiaohunao.phase_journey.common.phase.effect;
 
-import com.mojang.datafixers.util.Pair;
-import com.xiaohunao.phase_journey.common.attachment.PhaseAttachment;
-import com.xiaohunao.phase_journey.common.phase.PhaseManager;
-import com.xiaohunao.phase_journey.common.phase.PhaseType;
+import com.xiaohunao.phase_journey.api.phase.PhaseManager;
 import net.minecraft.core.Holder;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -14,7 +10,6 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.event.entity.living.MobEffectEvent;
 
 import javax.annotation.Nullable;
-import java.util.Map;
 
 public class MobEffectPhaseManager extends PhaseManager<MobEffectApplicableContext> {
     public static final MobEffectPhaseManager MANAGER = new MobEffectPhaseManager();

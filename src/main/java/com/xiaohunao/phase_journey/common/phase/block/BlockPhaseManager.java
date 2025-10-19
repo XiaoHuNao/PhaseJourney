@@ -4,7 +4,7 @@ import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import com.mojang.datafixers.util.Pair;
 import com.xiaohunao.phase_journey.common.attachment.PhaseAttachment;
-import com.xiaohunao.phase_journey.common.phase.PhaseManager;
+import com.xiaohunao.phase_journey.api.phase.PhaseManager;
 import com.xiaohunao.phase_journey.common.phase.PhaseType;
 import com.xiaohunao.phase_journey.common.phase.item.ItemPhaseManager;
 import com.xiaohunao.phase_journey.common.phase.item.ItemReplacementContext;

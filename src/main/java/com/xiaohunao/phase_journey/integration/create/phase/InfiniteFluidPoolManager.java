@@ -3,16 +3,13 @@ package com.xiaohunao.phase_journey.integration.create.phase;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import com.mojang.datafixers.util.Pair;
-import com.xiaohunao.phase_journey.common.attachment.PhaseAttachment;
-import com.xiaohunao.phase_journey.common.phase.PhaseManager;
+import com.xiaohunao.phase_journey.api.phase.PhaseManager;
 import com.xiaohunao.phase_journey.common.phase.PhaseType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.material.Fluid;
-
-import java.util.Map;
 
 /**
  * 无限流体池管理器

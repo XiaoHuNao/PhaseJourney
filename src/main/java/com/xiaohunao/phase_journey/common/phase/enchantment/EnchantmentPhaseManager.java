@@ -1,8 +1,6 @@
 package com.xiaohunao.phase_journey.common.phase.enchantment;
 
-import com.mojang.datafixers.util.Pair;
-import com.xiaohunao.phase_journey.common.attachment.PhaseAttachment;
-import com.xiaohunao.phase_journey.common.phase.PhaseManager;
+import com.xiaohunao.phase_journey.api.phase.PhaseManager;
 import com.xiaohunao.phase_journey.common.phase.PhaseType;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import net.minecraft.core.Holder;
@@ -16,8 +14,6 @@ import net.minecraft.world.item.enchantment.ItemEnchantments;
 import net.minecraft.world.level.Level;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.event.AnvilUpdateEvent;
-
-import java.util.Map;
 
 public class EnchantmentPhaseManager extends PhaseManager<EnchantmentRestrictedContext> {
 

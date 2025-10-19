@@ -1,8 +1,6 @@
 package com.xiaohunao.phase_journey.common.phase.dimension;
 
-import com.mojang.datafixers.util.Pair;
-import com.xiaohunao.phase_journey.common.attachment.PhaseAttachment;
-import com.xiaohunao.phase_journey.common.phase.PhaseManager;
+import com.xiaohunao.phase_journey.api.phase.PhaseManager;
 import com.xiaohunao.phase_journey.common.phase.PhaseType;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;

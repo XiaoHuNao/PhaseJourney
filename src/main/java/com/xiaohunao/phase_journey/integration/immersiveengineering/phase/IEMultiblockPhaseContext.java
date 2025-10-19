@@ -3,13 +3,13 @@ package com.xiaohunao.phase_journey.integration.immersiveengineering.phase;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.xiaohunao.phase_journey.api.phase.IPhaseContext;
 import com.xiaohunao.phase_journey.common.phase.PhaseContext;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.List;
 
 public class IEMultiblockPhaseContext extends PhaseContext {
-
     public static final MapCodec<IEMultiblockPhaseContext> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             ResourceLocation.CODEC.fieldOf("phase").forGetter(IEMultiblockPhaseContext::phase),
             ResourceLocation.CODEC.listOf().fieldOf("banned_multiblocks").forGetter(IEMultiblockPhaseContext::bannedMultiblocks),
@@ -35,5 +35,10 @@ public class IEMultiblockPhaseContext extends PhaseContext {
 
     public boolean disableAll() {
         return disableAll;
+    }
+
+    @Override
+    public MapCodec<? extends IPhaseContext> codec() {
+        return CODEC;
     }
 }

@@ -1,9 +1,6 @@
 package com.xiaohunao.phase_journey.integration.ironsspellbooks.phase;
 
-import com.mojang.datafixers.util.Pair;
-import com.xiaohunao.phase_journey.common.attachment.PhaseAttachment;
-import com.xiaohunao.phase_journey.common.phase.PhaseManager;
-import com.xiaohunao.phase_journey.common.phase.PhaseType;
+import com.xiaohunao.phase_journey.api.phase.PhaseManager;
 import io.redspace.ironsspellbooks.api.events.SpellPreCastEvent;
 import io.redspace.ironsspellbooks.api.spells.SchoolType;
 import net.minecraft.resources.ResourceLocation;
@@ -12,7 +9,6 @@ import net.minecraft.world.level.Level;
 import net.neoforged.bus.api.SubscribeEvent;
 
 import java.util.List;
-import java.util.Map;
 
 public class SpellCastPhaseManager extends PhaseManager<SpellCastPhaseContext> {
 

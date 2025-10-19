@@ -10,7 +10,7 @@ import com.xiaohunao.phase_journey.common.init.PJPhaseContextTypes;
 import com.xiaohunao.phase_journey.common.init.PJRegistries;
 import com.xiaohunao.phase_journey.common.phase.PhaseContext;
 import com.xiaohunao.phase_journey.common.phase.PhaseContextType;
-import com.xiaohunao.phase_journey.common.phase.PhaseManager;
+import com.xiaohunao.phase_journey.api.phase.PhaseManager;
 import com.xiaohunao.phase_journey.common.phase.PhaseType;
 import com.xiaohunao.phase_journey.common.phase.block.BlockPhaseManager;
 import com.xiaohunao.phase_journey.common.phase.block.BlockReplacementPhaseContext;
@@ -26,7 +26,6 @@ import com.xiaohunao.phase_journey.common.phase.item.ItemPhaseManager;
 import com.xiaohunao.phase_journey.common.phase.item.ItemReplacementContext;
 import com.xiaohunao.phase_journey.common.phase.player.interact.BlockInteractContext;
 import com.xiaohunao.phase_journey.common.phase.player.interact.EntityInteractContext;
-import com.xiaohunao.phase_journey.common.phase.player.interact.InteractContext;
 import com.xiaohunao.phase_journey.common.phase.player.interact.InteractContextManager;
 import com.xiaohunao.phase_journey.common.phase.recipe.RecipeLockContext;
 import com.xiaohunao.phase_journey.common.phase.recipe.RecipeModLockContext;
@@ -45,18 +44,6 @@ public class ModKubeJSPlugin implements KubeJSPlugin {
     public void registerEvents(EventGroupRegistry registry) {
         registry.register(PhaseJourneyEvents.GROUP);
     }
-    @Override
-    public void initStartup() {
-        ModList.get().getModContainerById(PhaseJourney.MODID).ifPresent(container -> {
-            IEventBus eventBus = container.getEventBus();
-            if (eventBus != null) eventBus.addListener(PhaseJourneyEvent.Register.class, event -> {
-                if (PhaseJourneyEvents.REGISTER.hasListeners()) {
-                    PhaseJourneyEvents.REGISTER.post(new PhaseJourneyEventJS.RegisterJS(event));
-                }
-            });
-        });
-    }
-
 
     @Override
     public void registerBindings(BindingRegistry bindings) {

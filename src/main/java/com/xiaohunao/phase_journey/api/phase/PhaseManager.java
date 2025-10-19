@@ -1,33 +1,62 @@
-package com.xiaohunao.phase_journey.common.phase;
+package com.xiaohunao.phase_journey.api.phase;
 
+
+import java.util.Collection;
+import java.util.Map;
+import java.util.function.BiConsumer;
+import java.util.function.Function;
+
+import javax.annotation.Nullable;
+
+import com.google.gson.JsonElement;
+import com.xiaohunao.phase_journey.api.event.PhaseJourneyEvent;
+import com.xiaohunao.phase_journey.common.phase.PhaseContextType;
+import net.minecraft.core.MappedRegistry;
+import net.neoforged.neoforge.common.NeoForge;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import com.mojang.datafixers.util.Pair;
-import com.xiaohunao.phase_journey.api.phase.IPhaseContext;
+import com.mojang.serialization.Codec;
 import com.xiaohunao.phase_journey.common.attachment.PhaseAttachment;
+import com.xiaohunao.phase_journey.common.init.PJRegistries;
+import com.xiaohunao.phase_journey.common.phase.PhaseType;
+import com.xiaohunao.xhn_lib.api.data.loader.BaseDynamicLoader;
+import com.xiaohunao.xhn_lib.common.serialization.IDynamicSerializer;
+
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import javax.annotation.Nullable;
-import java.util.Collection;
-import java.util.Map;
-import java.util.function.BiConsumer;
-import java.util.function.BiFunction;
-import java.util.function.Function;
-import java.util.function.Supplier;
-
-public abstract class PhaseManager <T extends IPhaseContext> {
+public abstract class PhaseManager <T extends IPhaseContext> extends BaseDynamicLoader<T> {
     public static final Logger LOGGER = LoggerFactory.getLogger(PhaseManager.class);
     protected final Multimap<PhaseType, Pair<ResourceLocation, T>> phaseContexts = ArrayListMultimap.create();
 
-    public void register(PhaseType type,ResourceLocation phase, T phaseContext) {
+    public PhaseManager(String folderName, Registry<T> registry, IDynamicSerializer<T> serializer) {
+        super(folderName, registry, serializer);
+    }
+
+    public PhaseManager() {
+        super((Registry<T>) PJRegistries.PHASE_CONTEXT, IDynamicSerializer.of((Codec<T>) IPhaseContext.CODEC));
+    }
+
+    @Override
+    protected void loadNewValues(MappedRegistry<T> mappedRegistry, Map<ResourceLocation, JsonElement> resources) {
+        PhaseJourneyEvent.Register register = new PhaseJourneyEvent.Register();
+        NeoForge.EVENT_BUS.post(register);
+
+        for (PhaseContextType<?> type : PJRegistries.PHASE_CONTEXT_TYPE) {
+            type.manager().init();
+        }
+    }
+
+    public void register(PhaseType type, ResourceLocation phase, T phaseContext) {
         if (phaseContext.getSupportedPhaseTypes().contains(type)){
             phaseContexts.put(type, Pair.of(phase, phaseContext));
         }else {

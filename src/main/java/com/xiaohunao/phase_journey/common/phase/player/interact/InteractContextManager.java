@@ -3,7 +3,7 @@ package com.xiaohunao.phase_journey.common.phase.player.interact;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import com.xiaohunao.phase_journey.common.phase.InteractType;
-import com.xiaohunao.phase_journey.common.phase.PhaseManager;
+import com.xiaohunao.phase_journey.api.phase.PhaseManager;
 import com.xiaohunao.phase_journey.common.phase.PhaseType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;

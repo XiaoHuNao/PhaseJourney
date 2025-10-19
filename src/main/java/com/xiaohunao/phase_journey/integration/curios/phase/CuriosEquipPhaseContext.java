@@ -3,13 +3,13 @@ package com.xiaohunao.phase_journey.integration.curios.phase;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.xiaohunao.phase_journey.api.phase.IPhaseContext;
 import com.xiaohunao.phase_journey.common.phase.PhaseContext;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.List;
 
 public class CuriosEquipPhaseContext extends PhaseContext {
-
     public static final MapCodec<CuriosEquipPhaseContext> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             ResourceLocation.CODEC.fieldOf("phase").forGetter(CuriosEquipPhaseContext::phase),
             Codec.STRING.listOf().fieldOf("banned_slots").forGetter(CuriosEquipPhaseContext::bannedSlots)
@@ -28,5 +28,10 @@ public class CuriosEquipPhaseContext extends PhaseContext {
 
     public List<String> bannedSlots() {
         return bannedSlots;
+    }
+
+    @Override
+    public MapCodec<? extends IPhaseContext> codec() {
+        return CODEC;
     }
 }

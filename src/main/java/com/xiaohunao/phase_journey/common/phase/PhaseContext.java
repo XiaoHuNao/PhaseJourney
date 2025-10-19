@@ -8,11 +8,7 @@ import net.minecraft.resources.ResourceLocation;
 import java.util.Collection;
 import java.util.List;
 
-public class PhaseContext implements IPhaseContext {
-    public static final MapCodec<PhaseContext> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-            ResourceLocation.CODEC.fieldOf("phase").forGetter(PhaseContext::getPhase)
-    ).apply(instance, PhaseContext::new));
-
+public abstract class PhaseContext implements IPhaseContext {
     protected ResourceLocation phase;
 
     public PhaseContext(ResourceLocation phase) {
@@ -33,7 +29,5 @@ public class PhaseContext implements IPhaseContext {
 
 
     @Override
-    public MapCodec<? extends IPhaseContext> codec() {
-        return CODEC;
-    }
+    public abstract MapCodec<? extends IPhaseContext> codec();
 }

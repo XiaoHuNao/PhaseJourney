@@ -1,10 +1,6 @@
 package com.xiaohunao.phase_journey.integration.curios.phase;
 
-import com.mojang.datafixers.util.Pair;
-import com.xiaohunao.phase_journey.common.attachment.PhaseAttachment;
-import com.xiaohunao.phase_journey.common.phase.PhaseManager;
-import com.xiaohunao.phase_journey.common.phase.PhaseType;
-import net.minecraft.resources.ResourceLocation;
+import com.xiaohunao.phase_journey.api.phase.PhaseManager;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -12,8 +8,6 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.common.util.TriState;
 import top.theillusivec4.curios.api.SlotContext;
 import top.theillusivec4.curios.api.event.CurioCanEquipEvent;
-
-import java.util.Map;
 
 public class CuriosEquipPhaseManager extends PhaseManager<CuriosEquipPhaseContext> {
 

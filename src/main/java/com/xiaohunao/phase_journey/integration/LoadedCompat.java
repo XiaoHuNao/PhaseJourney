@@ -2,7 +2,6 @@ package com.xiaohunao.phase_journey.integration;
 
 import com.xiaohunao.phase_journey.integration.create.CreateHelper;
 import com.xiaohunao.phase_journey.integration.curios.CuriosHelper;
-import com.xiaohunao.phase_journey.integration.hostilenetworks.HNNHelper;
 import com.xiaohunao.phase_journey.integration.immersiveengineering.IEHelper;
 import com.xiaohunao.phase_journey.integration.industrialforegoing.IFHelper;
 import com.xiaohunao.phase_journey.integration.ironsspellbooks.ISSHelper;
@@ -77,9 +76,9 @@ public class LoadedCompat {
             CuriosHelper.registerKubeJSBindings(bindings);
         }
 
-        if (HOSTILE_NETWORKS){
-            HNNHelper.registerKubeJSBindings(bindings);
-        }
+//        if (HOSTILE_NETWORKS){
+//            HNNHelper.registerKubeJSBindings(bindings);
+//        }
 
         if (IE){
             IEHelper.registerKubeJSBindings(bindings);

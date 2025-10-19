@@ -1,9 +1,6 @@
 package com.xiaohunao.phase_journey.common.phase.recipe;
 
-import com.mojang.datafixers.util.Pair;
-import com.xiaohunao.phase_journey.common.attachment.PhaseAttachment;
-import com.xiaohunao.phase_journey.common.phase.PhaseManager;
-import com.xiaohunao.phase_journey.common.phase.PhaseType;
+import com.xiaohunao.phase_journey.api.phase.PhaseManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;

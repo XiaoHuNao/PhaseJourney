@@ -1,17 +1,12 @@
 package com.xiaohunao.phase_journey.integration.immersiveengineering.phase;
 
 import blusunrize.immersiveengineering.api.multiblocks.MultiblockHandler;
-import com.mojang.datafixers.util.Pair;
-import com.xiaohunao.phase_journey.common.attachment.PhaseAttachment;
-import com.xiaohunao.phase_journey.common.phase.PhaseManager;
-import com.xiaohunao.phase_journey.common.phase.PhaseType;
+import com.xiaohunao.phase_journey.api.phase.PhaseManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.neoforged.bus.api.SubscribeEvent;
-
-import java.util.Map;
 
 public class IEMultiblockPhaseManager extends PhaseManager<IEMultiblockPhaseContext> {
 

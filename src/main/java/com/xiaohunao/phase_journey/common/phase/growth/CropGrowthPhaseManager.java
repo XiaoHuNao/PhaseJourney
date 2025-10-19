@@ -1,8 +1,6 @@
 package com.xiaohunao.phase_journey.common.phase.growth;
 
-import com.mojang.datafixers.util.Pair;
-import com.xiaohunao.phase_journey.common.attachment.PhaseAttachment;
-import com.xiaohunao.phase_journey.common.phase.PhaseManager;
+import com.xiaohunao.phase_journey.api.phase.PhaseManager;
 import com.xiaohunao.phase_journey.common.phase.PhaseType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceKey;
@@ -14,8 +12,6 @@ import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.event.level.block.CropGrowEvent;
-
-import java.util.Map;
 
 public class CropGrowthPhaseManager extends PhaseManager<CropGrowthInhibitionContext> {
 

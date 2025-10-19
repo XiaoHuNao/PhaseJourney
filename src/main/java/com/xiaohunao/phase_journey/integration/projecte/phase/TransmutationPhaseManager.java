@@ -3,7 +3,7 @@ package com.xiaohunao.phase_journey.integration.projecte.phase;
 import blusunrize.immersiveengineering.api.multiblocks.MultiblockHandler;
 import com.mojang.datafixers.util.Pair;
 import com.xiaohunao.phase_journey.common.attachment.PhaseAttachment;
-import com.xiaohunao.phase_journey.common.phase.PhaseManager;
+import com.xiaohunao.phase_journey.api.phase.PhaseManager;
 import com.xiaohunao.phase_journey.common.phase.PhaseType;
 import moze_intel.projecte.api.event.PlayerAttemptCondenserSetEvent;
 import moze_intel.projecte.api.event.PlayerAttemptLearnEvent;
