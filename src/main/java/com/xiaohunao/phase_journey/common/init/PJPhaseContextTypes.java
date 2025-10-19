@@ -15,6 +15,7 @@ import com.xiaohunao.phase_journey.common.phase.growth.CropGrowthPhaseManager;
 import com.xiaohunao.phase_journey.common.phase.item.ItemPhaseManager;
 import com.xiaohunao.phase_journey.common.phase.item.ItemReplacementContext;
 import com.xiaohunao.phase_journey.common.phase.player.interact.InteractContext;
+import com.xiaohunao.phase_journey.common.phase.player.interact.InteractContextManager;
 import com.xiaohunao.phase_journey.common.phase.recipe.IRecipeContext;
 import com.xiaohunao.phase_journey.common.phase.recipe.RecipePhaseManager;
 import com.xiaohunao.xhn_lib.api.register.holder.FlexibleHolder;
@@ -32,6 +33,6 @@ public class PJPhaseContextTypes {
     public static final FlexibleHolder<PhaseContextType<?>, PhaseContextType<MobEffectApplicableContext>> MOB_EFFECT = CONDITION_CODEC.registerStatic("mob_effect", () -> new PhaseContextType<>(MobEffectApplicableContext.class, MobEffectPhaseManager.MANAGER));
     public static final FlexibleHolder<PhaseContextType<?>, PhaseContextType<CropGrowthInhibitionContext>> CROP_GROWTH = CONDITION_CODEC.registerStatic("crop_growth", () -> new PhaseContextType<>(CropGrowthInhibitionContext.class, CropGrowthPhaseManager.MANAGER));
     public static final FlexibleHolder<PhaseContextType<?>, PhaseContextType<IRecipeContext>> RECIPE = CONDITION_CODEC.registerStatic("recipe", () -> new PhaseContextType<>(IRecipeContext.class, RecipePhaseManager.MANAGER));
-    public static final FlexibleHolder<PhaseContextType<?>, PhaseContextType<InteractContext>> INTERACT = CONDITION_CODEC.registerStatic("interact", () -> new PhaseContextType<>(InteractContext.class, InteractContext.InteractContextManager.MANAGER));
+    public static final FlexibleHolder<PhaseContextType<?>, PhaseContextType<InteractContext>> INTERACT = CONDITION_CODEC.registerStatic("interact", () -> new PhaseContextType<>(InteractContext.class, InteractContextManager.MANAGER));
 
 }

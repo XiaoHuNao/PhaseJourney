@@ -27,6 +27,7 @@ import com.xiaohunao.phase_journey.common.phase.item.ItemReplacementContext;
 import com.xiaohunao.phase_journey.common.phase.player.interact.BlockInteractContext;
 import com.xiaohunao.phase_journey.common.phase.player.interact.EntityInteractContext;
 import com.xiaohunao.phase_journey.common.phase.player.interact.InteractContext;
+import com.xiaohunao.phase_journey.common.phase.player.interact.InteractContextManager;
 import com.xiaohunao.phase_journey.common.phase.recipe.RecipeLockContext;
 import com.xiaohunao.phase_journey.common.phase.recipe.RecipeModLockContext;
 import com.xiaohunao.phase_journey.common.phase.recipe.RecipePhaseManager;
@@ -88,7 +89,7 @@ public class ModKubeJSPlugin implements KubeJSPlugin {
         bindings.add("CropGrowthPhaseManager", CropGrowthPhaseManager.MANAGER);
         bindings.add("CropGrowthInhibitionContext", CropGrowthInhibitionContext.class);
 
-        bindings.add("InteractContextManager", InteractContext.InteractContextManager.MANAGER);
+        bindings.add("InteractContextManager", InteractContextManager.MANAGER);
         bindings.add("EntityInteractContext", EntityInteractContext.class);
         bindings.add("BlockInteractContext", BlockInteractContext.class);
 
