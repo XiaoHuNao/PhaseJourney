@@ -8,7 +8,7 @@ import com.xiaohunao.phase_journey.common.phase.dimension.DimensionPhaseManager;
 import com.xiaohunao.phase_journey.common.phase.effect.MobEffectPhaseManager;
 import com.xiaohunao.phase_journey.common.phase.enchantment.EnchantmentPhaseManager;
 import com.xiaohunao.phase_journey.common.phase.growth.CropGrowthPhaseManager;
-import com.xiaohunao.phase_journey.common.phase.interaction.EntityInteractionPhaseManager;
+import com.xiaohunao.phase_journey.common.phase.player.interact.InteractContext;
 import com.xiaohunao.phase_journey.integration.LoadedCompat;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
@@ -36,7 +36,7 @@ public class PhaseJourney {
 //        NeoForge.EVENT_BUS.register(ItemPhaseManager.MANAGER);
         NeoForge.EVENT_BUS.register(DimensionPhaseManager.MANAGER);
         NeoForge.EVENT_BUS.register(EnchantmentPhaseManager.MANAGER);
-        NeoForge.EVENT_BUS.register(EntityInteractionPhaseManager.MANAGER);
+        NeoForge.EVENT_BUS.register(InteractContext.InteractContextManager.MANAGER);
         NeoForge.EVENT_BUS.register(MobEffectPhaseManager.MANAGER);
         NeoForge.EVENT_BUS.register(CropGrowthPhaseManager.MANAGER);
 //        NeoForge.EVENT_BUS.register(RecipePhaseManager.MANAGER);

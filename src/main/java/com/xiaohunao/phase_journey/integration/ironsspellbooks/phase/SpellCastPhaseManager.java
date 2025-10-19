@@ -11,6 +11,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
 import net.neoforged.bus.api.SubscribeEvent;
 
+import java.util.List;
 import java.util.Map;
 
 public class SpellCastPhaseManager extends PhaseManager<SpellCastPhaseContext> {
@@ -18,43 +19,27 @@ public class SpellCastPhaseManager extends PhaseManager<SpellCastPhaseContext> {
     public static final SpellCastPhaseManager MANAGER = new SpellCastPhaseManager();
 
     public boolean isRestricted(Level level, ServerPlayer player, SpellPreCastEvent event) {
-        for (Map.Entry<PhaseType, Pair<ResourceLocation, SpellCastPhaseContext>> entry : phaseContexts.entries()) {
-            PhaseType phaseType = entry.getKey();
-            SpellCastPhaseContext phaseContext = entry.getValue().getSecond();
-            ResourceLocation phase = phaseContext.getPhase();
-
-            if (!phaseContext.getSupportedPhaseTypes().contains(phaseType)) {
-                continue;
+        return isRestricted(level, player.getOnPos(),player, ctx -> {
+            if (ctx.disableAll()) {
+                return true;
             }
-
-            PhaseAttachment phaseAttachment = phaseType.getPhaseAttachment(level, null, player);
-            if (phaseAttachment == null) {
-                return false;
-            }
-
-            return phaseAttachment.ifPhaseAbsent(phase, () -> {
-                if (phaseContext.disableAll()) {
+            List<ResourceLocation> configuredSchools = ctx.schoolTypes();
+            if (!configuredSchools.isEmpty()) {
+                SchoolType school = event.getSchoolType();
+                ResourceLocation schoolId = school.getId();
+                if (configuredSchools.contains(schoolId)) {
                     return true;
                 }
-                java.util.List<ResourceLocation> configuredSchools = phaseContext.schoolTypes();
-                if (!configuredSchools.isEmpty()) {
-                    SchoolType school = event.getSchoolType();
-                    ResourceLocation schoolId = school.getId();
-                    if (configuredSchools.contains(schoolId)) {
-                        return true;
-                    }
+            }
+            List<String> configuredSpellIds = ctx.spellIds();
+            if (!configuredSpellIds.isEmpty()) {
+                String spellId = event.getSpellId();
+                if (configuredSpellIds.contains(spellId)) {
+                    return true;
                 }
-                java.util.List<String> configuredSpellIds = phaseContext.spellIds();
-                if (!configuredSpellIds.isEmpty()) {
-                    String spellId = event.getSpellId();
-                    if (configuredSpellIds.contains(spellId)) {
-                        return true;
-                    }
-                }
-                return false;
-            },false);
-        }
-        return false;
+            }
+            return false;
+        });
     }
 
     @SubscribeEvent

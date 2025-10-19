@@ -4,6 +4,7 @@ import com.mojang.datafixers.util.Pair;
 import com.xiaohunao.phase_journey.common.attachment.PhaseAttachment;
 import com.xiaohunao.phase_journey.common.phase.PhaseManager;
 import com.xiaohunao.phase_journey.common.phase.PhaseType;
+import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -25,37 +26,22 @@ public class CropGrowthPhaseManager extends PhaseManager<CropGrowthInhibitionCon
         super.register(type, phase, phaseContext);
     }
 
-    public boolean isRestricted(Level level, BlockState state) {
+    public boolean isRestricted(Level level,BlockPos pos, BlockState state) {
         if (!(state.getBlock() instanceof CropBlock)) {
             return false;
         }
-        for (Map.Entry<PhaseType, Pair<ResourceLocation, CropGrowthInhibitionContext>> entry : phaseContexts.entries()) {
-            PhaseType phaseType = entry.getKey();
-            CropGrowthInhibitionContext phaseContext = entry.getValue().getSecond();
-            ResourceLocation phase = phaseContext.getPhase();
 
-            if (!phaseContext.getSupportedPhaseTypes().contains(phaseType)) {
-                continue;
+        return isRestricted(level,pos,null,ctx ->{
+            if (ctx.disableAll()) {
+                return true;
             }
-
-            PhaseAttachment phaseAttachment = phaseType.getPhaseAttachment(level, null, null);
-            if (phaseAttachment == null) {
-                return false;
-            }
-
-            return phaseAttachment.ifPhaseAbsent(phase, () -> {
-                if (phaseContext.disableAll()) {
+            for (ResourceKey<Block> bannedBlock : ctx.bannedBlocks()) {
+                if (state.is(bannedBlock)) {
                     return true;
                 }
-                for (ResourceKey<Block> bannedBlock : phaseContext.bannedBlocks()) {
-                    if (state.is(bannedBlock)) {
-                        return true;
-                    }
-                }
-                return false;
-            },false);
-        }
-        return false;
+            }
+            return false;
+        });
     }
 
     @SubscribeEvent
@@ -64,7 +50,8 @@ public class CropGrowthPhaseManager extends PhaseManager<CropGrowthInhibitionCon
             return;
         }
         BlockState state = event.getState();
-        if (isRestricted(level, state)) {
+        BlockPos pos = event.getPos();
+        if (isRestricted(level,pos, state)) {
             event.setResult(CropGrowEvent.Pre.Result.DO_NOT_GROW);
         }
     }

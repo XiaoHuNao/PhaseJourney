@@ -33,12 +33,12 @@ public abstract class PhaseJourneyEvent extends Event {
             manager.register(phaseType,context.getPhase(),context);
         }
 
-        @SafeVarargs
-        public final <T extends IPhaseContext> void register(PhaseType phaseType, PhaseContextType<T> type, T... contexts) {
-            PhaseManager<T> manager = type.manager();
-            for (T ctx : contexts) {
-                manager.register(phaseType,ctx.getPhase(),ctx);
-            }
-        }
+//        @SafeVarargs
+//        public final <T extends IPhaseContext> void register(PhaseType phaseType, PhaseContextType<T> type, T... contexts) {
+//            PhaseManager<T> manager = type.manager();
+//            for (T ctx : contexts) {
+//                manager.register(phaseType,ctx.getPhase(),ctx);
+//            }
+//        }
     }
 }

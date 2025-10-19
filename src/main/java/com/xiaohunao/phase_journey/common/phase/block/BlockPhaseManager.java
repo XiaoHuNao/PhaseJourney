@@ -21,6 +21,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.event.level.BlockDropsEvent;
+import net.neoforged.neoforge.event.level.BlockEvent;
 import net.neoforged.neoforge.event.server.ServerStartedEvent;
 
 import java.util.Collection;
@@ -43,19 +44,16 @@ public class BlockPhaseManager extends PhaseManager<BlockReplacementPhaseContext
         if (sourceItem != Items.AIR && (targetItem = phaseContext.getTarget().getBlock().asItem()) != Items.AIR) {
             if (!ItemPhaseManager.MANAGER.hasReplacedItem(sourceItem)) { // 确保物品只注册一次
                 ItemReplacementContext itemReplacementContext = new ItemReplacementContext(phase, sourceItem, targetItem);
-                ItemPhaseManager.MANAGER.register(phase, itemReplacementContext);
+                ItemPhaseManager.MANAGER.register(type,phase, itemReplacementContext);
             }
         }
     }
 
     @Override
     public void init() {
-        // 使用新的数据结构，但保持向后兼容
-        for (Map.Entry<PhaseType, Collection<Pair<ResourceLocation, BlockReplacementPhaseContext>>> entry : phaseContexts.asMap().entrySet()) {
-            for (Pair<ResourceLocation, BlockReplacementPhaseContext> pair : entry.getValue()) {
-                replaceBlockProperties(pair.getFirst());
-            }
-        }
+        forEach((phase, ctx) -> {
+            replaceBlockProperties(phase);
+        });
     }
 
     @Override
@@ -103,13 +101,29 @@ public class BlockPhaseManager extends PhaseManager<BlockReplacementPhaseContext
         }
     }
 
+    @SubscribeEvent
+    public void onBlockEntityPlace(BlockEvent.EntityPlaceEvent event) {
+		BlockState placed = event.getPlacedBlock();
+		if (event.getEntity() instanceof Player player) {
+			applyTargetIfPlayerNotReachedPhase(player, placed, target -> {
+				Level level = (Level) event.getLevel();
+				BlockPos pos = event.getPos();
+				level.setBlock(pos, target, 3);
+			});
+		} else {
+			Level level = (Level) event.getLevel();
+			applyTargetIfLevelNotFinishedPhase(level, placed, target -> {
+				BlockPos pos = event.getPos();
+				level.setBlock(pos, target, 3);
+			});
+		}
+    }
 
 
     public void applyTargetIfNotAchievedPhase(Player player, BlockState source, Consumer<BlockState> targetConsumer) {
         if (source.hasBlockEntity() || source.isAir()) return;
         BlockReplacementPhaseContext replacement = blockStateReplacements.get(source);
         if (replacement == null) return;
-        // 使用新的数据结构，但保持向后兼容
         for (Map.Entry<PhaseType, Collection<Pair<ResourceLocation, BlockReplacementPhaseContext>>> entry : phaseContexts.asMap().entrySet()) {
             for (Pair<ResourceLocation, BlockReplacementPhaseContext> pair : entry.getValue()) {
                 ResourceLocation phase = pair.getFirst();
@@ -127,7 +141,6 @@ public class BlockPhaseManager extends PhaseManager<BlockReplacementPhaseContext
         if (source.hasBlockEntity() || source.isAir()) return;
         BlockReplacementPhaseContext replacement = blockStateReplacements.get(source);
         if (replacement == null) return;
-        // 使用新的数据结构，但保持向后兼容
         for (Map.Entry<PhaseType, Collection<Pair<ResourceLocation, BlockReplacementPhaseContext>>> entry : phaseContexts.asMap().entrySet()) {
             for (Pair<ResourceLocation, BlockReplacementPhaseContext> pair : entry.getValue()) {
                 ResourceLocation phase = pair.getFirst();
@@ -145,7 +158,6 @@ public class BlockPhaseManager extends PhaseManager<BlockReplacementPhaseContext
         if (source.hasBlockEntity() || source.isAir()) return;
         BlockReplacementPhaseContext replacement = blockStateReplacements.get(source);
         if (replacement == null) return;
-        // 使用新的数据结构，但保持向后兼容
         for (Map.Entry<PhaseType, Collection<Pair<ResourceLocation, BlockReplacementPhaseContext>>> entry : phaseContexts.asMap().entrySet()) {
             for (Pair<ResourceLocation, BlockReplacementPhaseContext> pair : entry.getValue()) {
                 ResourceLocation phase = pair.getFirst();
@@ -163,7 +175,6 @@ public class BlockPhaseManager extends PhaseManager<BlockReplacementPhaseContext
         if (source.hasBlockEntity() || source.isAir()) return source;
         BlockReplacementPhaseContext replacement = blockStateReplacements.get(source);
         if (replacement == null) return source;
-        // 使用新的数据结构，但保持向后兼容
         for (Map.Entry<PhaseType, Collection<Pair<ResourceLocation, BlockReplacementPhaseContext>>> entry : phaseContexts.asMap().entrySet()) {
             for (Pair<ResourceLocation, BlockReplacementPhaseContext> pair : entry.getValue()) {
                 ResourceLocation phase = pair.getFirst();
@@ -181,7 +192,6 @@ public class BlockPhaseManager extends PhaseManager<BlockReplacementPhaseContext
         if (source.hasBlockEntity() || source.isAir()) return source;
         BlockReplacementPhaseContext replacement = blockStateReplacements.get(source);
         if (replacement == null) return source;
-        // 使用新的数据结构，但保持向后兼容
         for (Map.Entry<PhaseType, Collection<Pair<ResourceLocation, BlockReplacementPhaseContext>>> entry : phaseContexts.asMap().entrySet()) {
             for (Pair<ResourceLocation, BlockReplacementPhaseContext> pair : entry.getValue()) {
                 ResourceLocation phase = pair.getFirst();
@@ -214,7 +224,6 @@ public class BlockPhaseManager extends PhaseManager<BlockReplacementPhaseContext
 
     public boolean denyDestroy(Player player, BlockState source) {
         if (source.hasBlockEntity() || source.isAir()) return false;
-        // 使用新的数据结构，但保持向后兼容
         for (Map.Entry<PhaseType, Collection<Pair<ResourceLocation, BlockReplacementPhaseContext>>> entry : phaseContexts.asMap().entrySet()) {
             for (Pair<ResourceLocation, BlockReplacementPhaseContext> pair : entry.getValue()) {
                 ResourceLocation phase = pair.getFirst();
@@ -239,53 +248,26 @@ public class BlockPhaseManager extends PhaseManager<BlockReplacementPhaseContext
     }
 
     public void replaceBlockProperties(ResourceLocation phase) {
-        // 使用新的数据结构，但保持向后兼容
-        for (Map.Entry<PhaseType, Collection<Pair<ResourceLocation, BlockReplacementPhaseContext>>> entry : phaseContexts.asMap().entrySet()) {
-            for (Pair<ResourceLocation, BlockReplacementPhaseContext> pair : entry.getValue()) {
-                if (pair.getFirst().equals(phase)) {
-                    pair.getSecond().replaceProperties();
-                }
+        forEach((phaseLocation, ctx) -> {
+            if (phaseLocation.equals(phase)) {
+                ctx.replaceProperties();
             }
-        }
+        });
     }
 
     public void rollbackBlockProperties(ResourceLocation phase) {
-        // 使用新的数据结构，但保持向后兼容
-        for (Map.Entry<PhaseType, Collection<Pair<ResourceLocation, BlockReplacementPhaseContext>>> entry : phaseContexts.asMap().entrySet()) {
-            for (Pair<ResourceLocation, BlockReplacementPhaseContext> pair : entry.getValue()) {
-                if (pair.getFirst().equals(phase)) {
-                    pair.getSecond().rollbackProperties();
-                }
+        forEach((phaseLocation, ctx) -> {
+            if (phaseLocation.equals(phase)) {
+                ctx.rollbackProperties();
             }
-        }
+        });
     }
 
     // 统一的阶段限制逻辑 - 新增方法，保持向后兼容
     public boolean isRestricted(Level level, BlockPos pos, ServerPlayer player, BlockState blockState) {
-        for (Map.Entry<PhaseType, Pair<ResourceLocation, BlockReplacementPhaseContext>> entry : phaseContexts.entries()) {
-            PhaseType phaseType = entry.getKey();
-            ResourceLocation phase = entry.getValue().getFirst();
-            BlockReplacementPhaseContext ctx = entry.getValue().getSecond();
-
-            if (!ctx.getSupportedPhaseTypes().contains(phaseType)) {
-                continue;
-            }
-
-            if (!blockState.equals(ctx.getSource())) {
-                continue;
-            }
-
-            PhaseAttachment attachment = phaseType.getPhaseAttachment(level, pos, player);
-            if (attachment == null) {
-                return false;
-            }
-
-            return attachment.ifPhaseAbsent(phase, () -> true,false);
-        }
-        return false;
+        return isRestricted(level, pos, player, ctx ->{
+            return ctx.getSource().equals(blockState);
+        });
     }
 
-    public boolean isRestricted(Level level, ServerPlayer player, BlockState blockState) {
-        return isRestricted(level, null, player, blockState);
-    }
 }

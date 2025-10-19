@@ -34,27 +34,9 @@ public class InfiniteFluidPoolManager extends PhaseManager<InfiniteFluidPoolCont
         if (context == null) {
             return false;
         }
-        
-        for (Map.Entry<PhaseType, Pair<ResourceLocation, InfiniteFluidPoolContext>> entry : phaseContexts.entries()) {
-            PhaseType phaseType = entry.getKey();
-            ResourceLocation phase = entry.getValue().getFirst();
-            InfiniteFluidPoolContext ctx = entry.getValue().getSecond();
 
-            if (!ctx.getSupportedPhaseTypes().contains(phaseType)) {
-                continue;
-            }
-
-            if (!fluid.equals(ctx.getFluid())) {
-                continue;
-            }
-
-            PhaseAttachment attachment = phaseType.getPhaseAttachment(level, pos, player);
-            if (attachment == null) {
-                return false;
-            }
-
-            return attachment.ifPhaseAbsent(phase, () -> true,false);
-        }
-        return false;
+        return isRestricted(level, pos, player, ctx -> {
+            return ctx.getFluid().equals(fluid);
+        });
     }
 }

@@ -22,10 +22,11 @@ import com.xiaohunao.phase_journey.common.phase.enchantment.EnchantmentPhaseMana
 import com.xiaohunao.phase_journey.common.phase.enchantment.EnchantmentRestrictedContext;
 import com.xiaohunao.phase_journey.common.phase.growth.CropGrowthInhibitionContext;
 import com.xiaohunao.phase_journey.common.phase.growth.CropGrowthPhaseManager;
-import com.xiaohunao.phase_journey.common.phase.interaction.EntityInteractionPhaseContext;
-import com.xiaohunao.phase_journey.common.phase.interaction.EntityInteractionPhaseManager;
 import com.xiaohunao.phase_journey.common.phase.item.ItemPhaseManager;
 import com.xiaohunao.phase_journey.common.phase.item.ItemReplacementContext;
+import com.xiaohunao.phase_journey.common.phase.player.interact.BlockInteractContext;
+import com.xiaohunao.phase_journey.common.phase.player.interact.EntityInteractContext;
+import com.xiaohunao.phase_journey.common.phase.player.interact.InteractContext;
 import com.xiaohunao.phase_journey.common.phase.recipe.RecipeLockContext;
 import com.xiaohunao.phase_journey.common.phase.recipe.RecipeModLockContext;
 import com.xiaohunao.phase_journey.common.phase.recipe.RecipePhaseManager;
@@ -43,15 +44,18 @@ public class ModKubeJSPlugin implements KubeJSPlugin {
     public void registerEvents(EventGroupRegistry registry) {
         registry.register(PhaseJourneyEvents.GROUP);
     }
-
     @Override
     public void initStartup() {
         ModList.get().getModContainerById(PhaseJourney.MODID).ifPresent(container -> {
-            if (PhaseJourneyEvents.REGISTER.hasListeners()) {
-                PhaseJourneyEvents.REGISTER.post(new RegisterEventJS());
-            }
+            IEventBus eventBus = container.getEventBus();
+            if (eventBus != null) eventBus.addListener(PhaseJourneyEvent.Register.class, event -> {
+                if (PhaseJourneyEvents.REGISTER.hasListeners()) {
+                    PhaseJourneyEvents.REGISTER.post(new PhaseJourneyEventJS.RegisterJS(event));
+                }
+            });
         });
     }
+
 
     @Override
     public void registerBindings(BindingRegistry bindings) {
@@ -84,8 +88,9 @@ public class ModKubeJSPlugin implements KubeJSPlugin {
         bindings.add("CropGrowthPhaseManager", CropGrowthPhaseManager.MANAGER);
         bindings.add("CropGrowthInhibitionContext", CropGrowthInhibitionContext.class);
 
-        bindings.add("EntityInteractionPhaseManager", EntityInteractionPhaseManager.MANAGER);
-        bindings.add("EntityInteractionPhaseContext", EntityInteractionPhaseContext.class);
+        bindings.add("InteractContextManager", InteractContext.InteractContextManager.MANAGER);
+        bindings.add("EntityInteractContext", EntityInteractContext.class);
+        bindings.add("BlockInteractContext", BlockInteractContext.class);
 
         bindings.add("ItemPhaseManager", ItemPhaseManager.MANAGER);
         bindings.add("ItemReplacementContext", ItemReplacementContext.class);

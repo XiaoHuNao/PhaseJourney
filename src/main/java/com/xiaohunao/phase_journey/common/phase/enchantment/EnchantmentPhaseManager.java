@@ -29,33 +29,13 @@ public class EnchantmentPhaseManager extends PhaseManager<EnchantmentRestrictedC
     }
 
     public boolean isRestricted(Level level, Player player, ResourceKey<Enchantment> enchantment, boolean isEnchantmentTable) {
-        for (Map.Entry<PhaseType, Pair<ResourceLocation, EnchantmentRestrictedContext>> entry : phaseContexts.entries()) {
-            PhaseType phaseType = entry.getKey();
-            EnchantmentRestrictedContext phaseContext = entry.getValue().getSecond();
-            ResourceLocation phase = phaseContext.getPhase();
-
-            if (!phaseContext.getSupportedPhaseTypes().contains(phaseType)) {
-                continue;
+        return isRestricted(level, player.getOnPos(),player, ctx -> {
+            if (isEnchantmentTable) {
+                return !ctx.isAllowInEnchantmentTable();
+            } else {
+                return !ctx.isAllowAnvil();
             }
-
-            if (!phaseContext.getEnchantment().equals(enchantment)) {
-                continue;
-            }
-
-            PhaseAttachment phaseAttachment = phaseType.getPhaseAttachment(level, null, player);
-            if (phaseAttachment == null) {
-                return false;
-            }
-
-            return phaseAttachment.ifPhaseAbsent(phase, () -> {
-                if (isEnchantmentTable) {
-                    return !phaseContext.isAllowInEnchantmentTable();
-                } else {
-                    return !phaseContext.isAllowAnvil();
-                }
-            },false);
-        }
-        return false;
+        });
     }
 
     @SubscribeEvent

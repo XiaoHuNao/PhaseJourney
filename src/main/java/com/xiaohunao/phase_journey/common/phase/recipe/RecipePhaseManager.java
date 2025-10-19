@@ -37,27 +37,6 @@ public class RecipePhaseManager extends PhaseManager<IRecipeContext> {
     }
 
     public boolean isRestricted(Level level, BlockPos pos, Player player, RecipeType<?> recipeType, ResourceLocation recipeID) {
-        for (PhaseType phaseType : PhaseType.values()) {
-            for (Pair<ResourceLocation, IRecipeContext> pair : phaseContexts.get(phaseType)) {
-                ResourceLocation phase = pair.getFirst();
-                IRecipeContext ctx = pair.getSecond();
-
-                if (!ctx.getSupportedPhaseTypes().contains(phaseType)) {
-                    continue;
-                }
-
-                if (!ctx.isRestricted(recipeType, recipeID)) {
-                    continue;
-                }
-
-                PhaseAttachment attachment = phaseType.getPhaseAttachment(level, pos, player);
-                if (attachment == null) {
-                    return false;
-                }
-
-                return attachment.ifPhaseAbsent(phase, () -> true, false);
-            }
-        }
-        return false;
+        return isRestricted(level, pos, player, cxt -> cxt.isRestricted(recipeType, recipeID));
     }
 }

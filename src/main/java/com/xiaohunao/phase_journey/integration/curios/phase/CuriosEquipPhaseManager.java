@@ -20,23 +20,9 @@ public class CuriosEquipPhaseManager extends PhaseManager<CuriosEquipPhaseContex
     public static final CuriosEquipPhaseManager MANAGER = new CuriosEquipPhaseManager();
 
     public boolean isRestricted(Level level, Player player, String slotIdentifier) {
-        for (Map.Entry<PhaseType, Pair<ResourceLocation, CuriosEquipPhaseContext>> entry : phaseContexts.entries()) {
-            PhaseType phaseType = entry.getKey();
-            CuriosEquipPhaseContext phaseContext = entry.getValue().getSecond();
-            ResourceLocation phase = phaseContext.getPhase();
-
-            if (!phaseContext.getSupportedPhaseTypes().contains(phaseType)) {
-                continue;
-            }
-
-            PhaseAttachment phaseAttachment = phaseType.getPhaseAttachment(level, null, player);
-            if (phaseAttachment == null) {
-                return false;
-            }
-
-            return phaseAttachment.ifPhaseAbsent(phase, () -> phaseContext.bannedSlots().contains(slotIdentifier),false);
-        }
-        return false;
+        return isRestricted(level,null, player,ctx -> {
+            return ctx.bannedSlots().contains(slotIdentifier);
+        });
     }
 
     @SubscribeEvent

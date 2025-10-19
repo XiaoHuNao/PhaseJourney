@@ -12,6 +12,7 @@ import net.minecraft.world.level.Level;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.event.entity.EntityTravelToDimensionEvent;
 
+import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -30,30 +31,14 @@ public class DimensionPhaseManager extends PhaseManager<DimensionTravelRestricte
         dimensionRestrictions.put(phaseContext.getDimension(), phaseContext);
     }
 
-    public boolean isRestricted(Level level, Player player,ResourceKey<Level> targetDimension,Entity entity,boolean isEnter){
-        for (Map.Entry<PhaseType, Pair<ResourceLocation, DimensionTravelRestrictedContext>> entry : phaseContexts.entries()) {
-            PhaseType phaseType = entry.getKey();
-            DimensionTravelRestrictedContext phaseContext = entry.getValue().getSecond();
-            ResourceLocation phase = phaseContext.getPhase();
-
-            if (!phaseContext.getSupportedPhaseTypes().contains(phaseType)){
-                continue;
+    public boolean isRestricted(Level level, @Nullable Player player, ResourceKey<Level> targetDimension, Entity entity, boolean isEnter){
+        return isRestricted(level,null,player,ctx ->{
+            if(isEnter){
+                return ctx.isEnterAllowed() && canEntityTravelToDimension(entity.getUUID(), targetDimension, ctx, true);
+            }else {
+                return ctx.isLeaveAllowed() && canEntityTravelToDimension(entity.getUUID(), targetDimension, ctx, false);
             }
-
-            PhaseAttachment phaseAttachment = phaseType.getPhaseAttachment(level, null, player);
-            if (phaseAttachment == null){
-                return false;
-            }
-
-            return phaseAttachment.ifPhaseAbsent(phase, () -> {
-                if (isEnter){
-                    return phaseContext.isEnterAllowed() && canEntityTravelToDimension(entity.getUUID(), targetDimension, phaseContext, true);
-                }else {
-                    return phaseContext.isLeaveAllowed() && canEntityTravelToDimension(entity.getUUID(), targetDimension, phaseContext, false);
-                }
-            },false);
-        }
-        return false;
+        });
     }
 
     /**

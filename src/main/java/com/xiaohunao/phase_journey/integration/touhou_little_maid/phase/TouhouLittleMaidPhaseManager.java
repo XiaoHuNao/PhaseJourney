@@ -7,8 +7,11 @@ import com.mojang.datafixers.util.Pair;
 import com.xiaohunao.phase_journey.common.attachment.PhaseAttachment;
 import com.xiaohunao.phase_journey.common.phase.PhaseManager;
 import com.xiaohunao.phase_journey.common.phase.PhaseType;
+import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.neoforged.bus.api.SubscribeEvent;
 
@@ -16,48 +19,20 @@ public class TouhouLittleMaidPhaseManager extends PhaseManager<TouhouLittleMaidP
 
     public static final TouhouLittleMaidPhaseManager MANAGER = new TouhouLittleMaidPhaseManager();
 
-    public boolean isTaskRestricted(Level level, ServerPlayer player, ResourceLocation taskId) {
-        for (java.util.Map.Entry<PhaseType, Pair<ResourceLocation, TouhouLittleMaidPhaseContext>> entry : phaseContexts.entries()) {
-            PhaseType phaseType = entry.getKey();
-            TouhouLittleMaidPhaseContext phaseContext = entry.getValue().getSecond();
-            ResourceLocation phase = phaseContext.getPhase();
-
-            if (!phaseContext.getSupportedPhaseTypes().contains(phaseType)) {
-                continue;
-            }
-
-            PhaseAttachment phaseAttachment = phaseType.getPhaseAttachment(level, null, player);
-            if (phaseAttachment == null) {
-                return false;
-            }
-
-            return phaseAttachment.ifPhaseAbsent(phase, () -> !phaseContext.isTaskAllowed(taskId),false);
-        }
-        return false;
+    public boolean isRestricted(Level level, BlockPos pos, Player player, ResourceLocation taskId) {
+        return isRestricted(level,pos,player,ctx -> {
+            return ctx.isTaskAllowed(taskId);
+        });
     }
 
-    /**
-     * 检查女仆是否可以切换到指定任务
-     */
-    public boolean canSwitchToTask(EntityMaid maid, ResourceLocation taskId) {
-        Level level = maid.level();
-        ServerPlayer owner = maid.getOwner() instanceof ServerPlayer sp ? sp : null;
-        if (!(level instanceof net.minecraft.server.level.ServerLevel)) {
-            return true;
-        }
-        return !isTaskRestricted(level, owner, taskId);
-    }
-
-    /**
-     * 处理女仆任务启用事件
-     */
     @SubscribeEvent
     public void onMaidTaskEnable(MaidTaskEnableEvent event) {
         EntityMaid maid = event.getEntityMaid();
         IMaidTask task = event.getTargetTask();
+        Player owner = maid.getOwner() instanceof Player ? (Player) maid.getOwner() : null;
+        Level level = maid.level();
 
-        if (!MANAGER.canSwitchToTask(maid, task.getUid())) {
-            // 取消任务切换
+        if (isRestricted(level, maid.blockPosition(), owner, task.getUid())) {
             event.setCanceled(true);
         }
     }

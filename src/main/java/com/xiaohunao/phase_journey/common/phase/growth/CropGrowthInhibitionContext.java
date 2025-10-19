@@ -4,11 +4,13 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.xiaohunao.phase_journey.common.phase.PhaseContext;
+import com.xiaohunao.phase_journey.common.phase.PhaseType;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 
+import java.util.Collection;
 import java.util.List;
 
 public class CropGrowthInhibitionContext extends PhaseContext {
@@ -39,5 +41,10 @@ public class CropGrowthInhibitionContext extends PhaseContext {
     @Override
     public MapCodec<CropGrowthInhibitionContext> codec() {
         return CODEC;
+    }
+
+    @Override
+    public Collection<PhaseType> getSupportedPhaseTypes() {
+        return List.of(PhaseType.LEVEL,PhaseType.NEAREST_PLAYER);
     }
 }

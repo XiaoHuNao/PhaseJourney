@@ -13,38 +13,23 @@ import net.minecraft.world.level.Level;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.event.entity.living.MobEffectEvent;
 
+import javax.annotation.Nullable;
 import java.util.Map;
 
 public class MobEffectPhaseManager extends PhaseManager<MobEffectApplicableContext> {
     public static final MobEffectPhaseManager MANAGER = new MobEffectPhaseManager();
 
-    public boolean isRestricted(Level level,Player player,Holder<MobEffect> effect,LivingEntity  entity){
-        for (Map.Entry<PhaseType, Pair<ResourceLocation, MobEffectApplicableContext>> entry : phaseContexts.entries()) {
-            PhaseType phaseType = entry.getKey();
-            MobEffectApplicableContext phaseContext = entry.getValue().getSecond();
-            ResourceLocation phase = phaseContext.getPhase();
-
-            if (!phaseContext.getSupportedPhaseTypes().contains(phaseType)){
-                continue;
-            }
-
-            PhaseAttachment phaseAttachment = phaseType.getPhaseAttachment(level, null, player);
-            if (phaseAttachment == null){
-                return false;
-            }
-
-            return phaseAttachment.ifPhaseAbsent(phase, () -> {
-                if (phaseContext.entityTypes().contains(entity.getType())) {
-                    if (phaseContext.disableAll()) {
-                        return true;
-                    }
-
-                    return phaseContext.bannedEffects().contains(effect);
+    public boolean isRestricted(Level level, @Nullable Player player, Holder<MobEffect> effect, LivingEntity  entity){
+        return isRestricted(level,null,player,ctx -> {
+            if (ctx.entityTypes().contains(entity.getType())) {
+                if (ctx.disableAll()) {
+                    return true;
                 }
-                return false;
-            },false);
-        }
-        return false;
+
+                return ctx.bannedEffects().contains(effect);
+            }
+            return false;
+        });
     }
 
     @SubscribeEvent

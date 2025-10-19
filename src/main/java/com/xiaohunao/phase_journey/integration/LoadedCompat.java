@@ -6,6 +6,7 @@ import com.xiaohunao.phase_journey.integration.hostilenetworks.HNNHelper;
 import com.xiaohunao.phase_journey.integration.immersiveengineering.IEHelper;
 import com.xiaohunao.phase_journey.integration.industrialforegoing.IFHelper;
 import com.xiaohunao.phase_journey.integration.ironsspellbooks.ISSHelper;
+import com.xiaohunao.phase_journey.integration.kubejs.KJSHelper;
 import com.xiaohunao.phase_journey.integration.mekanism.MEKHelper;
 import com.xiaohunao.phase_journey.integration.projecte.ProjecteHelper;
 import com.xiaohunao.phase_journey.integration.touhou_little_maid.TouhouLittleMaidHelper;
@@ -29,6 +30,10 @@ public class LoadedCompat {
 
 
     public static void register(IEventBus modEventBus) {
+        if (KJS){
+            KJSHelper.init(modEventBus);
+        }
+
         if (PROJECTE) {
             ProjecteHelper.register(modEventBus);
         }
