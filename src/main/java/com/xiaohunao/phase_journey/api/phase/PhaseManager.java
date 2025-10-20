@@ -48,12 +48,7 @@ public abstract class PhaseManager <T extends IPhaseContext> extends BaseDynamic
 
     @Override
     protected void loadNewValues(MappedRegistry<T> mappedRegistry, Map<ResourceLocation, JsonElement> resources) {
-        PhaseJourneyEvent.Register register = new PhaseJourneyEvent.Register();
-        NeoForge.EVENT_BUS.post(register);
-
-        for (PhaseContextType<?> type : PJRegistries.PHASE_CONTEXT_TYPE) {
-            type.manager().init();
-        }
+        init();
     }
 
     public void register(PhaseType type, ResourceLocation phase, T phaseContext) {
@@ -112,4 +107,9 @@ public abstract class PhaseManager <T extends IPhaseContext> extends BaseDynamic
     public void achieveLevelPhase(ServerLevel serverLevel, ResourceLocation phase, boolean add){
 
     }
+
+    public void clear(){
+        phaseContexts.clear();
+    }
+
 }

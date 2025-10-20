@@ -5,6 +5,7 @@ import com.google.common.collect.HashBiMap;
 import com.mojang.datafixers.util.Pair;
 import com.xiaohunao.phase_journey.common.attachment.PhaseAttachment;
 import com.xiaohunao.phase_journey.api.phase.PhaseManager;
+import com.xiaohunao.phase_journey.common.network.RebuildChunksS2C;
 import com.xiaohunao.phase_journey.common.phase.PhaseType;
 import com.xiaohunao.phase_journey.common.phase.item.ItemPhaseManager;
 import com.xiaohunao.phase_journey.common.phase.item.ItemReplacementContext;
@@ -23,6 +24,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.event.level.BlockDropsEvent;
 import net.neoforged.neoforge.event.level.BlockEvent;
 import net.neoforged.neoforge.event.server.ServerStartedEvent;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.Collection;
 import java.util.Map;
@@ -50,10 +52,18 @@ public class BlockPhaseManager extends PhaseManager<BlockReplacementPhaseContext
     }
 
     @Override
+    public void clear() {
+        super.clear();
+        blockStateReplacements.clear();
+    }
+
+    @Override
     public void init() {
         forEach((phase, ctx) -> {
             replaceBlockProperties(phase);
         });
+
+        PacketDistributor.sendToAllPlayers(new RebuildChunksS2C());
     }
 
     @Override

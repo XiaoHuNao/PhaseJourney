@@ -16,10 +16,6 @@ import java.util.List;
 
 @Mixin(EnchantmentMenu.class)
 public class EnchantmentTableMenuMixin {
-
-    /**
-     * 拦截附魔台获取可用附魔的方法，过滤掉被阶段限制的附魔
-     */
     @Inject(method = "getEnchantmentList", at = @At("RETURN"), cancellable = true)
     private void phaseJourney$filterRestrictedEnchantments(CallbackInfoReturnable<List<EnchantmentInstance>> cir) {
         List<EnchantmentInstance> enchantments = cir.getReturnValue();
