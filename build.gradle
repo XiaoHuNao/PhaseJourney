@@ -161,9 +161,11 @@ dependencies {
     //runtimeOnly "curse.maven:playeranimator-658587:6024462"
 
     compileOnly "curse.maven:rhino-416294:6886923"
-    compileOnly "curse.maven:kubejs-238086:7107528"
-    runtimeOnly "curse.maven:rhino-416294:6886923"
-    runtimeOnly "curse.maven:kubejs-238086:7107528"
+    compileOnly "curse.maven:kubejs-238086:5810100"
+    if (false) {
+        runtimeOnly "curse.maven:rhino-416294:6886923"
+        runtimeOnly "curse.maven:kubejs-238086:5810100"
+    }
     //runtimeOnly "curse.maven:probejs-585406:7105159"
 
     //runtimeOnly "top.theillusivec4.curios:curios-neoforge:${curios_version}"
