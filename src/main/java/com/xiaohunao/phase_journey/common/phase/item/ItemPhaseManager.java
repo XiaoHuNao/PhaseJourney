@@ -27,6 +27,16 @@ public class ItemPhaseManager extends PhaseManager<ItemReplacementContext> {
         itemReplacements.put(phaseContext.getSource(), phaseContext);
     }
 
+    @Override
+    public void clear() {
+        super.clear();
+        itemReplacements.clear();
+    }
+
+    public ItemReplacementContext getItemReplacementContext(Item item) {
+        return itemReplacements.get(item);
+    }
+
     public void applyTargetIfPhaseIsNotAchieved(Player player, Item source, Consumer<Item> targetConsumer) {
         ItemReplacementContext replacement = itemReplacements.get(source);
         if (replacement == null) return;

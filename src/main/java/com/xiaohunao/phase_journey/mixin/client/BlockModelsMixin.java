@@ -1,6 +1,7 @@
 package com.xiaohunao.phase_journey.mixin.client;
 
 import com.xiaohunao.phase_journey.common.phase.block.BlockPhaseManager;
+import com.xiaohunao.phase_journey.common.phase.block.BlockReplacementPhaseContext;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.block.BlockModelShaper;
@@ -29,8 +30,14 @@ public abstract class BlockModelsMixin {
     private void getBlockModel(BlockState source, CallbackInfoReturnable<BakedModel> callback) {
         LocalPlayer player = Minecraft.getInstance().player;
         if (player == null) return;
-        BlockPhaseManager.MANAGER.applyTargetIfPlayerNotReachedPhase(player, source, target -> {
-            callback.setReturnValue(modelByStateCache.getOrDefault(target, modelManager.getMissingModel()));
+        BlockPhaseManager.MANAGER.isRestricted(player.level(),null,player, ctx -> {
+            BlockReplacementPhaseContext blockReplacementPhaseContext = BlockPhaseManager.MANAGER.getBlockReplacementPhaseContext(source);
+            if (ctx.equals(blockReplacementPhaseContext) && blockReplacementPhaseContext.getSource().equals(source)){
+                return blockReplacementPhaseContext.getTarget();
+            }
+            return null;
+        }, blockState -> {
+            callback.setReturnValue(modelByStateCache.getOrDefault(blockState, modelManager.getMissingModel()));
         });
     }
 }

@@ -18,6 +18,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -62,26 +63,21 @@ public class BlockPhaseManager extends PhaseManager<BlockReplacementPhaseContext
         forEach((phase, ctx) -> {
             replaceBlockProperties(phase);
         });
-
-        PacketDistributor.sendToAllPlayers(new RebuildChunksS2C());
     }
 
     @Override
-    public void broadcastPhaseChangeToClient(ResourceLocation phase, boolean add) {
+    public void applyOrRevokePhase(Level level,ResourceLocation phase, boolean add) {
         updateBlockProperties(phase,add);
+        if (!level.isClientSide){
+            PacketDistributor.sendToAllPlayers(new RebuildChunksS2C());
+        }
     }
 
-    @Override
-    public void achievePlayerPhase(ServerPlayer player, ResourceLocation phase, boolean add) {
-        updateBlockProperties(phase,add);
+    public BlockReplacementPhaseContext getBlockReplacementPhaseContext(BlockState blockState) {
+        return blockStateReplacements.get(blockState);
     }
 
-    @Override
-    public void achieveLevelPhase(ServerLevel serverLevel, ResourceLocation phase, boolean add) {
-        updateBlockProperties(phase,add);
-    }
-
-    public void updateBlockProperties(ResourceLocation phase,boolean add) {
+    public void updateBlockProperties(ResourceLocation phase, boolean add) {
         if (add){
             rollbackBlockProperties(phase);
         }else {
@@ -114,19 +110,19 @@ public class BlockPhaseManager extends PhaseManager<BlockReplacementPhaseContext
     @SubscribeEvent
     public void onBlockEntityPlace(BlockEvent.EntityPlaceEvent event) {
 		BlockState placed = event.getPlacedBlock();
-		if (event.getEntity() instanceof Player player) {
-			applyTargetIfPlayerNotReachedPhase(player, placed, target -> {
-				Level level = (Level) event.getLevel();
-				BlockPos pos = event.getPos();
-				level.setBlock(pos, target, 3);
-			});
-		} else {
-			Level level = (Level) event.getLevel();
-			applyTargetIfLevelNotFinishedPhase(level, placed, target -> {
-				BlockPos pos = event.getPos();
-				level.setBlock(pos, target, 3);
-			});
-		}
+        Level level = (Level)event.getLevel();
+        Player player = event.getEntity() instanceof Player ? (Player) event.getEntity() : null;
+
+        isRestricted(level,null, player,ctx -> {
+            BlockReplacementPhaseContext blockReplacementPhaseContext = BlockPhaseManager.MANAGER.getBlockReplacementPhaseContext(ctx.getSource());
+            if (ctx.equals(blockReplacementPhaseContext) && blockReplacementPhaseContext.getSource().equals(placed)){
+                return blockReplacementPhaseContext.getTarget();
+            }
+            return null;
+        }, target -> {
+            BlockPos pos = event.getPos();
+            level.setBlock(pos, target, 3);
+        });
     }
 
 

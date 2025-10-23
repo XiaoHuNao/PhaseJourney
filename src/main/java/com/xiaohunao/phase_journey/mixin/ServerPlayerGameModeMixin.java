@@ -3,6 +3,7 @@ package com.xiaohunao.phase_journey.mixin;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.xiaohunao.phase_journey.common.phase.block.BlockPhaseManager;
+import com.xiaohunao.phase_journey.common.phase.block.BlockReplacementPhaseContext;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -22,11 +23,25 @@ public abstract class ServerPlayerGameModeMixin {
 
     @WrapOperation(method = "useItemOn", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/Level;getBlockState(Lnet/minecraft/core/BlockPos;)Lnet/minecraft/world/level/block/state/BlockState;"))
     public BlockState onUseItemOn(Level instance, BlockPos blockPos, Operation<BlockState> original) {
-        return BlockPhaseManager.MANAGER.replaceSourceIfPlayerNotReachedPhase(player, original.call(instance, blockPos));
+        BlockState blockState = original.call(instance, blockPos);
+        return BlockPhaseManager.MANAGER.isRestricteds(player.level(),null,player, ctx -> {
+            BlockReplacementPhaseContext blockReplacementPhaseContext = BlockPhaseManager.MANAGER.getBlockReplacementPhaseContext(blockState);
+            if (ctx.equals(blockReplacementPhaseContext)){
+                return blockReplacementPhaseContext.getTarget();
+            }
+            return blockState;
+        },blockState);
     }
 
     @WrapOperation(method = "destroyBlock", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/level/ServerLevel;getBlockState(Lnet/minecraft/core/BlockPos;)Lnet/minecraft/world/level/block/state/BlockState;"))
     private BlockState replace(ServerLevel instance, BlockPos blockPos, Operation<BlockState> original) {
-        return BlockPhaseManager.MANAGER.replaceSourceIfPlayerNotReachedPhase(player, original.call(instance, blockPos));
+        BlockState blockState = original.call(instance, blockPos);
+        return BlockPhaseManager.MANAGER.isRestricteds(player.level(),null,player, ctx -> {
+            BlockReplacementPhaseContext blockReplacementPhaseContext = BlockPhaseManager.MANAGER.getBlockReplacementPhaseContext(blockState);
+            if (ctx.equals(blockReplacementPhaseContext)){
+                return blockReplacementPhaseContext.getTarget();
+            }
+            return blockState;
+        },blockState);
     }
 }

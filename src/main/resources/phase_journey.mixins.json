@@ -7,9 +7,11 @@
   "mixins": [
     "AbstractContainerMenuMixin",
     "BlockBehaviourMixin",
+    "BlockBehaviourMixin$BlockStateBaseMixin",
     "EnchantmentTableMenuMixin",
     "ServerPlayerGameModeMixin",
     "integration.create.FluidDrainingBehaviourMixin",
+    "integration.ftbquests.StageRewardMixin",
     "integration.hostilenetworks.SimChamberTileEntityMixin",
     "recipe.create.BasinOperatingBlockEntityMixin",
     "recipe.create.CrushingWheelControllerBlockEntityMixin",

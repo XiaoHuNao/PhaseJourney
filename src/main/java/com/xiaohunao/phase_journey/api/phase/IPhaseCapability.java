@@ -50,30 +50,4 @@ public interface IPhaseCapability {
         }
         return action.get();
     }
-
-    /**
-     * 检查特定阶段是否未解锁，如果未解锁则添加它
-     * @param phase 要检查和可能添加的阶段标识符
-     * @return 如果阶段被添加则返回true，如果已经解锁则返回false
-     */
-    default boolean addPhaseIfAbsent(ResourceLocation phase) {
-        if (getPhases().contains(phase)) {
-            return false;
-        }
-        addPhase(phase);
-        return true;
-    }
-
-    /**
-     * 检查特定阶段是否存在，如果存在则移除它
-     * @param phase 要检查和可能移除的阶段标识符
-     * @return 如果阶段被移除则返回true，如果不存在则返回false
-     */
-    default boolean removePhaseIfPresent(ResourceLocation phase) {
-        if (!getPhases().contains(phase)) {
-            return false;
-        }
-        removePhase(phase);
-        return true;
-    }
 }

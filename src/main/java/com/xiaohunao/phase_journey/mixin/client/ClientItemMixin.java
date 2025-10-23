@@ -1,6 +1,7 @@
 package com.xiaohunao.phase_journey.mixin.client;
 
 import com.xiaohunao.phase_journey.common.phase.item.ItemPhaseManager;
+import com.xiaohunao.phase_journey.common.phase.item.ItemReplacementContext;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.chat.Component;
@@ -17,7 +18,11 @@ public abstract class ClientItemMixin {
     public void getName(ItemStack itemStack, CallbackInfoReturnable<Component> callback) {
         LocalPlayer player = Minecraft.getInstance().player;
         if (player == null) return;
-        ItemPhaseManager.MANAGER.applyTargetIfPhaseIsNotAchieved(player, itemStack.getItem(), target -> {
+        ItemPhaseManager.MANAGER.isRestricted(player.level(),null,player,ctx -> {
+            ItemReplacementContext itemReplacementContext = ItemPhaseManager.MANAGER.getItemReplacementContext(itemStack.getItem());
+            return ctx.equals(itemReplacementContext) ? itemReplacementContext.getTarget() : null;
+        },
+        target -> {
             callback.setReturnValue(target.getDescription());
         });
     }

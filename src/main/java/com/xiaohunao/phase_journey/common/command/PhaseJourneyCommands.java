@@ -6,6 +6,7 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import com.xiaohunao.phase_journey.common.attachment.PhaseAttachment;
+import com.xiaohunao.phase_journey.common.phase.PhaseType;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -74,16 +75,8 @@ public class PhaseJourneyCommands {
         String phaseName = StringArgumentType.getString(context, "phase");
         ResourceLocation phase = ResourceLocation.parse(phaseName);
 
-        boolean hasSuccess = false;
         for (ServerPlayer player : targets) {
-            PhaseAttachment attachment = PhaseAttachment.of(player);
-            if (attachment.addPhaseIfAbsent(phase)) {
-                hasSuccess = true;
-            }
-        }
-
-        if (!hasSuccess) {
-            throw PHASE_ALREADY_EXISTS.create();
+            PhaseType.PLAYER.applyOrRevokePhase(player, phase, true);
         }
 
         final ResourceLocation finalPhase = phase;
@@ -98,16 +91,8 @@ public class PhaseJourneyCommands {
         String phaseName = StringArgumentType.getString(context, "phase");
         ResourceLocation phase = ResourceLocation.parse(phaseName);
 
-        boolean hasSuccess = false;
         for (ServerPlayer player : targets) {
-            PhaseAttachment attachment = PhaseAttachment.of(player);
-            if (attachment.removePhaseIfPresent(phase)) {
-                hasSuccess = true;
-            }
-        }
-
-        if (!hasSuccess) {
-            throw PHASE_NOT_FOUND.create();
+            PhaseType.PLAYER.applyOrRevokePhase(player, phase, false);
         }
 
         final ResourceLocation finalPhase = phase;
@@ -144,7 +129,10 @@ public class PhaseJourneyCommands {
 
         for (ServerPlayer player : targets) {
             PhaseAttachment attachment = PhaseAttachment.of(player);
-            attachment.getPhases().clear();
+            for (ResourceLocation phase : attachment.getPhases()) {
+                PhaseType.PLAYER.applyOrRevokePhase(player,phase,false);
+            }
+
         }
 
         final int targetSize = targets.size();
@@ -159,11 +147,8 @@ public class PhaseJourneyCommands {
         ResourceLocation phase = ResourceLocation.parse(phaseName);
 
         Level level = context.getSource().getLevel();
-        PhaseAttachment attachment = PhaseAttachment.of(level);
+        PhaseType.LEVEL.applyOrRevokePhase(level, phase, true);
 
-        if (!attachment.addPhaseIfAbsent(phase)) {
-            throw PHASE_ALREADY_EXISTS.create();
-        }
         return 1;
     }
 
@@ -172,11 +157,7 @@ public class PhaseJourneyCommands {
         ResourceLocation phase = ResourceLocation.parse(phaseName);
 
         Level level = context.getSource().getLevel();
-        PhaseAttachment attachment = PhaseAttachment.of(level);
-
-        if (!attachment.removePhaseIfPresent(phase)) {
-            throw PHASE_NOT_FOUND.create();
-        }
+        PhaseType.LEVEL.applyOrRevokePhase(level, phase, false);
 
         context.getSource().sendSuccess(() -> Component.translatable("commands.phase_journey.world.remove.success", phase), true);
         return 1;
@@ -203,7 +184,9 @@ public class PhaseJourneyCommands {
     private static int clearWorldPhases(CommandContext<CommandSourceStack> context) {
         Level level = context.getSource().getLevel();
         PhaseAttachment attachment = PhaseAttachment.of(level);
-        attachment.getPhases().clear();
+        for (ResourceLocation phase : attachment.getPhases()) {
+            PhaseType.LEVEL.applyOrRevokePhase(level,phase,false);
+        }
 
         context.getSource().sendSuccess(() -> Component.translatable("commands.phase_journey.world.clear.success"), true);
         return 1;

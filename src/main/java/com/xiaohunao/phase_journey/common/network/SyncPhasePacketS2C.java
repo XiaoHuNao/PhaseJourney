@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Streams;
 import com.xiaohunao.phase_journey.PhaseJourney;
 import com.xiaohunao.phase_journey.common.attachment.PhaseAttachment;
+import com.xiaohunao.phase_journey.common.phase.PhaseType;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -17,9 +18,10 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public record SyncPhasePacketS2C(List<ResourceLocation> phases, boolean add) implements CustomPacketPayload {
+public record SyncPhasePacketS2C(PhaseType phaseType, List<ResourceLocation> phases, boolean add) implements CustomPacketPayload {
     public static final Type<SyncPhasePacketS2C> TYPE = new Type<>(PhaseJourney.asResource("sync_phase"));
     public static final StreamCodec<ByteBuf, SyncPhasePacketS2C> STREAM_CODEC = StreamCodec.composite(
+            ByteBufCodecs.fromCodec(PhaseType.CODEC), SyncPhasePacketS2C::phaseType,
             ResourceLocation.STREAM_CODEC.apply(ByteBufCodecs.list()), SyncPhasePacketS2C::phases,
             ByteBufCodecs.BOOL, SyncPhasePacketS2C::add,
             SyncPhasePacketS2C::new
@@ -32,8 +34,12 @@ public record SyncPhasePacketS2C(List<ResourceLocation> phases, boolean add) imp
 
     public void handle(IPayloadContext context) {
         context.enqueueWork(() -> {
+            if (phaseType == PhaseType.NEAREST_PLAYER || phaseType == PhaseType.BLOCK_OWNER_PLAYER){
+                return;
+            }
+
             if (context.player().isLocalPlayer()) {
-                PJClientPacketHandler.handleSync(phases, add, context.player());
+                PJClientPacketHandler.handleSync(phaseType,phases, add, context.player());
             }
         }).exceptionally(e -> {
             context.disconnect(Component.translatable("neoforge.network.invalid_flow", e.getMessage()));
@@ -42,17 +48,15 @@ public record SyncPhasePacketS2C(List<ResourceLocation> phases, boolean add) imp
     }
 
     public static void sync2Player4All(ServerPlayer player, boolean add) {
-        PacketDistributor.sendToPlayer(player, new SyncPhasePacketS2C(Streams.concat(
-                PhaseAttachment.of(player).getPhases().stream(),
-                PhaseAttachment.of(player.level()).getPhases().stream()
-        ).distinct().toList(), add));
+        PacketDistributor.sendToPlayer(player, new SyncPhasePacketS2C(PhaseType.PLAYER,Lists.newArrayList(PhaseAttachment.of(player).getPhases()), add));
+        PacketDistributor.sendToPlayer(player, new SyncPhasePacketS2C(PhaseType.LEVEL,Lists.newArrayList(PhaseAttachment.of(player.level()).getPhases()), add));
     }
 
     public static void sync2Player(ServerPlayer player, boolean add, ResourceLocation... phases) {
-        PacketDistributor.sendToPlayer(player, new SyncPhasePacketS2C(Lists.newArrayList(phases), add));
+        PacketDistributor.sendToPlayer(player, new SyncPhasePacketS2C(PhaseType.PLAYER,Lists.newArrayList(phases), add));
     }
 
-    public static void sync2All(boolean add, ResourceLocation... phases) {
-        PacketDistributor.sendToAllPlayers(new SyncPhasePacketS2C(Lists.newArrayList(phases), add));
+    public static void sync2Level(boolean add, ResourceLocation... phases) {
+        PacketDistributor.sendToAllPlayers(new SyncPhasePacketS2C(PhaseType.LEVEL,Lists.newArrayList(phases), add));
     }
 }

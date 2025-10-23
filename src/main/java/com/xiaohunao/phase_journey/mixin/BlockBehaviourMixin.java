@@ -4,6 +4,7 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.xiaohunao.phase_journey.common.phase.block.BlockPhaseManager;
+import com.xiaohunao.phase_journey.common.phase.block.BlockReplacementPhaseContext;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -34,14 +35,27 @@ public abstract class BlockBehaviourMixin {
 
     @ModifyVariable(method = "getDestroyProgress", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/state/BlockState;getDestroySpeed(Lnet/minecraft/world/level/BlockGetter;Lnet/minecraft/core/BlockPos;)F"), argsOnly = true)
     private BlockState replace(BlockState source, @Local(argsOnly = true) Player player) {
-        return BlockPhaseManager.MANAGER.replaceSourceIfPlayerNotReachedPhase(player, source);
+        return BlockPhaseManager.MANAGER.isRestricteds(player.level(),null,player, ctx -> {
+            BlockReplacementPhaseContext blockReplacementPhaseContext = BlockPhaseManager.MANAGER.getBlockReplacementPhaseContext(source);
+            if (ctx.equals(blockReplacementPhaseContext)){
+                return blockReplacementPhaseContext.getTarget();
+            }
+            return source;
+        },source);
     }
 
     @Mixin(BlockBehaviour.BlockStateBase.class)
     public abstract static class BlockStateBaseMixin {
         @WrapOperation(method = "onExplosionHit", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/Block;onExplosionHit(Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/Explosion;Ljava/util/function/BiConsumer;)V"))
         private void replaceState(Block instance, BlockState blockState, Level level, BlockPos pos, Explosion explosion, BiConsumer<ItemStack, BlockPos> biConsumer, Operation<Void> original) {
-            BlockState target = BlockPhaseManager.MANAGER.replaceSourceIfLevelNotFinishedPhase(level, blockState);
+            BlockState target = BlockPhaseManager.MANAGER.isRestricteds(level, null, null, ctx -> {
+                BlockReplacementPhaseContext blockReplacementPhaseContext = BlockPhaseManager.MANAGER.getBlockReplacementPhaseContext(blockState);
+                if (ctx.equals(blockReplacementPhaseContext)) {
+                    return blockReplacementPhaseContext.getTarget();
+                }
+                return blockState;
+            }, blockState);
+
             if (target == blockState) {
                 original.call(instance, blockState, level, pos, explosion, biConsumer);
             } else {

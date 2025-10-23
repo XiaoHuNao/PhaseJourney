@@ -56,59 +56,5 @@ public class PhaseUtils {
         return hadLevelFinishedPhase(phase, level) ? ifPresent : ifAbsent;
     }
 
-    /**
-     * 为玩家添加或移除阶段，并在必要时更新世界阶段状态
-     * @param player 目标玩家
-     * @param phase 要添加或移除的阶段
-     * @param add true表示添加阶段，false表示移除阶段
-     */
-    public static void achievePlayerPhase(ServerPlayer player, ResourceLocation phase, boolean add) {
-        Stream<ServerPlayer> players = player.server.getPlayerList().getPlayers().stream();
-        if (add) {
-            PhaseAttachment.of(player).addPhase(phase);
-            if (players.allMatch(serverPlayer -> hadPlayerReachedPhase(phase, serverPlayer))) {
-                PhaseAttachment.of(player.level()).addPhase(phase);
-                for (PhaseContextType<?> type : PJRegistries.PHASE_CONTEXT_TYPE) {
-                    type.manager().broadcastPhaseChangeToClient(phase, true);
-                }
-            }
-        } else {
-            PhaseAttachment.of(player).removePhase(phase);
-            if (players.noneMatch(serverPlayer -> hadPlayerReachedPhase(phase, serverPlayer))) {
-                PhaseAttachment.of(player.level()).removePhase(phase);
-                for (PhaseContextType<?> type : PJRegistries.PHASE_CONTEXT_TYPE) {
-                    type.manager().broadcastPhaseChangeToClient(phase, false);
-                }
-            }
-        }
-        SyncPhasePacketS2C.sync2Player(player, add, phase);
-    }
 
-    /**
-     * 为服务器世界添加或移除阶段，并处理相关副作用
-     * @param level 目标服务器世界
-     * @param phase 要添加或移除的阶段
-     * @param add true表示添加阶段，false表示移除阶段
-     */
-    public static void achieveLevelPhase(ServerLevel level, ResourceLocation phase, boolean add) {
-        if (add) {
-            PhaseAttachment.of(level).addPhase(phase);
-            for (ServerPlayer player : level.getServer().getPlayerList().getPlayers()) {
-                PhaseAttachment.of(player).addPhase(phase);
-            }
-
-            for (PhaseContextType<?> type : PJRegistries.PHASE_CONTEXT_TYPE) {
-                type.manager().achieveLevelPhase(level,phase, true);
-            }
-        } else {
-            PhaseAttachment.of(level).removePhase(phase);
-            for (ServerPlayer player : level.getServer().getPlayerList().getPlayers()) {
-                PhaseAttachment.of(player).removePhase(phase);
-            }
-            for (PhaseContextType<?> type : PJRegistries.PHASE_CONTEXT_TYPE) {
-                type.manager().achieveLevelPhase(level,phase, false);
-            }
-        }
-        SyncPhasePacketS2C.sync2All(add, phase);
-    }
 }

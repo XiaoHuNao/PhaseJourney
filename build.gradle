@@ -162,7 +162,7 @@ dependencies {
 
     compileOnly "curse.maven:rhino-416294:6886923"
     compileOnly "curse.maven:kubejs-238086:5810100"
-    if (false) {
+    if (true) {
         runtimeOnly "curse.maven:rhino-416294:6886923"
         runtimeOnly "curse.maven:kubejs-238086:5810100"
     }
@@ -211,11 +211,17 @@ dependencies {
     compileOnly "curse.maven:titanium-287342:6875285"
     //runtimeOnly "curse.maven:titanium-287342:6875285"
 
-    //runtimeOnly("com.simibubi.create:create-${minecraft_version}:${create_version}:slim") { transitive = false }
     compileOnly("net.createmod.ponder:Ponder-NeoForge-${minecraft_version}:${ponder_version}")
-    //runtimeOnly("net.createmod.ponder:Ponder-NeoForge-${minecraft_version}:${ponder_version}")
-    //runtimeOnly("dev.engine-room.flywheel:flywheel-neoforge-${minecraft_version}:${flywheel_version}")
-    //runtimeOnly("com.tterrag.registrate:Registrate:${registrate_version}")
+
+    compileOnly "curse.maven:ftb-quests-forge-289412:7029249"
+    compileOnly "curse.maven:ftb-teams-forge-404468:6930910"
+    compileOnly "curse.maven:architectury-api-419699:5786327"
+    compileOnly "curse.maven:ftb-library-forge-404465:7029003"
+
+    runtimeOnly "curse.maven:ftb-quests-forge-289412:7029249"
+    runtimeOnly "curse.maven:ftb-teams-forge-404468:6930910"
+    runtimeOnly "curse.maven:architectury-api-419699:5786327"
+    runtimeOnly "curse.maven:ftb-library-forge-404465:7029003"
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.

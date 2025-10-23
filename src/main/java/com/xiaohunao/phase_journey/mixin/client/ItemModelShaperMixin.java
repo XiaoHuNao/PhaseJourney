@@ -1,6 +1,7 @@
 package com.xiaohunao.phase_journey.mixin.client;
 
 import com.xiaohunao.phase_journey.common.phase.item.ItemPhaseManager;
+import com.xiaohunao.phase_journey.common.phase.item.ItemReplacementContext;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.ItemModelShaper;
@@ -14,6 +15,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import javax.annotation.Nullable;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 @Mixin(ItemModelShaper.class)
 public abstract class ItemModelShaperMixin {
@@ -25,8 +28,9 @@ public abstract class ItemModelShaperMixin {
     private void getModel(ItemStack itemStack, CallbackInfoReturnable<BakedModel> callback) {
         LocalPlayer player = Minecraft.getInstance().player;
         if (player == null) return;
-        ItemPhaseManager.MANAGER.applyTargetIfPhaseIsNotAchieved(player, itemStack.getItem(), target -> {
-            callback.setReturnValue(getItemModel(target));
-        });
+        ItemPhaseManager.MANAGER.isRestricted(player.level(), null, player,ctx -> {
+            ItemReplacementContext itemReplacementContext = ItemPhaseManager.MANAGER.getItemReplacementContext(itemStack.getItem());
+            return ctx.equals(itemReplacementContext) ? itemReplacementContext.getTarget() : null;
+        }, item -> callback.setReturnValue(getItemModel(item)));
     }
 }
