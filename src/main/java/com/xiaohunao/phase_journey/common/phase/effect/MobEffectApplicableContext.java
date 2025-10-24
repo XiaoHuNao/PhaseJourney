@@ -25,6 +25,10 @@ public class MobEffectApplicableContext extends PhaseContext {
     private final boolean disableAll;
     private final List<EntityType<?>> entityTypes;
 
+    public MobEffectApplicableContext(ResourceLocation phase, Holder<MobEffect> bannedEffect) {
+        this(phase, List.of(bannedEffect), false, List.of(EntityType.PLAYER));
+    }
+
     public MobEffectApplicableContext(ResourceLocation phase, List<Holder<MobEffect>> bannedEffects, boolean disableAll) {
         this(phase, bannedEffects, disableAll, List.of(EntityType.PLAYER));
     }

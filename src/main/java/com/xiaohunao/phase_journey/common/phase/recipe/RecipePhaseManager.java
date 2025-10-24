@@ -1,6 +1,7 @@
 package com.xiaohunao.phase_journey.common.phase.recipe;
 
 import com.xiaohunao.phase_journey.api.phase.PhaseManager;
+import com.xiaohunao.phase_journey.common.util.PhaseUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
@@ -34,6 +35,8 @@ public class RecipePhaseManager extends PhaseManager<IRecipeContext> {
     }
 
     public boolean isRestricted(Level level, BlockPos pos, Player player, RecipeType<?> recipeType, ResourceLocation recipeID) {
-        return isRestricted(level, pos, player, cxt -> cxt.isRestricted(recipeType, recipeID));
+        return PhaseUtils.anyContextMatches(this,level, player, pos, (ctx, phaseManager) -> {
+            return ctx.isRestricted(recipeType, recipeID);
+        });
     }
 }

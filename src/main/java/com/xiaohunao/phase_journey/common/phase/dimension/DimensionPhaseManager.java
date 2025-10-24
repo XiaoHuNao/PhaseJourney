@@ -2,6 +2,7 @@ package com.xiaohunao.phase_journey.common.phase.dimension;
 
 import com.xiaohunao.phase_journey.api.phase.PhaseManager;
 import com.xiaohunao.phase_journey.common.phase.PhaseType;
+import com.xiaohunao.phase_journey.common.util.PhaseUtils;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
@@ -30,7 +31,7 @@ public class DimensionPhaseManager extends PhaseManager<DimensionTravelRestricte
     }
 
     public boolean isRestricted(Level level, @Nullable Player player, ResourceKey<Level> targetDimension, Entity entity, boolean isEnter){
-        return isRestricted(level,null,player,ctx ->{
+        return PhaseUtils.anyContextMatches(this,level,player,null, (ctx,phaseManager) -> {
             if(isEnter){
                 return ctx.isEnterAllowed() && canEntityTravelToDimension(entity.getUUID(), targetDimension, ctx, true);
             }else {

@@ -1,6 +1,7 @@
 package com.xiaohunao.phase_journey.integration.waystones.phase;
 
 import com.xiaohunao.phase_journey.api.phase.PhaseManager;
+import com.xiaohunao.phase_journey.common.util.PhaseUtils;
 import net.blay09.mods.waystones.api.Waystone;
 import net.blay09.mods.waystones.api.WaystoneTeleportContext;
 import net.blay09.mods.waystones.api.event.WaystoneTeleportEvent;
@@ -17,7 +18,7 @@ public class WaystoneTeleportPhaseManager extends PhaseManager<WaystoneTeleportP
     public static final WaystoneTeleportPhaseManager MANAGER = new WaystoneTeleportPhaseManager();
 
     public boolean isRestricted(Level level, BlockPos pos, Player player, WaystoneTeleportContext waystoneTeleportContext){
-        return isRestricted(level,pos,player,ctx -> {
+        return PhaseUtils.anyContextMatches(this,level,player,pos,(ctx, phaseManager) -> {
             if (ctx.disableAll()) {
                 return true;
             }

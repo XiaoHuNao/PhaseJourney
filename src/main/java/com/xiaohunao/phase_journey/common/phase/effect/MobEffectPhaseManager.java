@@ -1,6 +1,7 @@
 package com.xiaohunao.phase_journey.common.phase.effect;
 
 import com.xiaohunao.phase_journey.api.phase.PhaseManager;
+import com.xiaohunao.phase_journey.common.util.PhaseUtils;
 import net.minecraft.core.Holder;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.LivingEntity;
@@ -15,7 +16,7 @@ public class MobEffectPhaseManager extends PhaseManager<MobEffectApplicableConte
     public static final MobEffectPhaseManager MANAGER = new MobEffectPhaseManager();
 
     public boolean isRestricted(Level level, @Nullable Player player, Holder<MobEffect> effect, LivingEntity  entity){
-        return isRestricted(level,null,player,ctx -> {
+        return PhaseUtils.anyContextMatches(this, level, player, null, (ctx, phaseManager) -> {
             if (ctx.entityTypes().contains(entity.getType())) {
                 if (ctx.disableAll()) {
                     return true;

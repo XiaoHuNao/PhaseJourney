@@ -94,17 +94,14 @@ public class BlockPhaseManager extends PhaseManager<BlockReplacementPhaseContext
 
     @SubscribeEvent
     public void blockDrops(BlockDropsEvent event) {
-        if (event.getBreaker() instanceof Player player) {
-            applyTargetIfPlayerNotReachedPhase(player, event.getState(), target -> {
-                Block.dropResources(target, event.getLevel(), event.getPos(), null, player, event.getTool());
-                event.setCanceled(true);
-            });
-        } else {
-            applyTargetIfLevelNotFinishedPhase(event.getLevel(), event.getState(), target -> {
-                Block.dropResources(target, event.getLevel(), event.getPos(), null);
-                event.setCanceled(true);
-            });
-        }
+        Player player = event.getBreaker() instanceof Player ? (Player) event.getBreaker() : null;
+        ServerLevel level = event.getLevel();
+        PhaseUtils.applyActionToMatchingContexts(this,level,player,null,(ctx,phaseManager) -> {
+            return ctx.getSource().equals(event.getState());
+        },(target,phaseManager) -> {
+            Block.dropResources(target.getTarget(), event.getLevel(), event.getPos(), null, player, event.getTool());
+            event.setCanceled(true);
+        });
     }
 
     @SubscribeEvent
@@ -113,132 +110,21 @@ public class BlockPhaseManager extends PhaseManager<BlockReplacementPhaseContext
         Level level = (Level)event.getLevel();
         Player player = event.getEntity() instanceof Player ? (Player) event.getEntity() : null;
 
-        isRestricted(level,null, player,ctx -> {
-            BlockReplacementPhaseContext blockReplacementPhaseContext = BlockPhaseManager.MANAGER.getBlockReplacementPhaseContext(ctx.getSource());
-            if (ctx.equals(blockReplacementPhaseContext) && blockReplacementPhaseContext.getSource().equals(placed)){
-                return blockReplacementPhaseContext.getTarget();
-            }
-            return null;
-        }, target -> {
-            BlockPos pos = event.getPos();
-            level.setBlock(pos, target, 3);
-        });
-    }
-
-
-    public void applyTargetIfNotAchievedPhase(Player player, BlockState source, Consumer<BlockState> targetConsumer) {
-        if (source.hasBlockEntity() || source.isAir()) return;
-        BlockReplacementPhaseContext replacement = blockStateReplacements.get(source);
-        if (replacement == null) return;
-        for (Map.Entry<PhaseType, Collection<Pair<ResourceLocation, BlockReplacementPhaseContext>>> entry : phaseContexts.asMap().entrySet()) {
-            for (Pair<ResourceLocation, BlockReplacementPhaseContext> pair : entry.getValue()) {
-                ResourceLocation phase = pair.getFirst();
-                BlockReplacementPhaseContext ctx = pair.getSecond();
-                if (PhaseUtils.hadPlayerOrLevelAchievedPhase(phase, player)) continue;
-                if (ctx.equals(replacement)) {
-                    targetConsumer.accept(replacement.getTarget());
-                    return;
-                }
-            }
-        }
-    }
-
-    public void applyTargetIfPlayerNotReachedPhase(Player player, BlockState source, Consumer<BlockState> targetConsumer) {
-        if (source.hasBlockEntity() || source.isAir()) return;
-        BlockReplacementPhaseContext replacement = blockStateReplacements.get(source);
-        if (replacement == null) return;
-        for (Map.Entry<PhaseType, Collection<Pair<ResourceLocation, BlockReplacementPhaseContext>>> entry : phaseContexts.asMap().entrySet()) {
-            for (Pair<ResourceLocation, BlockReplacementPhaseContext> pair : entry.getValue()) {
-                ResourceLocation phase = pair.getFirst();
-                BlockReplacementPhaseContext ctx = pair.getSecond();
-                if (PhaseUtils.hadPlayerReachedPhase(phase, player)) continue;
-                if (ctx.equals(replacement)) {
-                    targetConsumer.accept(replacement.getTarget());
-                    return;
-                }
-            }
-        }
-    }
-
-    public void applyTargetIfLevelNotFinishedPhase(Level level, BlockState source, Consumer<BlockState> targetConsumer) {
-        if (source.hasBlockEntity() || source.isAir()) return;
-        BlockReplacementPhaseContext replacement = blockStateReplacements.get(source);
-        if (replacement == null) return;
-        for (Map.Entry<PhaseType, Collection<Pair<ResourceLocation, BlockReplacementPhaseContext>>> entry : phaseContexts.asMap().entrySet()) {
-            for (Pair<ResourceLocation, BlockReplacementPhaseContext> pair : entry.getValue()) {
-                ResourceLocation phase = pair.getFirst();
-                BlockReplacementPhaseContext ctx = pair.getSecond();
-                if (PhaseUtils.hadLevelFinishedPhase(phase, level)) continue;
-                if (ctx.equals(replacement)) {
-                    targetConsumer.accept(replacement.getTarget());
-                    return;
-                }
-            }
-        }
-    }
-
-    public BlockState replaceSourceIfNotAchievedPhase(Player player, BlockState source) {
-        if (source.hasBlockEntity() || source.isAir()) return source;
-        BlockReplacementPhaseContext replacement = blockStateReplacements.get(source);
-        if (replacement == null) return source;
-        for (Map.Entry<PhaseType, Collection<Pair<ResourceLocation, BlockReplacementPhaseContext>>> entry : phaseContexts.asMap().entrySet()) {
-            for (Pair<ResourceLocation, BlockReplacementPhaseContext> pair : entry.getValue()) {
-                ResourceLocation phase = pair.getFirst();
-                BlockReplacementPhaseContext ctx = pair.getSecond();
-                if (PhaseUtils.hadPlayerOrLevelAchievedPhase(phase, player)) continue;
-                if (ctx.equals(replacement)) {
-                    return replacement.getTarget();
-                }
-            }
-        }
-        return source;
-    }
-
-    public BlockState replaceSourceIfPlayerNotReachedPhase(Player player, BlockState source) {
-        if (source.hasBlockEntity() || source.isAir()) return source;
-        BlockReplacementPhaseContext replacement = blockStateReplacements.get(source);
-        if (replacement == null) return source;
-        for (Map.Entry<PhaseType, Collection<Pair<ResourceLocation, BlockReplacementPhaseContext>>> entry : phaseContexts.asMap().entrySet()) {
-            for (Pair<ResourceLocation, BlockReplacementPhaseContext> pair : entry.getValue()) {
-                ResourceLocation phase = pair.getFirst();
-                BlockReplacementPhaseContext ctx = pair.getSecond();
-                if (PhaseUtils.hadPlayerReachedPhase(phase, player)) continue;
-                if (ctx.equals(replacement)) {
-                    return replacement.getTarget();
-                }
-            }
-        }
-        return source;
-    }
-
-    public BlockState replaceSourceIfLevelNotFinishedPhase(Level level, BlockState source) {
-        if (source.hasBlockEntity() || source.isAir()) return source;
-        BlockReplacementPhaseContext replacement = blockStateReplacements.get(source);
-        if (replacement == null) return source;
-        for (Map.Entry<PhaseType, Collection<Pair<ResourceLocation, BlockReplacementPhaseContext>>> entry : phaseContexts.asMap().entrySet()) {
-            for (Pair<ResourceLocation, BlockReplacementPhaseContext> pair : entry.getValue()) {
-                ResourceLocation phase = pair.getFirst();
-                BlockReplacementPhaseContext ctx = pair.getSecond();
-                if (PhaseUtils.hadLevelFinishedPhase(phase, level)) continue;
-                if (ctx.equals(replacement)) {
-                    return replacement.getTarget();
-                }
-            }
-        }
-        return source;
+        //测试
+//        PhaseUtils.applyActionToMatchingContexts(this,level,player,null,(ctx,phaseManager) -> {
+//            return ctx.getSource().equals(placed);
+//        },(target,phaseManager) -> {
+//            BlockPos pos = event.getPos();
+//            level.setBlock(pos, target.getTarget(), 3);
+//        });
     }
 
     public boolean denyDestroy(Player player, BlockState source) {
         if (source.hasBlockEntity() || source.isAir()) return false;
-        for (Map.Entry<PhaseType, Collection<Pair<ResourceLocation, BlockReplacementPhaseContext>>> entry : phaseContexts.asMap().entrySet()) {
-            for (Pair<ResourceLocation, BlockReplacementPhaseContext> pair : entry.getValue()) {
-                ResourceLocation phase = pair.getFirst();
-                if (PhaseUtils.hadPlayerReachedPhase(phase, player)) continue;
-                BlockReplacementPhaseContext replacement = blockStateReplacements.get(source);
-                if (replacement != null) return !replacement.isDestroyAllowed();
-            }
-        }
-        return false;
+
+        return PhaseUtils.anyContextMatches(this,player.level(),player,null,(ctx,phaseManager) ->{
+            return ctx.getSource().equals(source) && !ctx.isDestroyAllowed();
+        });
     }
 
     public BlockState getReplacedBlockState(BlockState source) {
@@ -269,11 +155,5 @@ public class BlockPhaseManager extends PhaseManager<BlockReplacementPhaseContext
         });
     }
 
-    // 统一的阶段限制逻辑 - 新增方法，保持向后兼容
-    public boolean isRestricted(Level level, BlockPos pos, ServerPlayer player, BlockState blockState) {
-        return isRestricted(level, pos, player, ctx ->{
-            return ctx.getSource().equals(blockState);
-        });
-    }
 
 }

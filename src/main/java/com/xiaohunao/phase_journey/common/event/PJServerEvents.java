@@ -4,13 +4,18 @@ import com.xiaohunao.phase_journey.PhaseJourney;
 import com.xiaohunao.phase_journey.api.event.PhaseJourneyEvent;
 import com.xiaohunao.phase_journey.api.event.ResourceManagerReloadEvent;
 import com.xiaohunao.phase_journey.common.command.PhaseJourneyCommands;
+import com.xiaohunao.phase_journey.common.init.PJPhaseContextTypes;
 import com.xiaohunao.phase_journey.common.init.PJRegistries;
 import com.xiaohunao.phase_journey.common.network.RebuildChunksS2C;
 import com.xiaohunao.phase_journey.common.network.SyncPhasePacketS2C;
 import com.xiaohunao.phase_journey.common.phase.PhaseContextType;
 
+import com.xiaohunao.phase_journey.common.phase.PhaseType;
+import com.xiaohunao.phase_journey.common.phase.effect.MobEffectApplicableContext;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
+import net.minecraft.world.effect.MobEffects;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.LogicalSide;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -20,6 +25,8 @@ import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
+
+import java.util.List;
 
 @EventBusSubscriber(modid = PhaseJourney.MODID)
 public class PJServerEvents {
@@ -78,4 +85,18 @@ public class PJServerEvents {
                 RebuildChunksS2C::handle
         );
     }
+
+    @SubscribeEvent
+    public static void onPhaseJourneyRegister(PhaseJourneyEvent.Register event) {
+        event.register(PhaseType.LEVEL,PJPhaseContextTypes.MOB_EFFECT.get(),new MobEffectApplicableContext(
+                ResourceLocation.parse("phase_journey:test"),
+                MobEffects.MOVEMENT_SPEED
+        ));
+
+        event.register(PhaseType.LEVEL,PJPhaseContextTypes.MOB_EFFECT.get(),new MobEffectApplicableContext(
+                ResourceLocation.parse("phase_journey:test"),
+                MobEffects.MOVEMENT_SLOWDOWN
+        ));
+    }
+
 }

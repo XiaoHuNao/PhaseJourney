@@ -5,6 +5,7 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.xiaohunao.phase_journey.common.phase.block.BlockPhaseManager;
 import com.xiaohunao.phase_journey.common.phase.block.BlockReplacementPhaseContext;
+import com.xiaohunao.phase_journey.common.util.PhaseUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -35,10 +36,9 @@ public abstract class BlockBehaviourMixin {
 
     @ModifyVariable(method = "getDestroyProgress", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/state/BlockState;getDestroySpeed(Lnet/minecraft/world/level/BlockGetter;Lnet/minecraft/core/BlockPos;)F"), argsOnly = true)
     private BlockState replace(BlockState source, @Local(argsOnly = true) Player player) {
-        return BlockPhaseManager.MANAGER.isRestricteds(player.level(),null,player, ctx -> {
-            BlockReplacementPhaseContext blockReplacementPhaseContext = BlockPhaseManager.MANAGER.getBlockReplacementPhaseContext(source);
-            if (ctx.equals(blockReplacementPhaseContext)){
-                return blockReplacementPhaseContext.getTarget();
+        return PhaseUtils.findFirstContextOrReturnDefault(BlockPhaseManager.MANAGER,player.level(),player,null,(ctx, phaseManager) -> {
+            if (ctx.getSource().equals(source)){
+                return ctx.getTarget();
             }
             return source;
         },source);
@@ -48,13 +48,12 @@ public abstract class BlockBehaviourMixin {
     public abstract static class BlockStateBaseMixin {
         @WrapOperation(method = "onExplosionHit", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/Block;onExplosionHit(Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/Explosion;Ljava/util/function/BiConsumer;)V"))
         private void replaceState(Block instance, BlockState blockState, Level level, BlockPos pos, Explosion explosion, BiConsumer<ItemStack, BlockPos> biConsumer, Operation<Void> original) {
-            BlockState target = BlockPhaseManager.MANAGER.isRestricteds(level, null, null, ctx -> {
-                BlockReplacementPhaseContext blockReplacementPhaseContext = BlockPhaseManager.MANAGER.getBlockReplacementPhaseContext(blockState);
-                if (ctx.equals(blockReplacementPhaseContext)) {
-                    return blockReplacementPhaseContext.getTarget();
+            BlockState target = PhaseUtils.findFirstContextOrReturnDefault(BlockPhaseManager.MANAGER,level,null,pos,(ctx,phaseManager) -> {
+                if (ctx.getSource().equals(blockState)){
+                    return ctx.getTarget();
                 }
                 return blockState;
-            }, blockState);
+            },blockState);
 
             if (target == blockState) {
                 original.call(instance, blockState, level, pos, explosion, biConsumer);
@@ -65,7 +64,14 @@ public abstract class BlockBehaviourMixin {
 
         @WrapOperation(method = "getDrops", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/Block;getDrops(Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/storage/loot/LootParams$Builder;)Ljava/util/List;"))
         private List<ItemStack> replaceState(Block instance, BlockState blockState, LootParams.Builder builder, Operation<List<ItemStack>> original) {
-            BlockState target = BlockPhaseManager.MANAGER.replaceSourceIfLevelNotFinishedPhase(builder.getLevel(), blockState);
+            BlockState target =PhaseUtils.findFirstContextOrReturnDefault(BlockPhaseManager.MANAGER,builder.getLevel(),null,null,(ctx,phaseManager) -> {
+                if (ctx.getSource().equals(blockState)){
+                    return ctx.getTarget();
+                }
+                return blockState;
+            },blockState);
+
+
             if (target == blockState) {
                 return original.call(instance, blockState, builder);
             } else {

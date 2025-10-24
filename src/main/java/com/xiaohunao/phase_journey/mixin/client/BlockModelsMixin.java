@@ -2,11 +2,13 @@ package com.xiaohunao.phase_journey.mixin.client;
 
 import com.xiaohunao.phase_journey.common.phase.block.BlockPhaseManager;
 import com.xiaohunao.phase_journey.common.phase.block.BlockReplacementPhaseContext;
+import com.xiaohunao.phase_journey.common.util.PhaseUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.block.BlockModelShaper;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.ModelManager;
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.state.BlockState;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -30,14 +32,10 @@ public abstract class BlockModelsMixin {
     private void getBlockModel(BlockState source, CallbackInfoReturnable<BakedModel> callback) {
         LocalPlayer player = Minecraft.getInstance().player;
         if (player == null) return;
-        BlockPhaseManager.MANAGER.isRestricted(player.level(),null,player, ctx -> {
-            BlockReplacementPhaseContext blockReplacementPhaseContext = BlockPhaseManager.MANAGER.getBlockReplacementPhaseContext(source);
-            if (ctx.equals(blockReplacementPhaseContext) && blockReplacementPhaseContext.getSource().equals(source)){
-                return blockReplacementPhaseContext.getTarget();
-            }
-            return null;
-        }, blockState -> {
-            callback.setReturnValue(modelByStateCache.getOrDefault(blockState, modelManager.getMissingModel()));
+        PhaseUtils.applyActionToMatchingContexts(BlockPhaseManager.MANAGER,player.level(),player,null,(ctx, phaseManager) -> {
+            return ctx.getSource().equals(source);
+        },(ctx,phaseManager) -> {
+            callback.setReturnValue(modelByStateCache.getOrDefault(ctx.getTarget(), modelManager.getMissingModel()));
         });
     }
 }

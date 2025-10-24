@@ -2,6 +2,7 @@ package com.xiaohunao.phase_journey.integration.immersiveengineering.phase;
 
 import blusunrize.immersiveengineering.api.multiblocks.MultiblockHandler;
 import com.xiaohunao.phase_journey.api.phase.PhaseManager;
+import com.xiaohunao.phase_journey.common.util.PhaseUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
@@ -13,7 +14,7 @@ public class IEMultiblockPhaseManager extends PhaseManager<IEMultiblockPhaseCont
     public static final IEMultiblockPhaseManager MANAGER = new IEMultiblockPhaseManager();
 
     public boolean isRestricted(Level level,BlockPos pos,Player player, ResourceLocation multiblockId) {
-        return isRestricted(level,pos,player, ctx -> {
+        return PhaseUtils.anyContextMatches(this,level,player,pos, (ctx, phaseManager) -> {
             if (ctx.disableAll()) {
                 return true;
             }

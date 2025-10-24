@@ -3,6 +3,7 @@ package com.xiaohunao.phase_journey.mixin.client;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.xiaohunao.phase_journey.common.phase.block.BlockPhaseManager;
 import com.xiaohunao.phase_journey.common.phase.block.BlockReplacementPhaseContext;
+import com.xiaohunao.phase_journey.common.util.PhaseUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.DebugScreenOverlay;
 import net.minecraft.world.level.block.state.BlockState;
@@ -19,12 +20,8 @@ public abstract class DebugScreenOverlayMixin {
 
     @ModifyExpressionValue(method = "getSystemInformation", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/multiplayer/ClientLevel;getBlockState(Lnet/minecraft/core/BlockPos;)Lnet/minecraft/world/level/block/state/BlockState;"))
     private BlockState wrap(BlockState original) {
-        return BlockPhaseManager.MANAGER.isRestricteds(minecraft.player.level(),null,minecraft.player, ctx -> {
-            BlockReplacementPhaseContext blockReplacementPhaseContext = BlockPhaseManager.MANAGER.getBlockReplacementPhaseContext(original);
-            if (ctx.equals(blockReplacementPhaseContext)){
-                return blockReplacementPhaseContext.getTarget();
-            }
-            return original;
-        },original);
+        return PhaseUtils.findFirstContextOrReturnDefault(BlockPhaseManager.MANAGER,minecraft.player.level(),minecraft.player,null,(ctx, phaseManager) -> {
+            return ctx.getSource().equals(original) ? ctx.getTarget() : original;
+        }, original);
     }
 }

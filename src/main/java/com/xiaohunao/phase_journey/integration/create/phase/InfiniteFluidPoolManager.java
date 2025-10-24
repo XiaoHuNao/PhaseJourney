@@ -5,6 +5,7 @@ import com.google.common.collect.HashBiMap;
 import com.mojang.datafixers.util.Pair;
 import com.xiaohunao.phase_journey.api.phase.PhaseManager;
 import com.xiaohunao.phase_journey.common.phase.PhaseType;
+import com.xiaohunao.phase_journey.common.util.PhaseUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -32,7 +33,7 @@ public class InfiniteFluidPoolManager extends PhaseManager<InfiniteFluidPoolCont
             return false;
         }
 
-        return isRestricted(level, pos, player, ctx -> {
+        return PhaseUtils.anyContextMatches(this,level,player, pos, (ctx,phaseManager) -> {
             return ctx.getFluid().equals(fluid);
         });
     }

@@ -65,51 +65,10 @@ public abstract class PhaseManager <T extends IPhaseContext> extends BaseDynamic
         return phaseContexts.get(type);
     }
 
-    public boolean isRestricted(@Nullable Level level, @Nullable BlockPos pos, @Nullable Player player, Function<T,Boolean> ctx){
-        for (Map.Entry<PhaseType, Pair<ResourceLocation, T>> entry : phaseContexts.entries()) {
-            PhaseType phaseType = entry.getKey();
-            T phaseContext = entry.getValue().getSecond();
-            ResourceLocation phase = entry.getValue().getFirst();
-            PhaseAttachment phaseAttachment = phaseType.getPhaseAttachment(level, pos, player);
-            if (phaseAttachment.getPhases().contains(phase)) {
-                return false;
-            }
-            return ctx.apply(phaseContext);
-        }
-        return false;
+    public Multimap<PhaseType, Pair<ResourceLocation, T>> getPhaseContexts() {
+        return phaseContexts;
     }
 
-    public <R> R isRestricteds(@Nullable Level level, @Nullable BlockPos pos, @Nullable Player player, Function<T,R> ctx, R defaultValue){
-        for (Map.Entry<PhaseType, Pair<ResourceLocation, T>> entry : phaseContexts.entries()) {
-            PhaseType phaseType = entry.getKey();
-            T phaseContext = entry.getValue().getSecond();
-            ResourceLocation phase = entry.getValue().getFirst();
-            PhaseAttachment phaseAttachment = phaseType.getPhaseAttachment(level, pos, player);
-            if (phaseAttachment.getPhases().contains(phase)) {
-                return defaultValue;
-            }
-
-            return ctx.apply(phaseContext);
-        }
-        return defaultValue;
-    }
-
-    public <A> void isRestricted(@Nullable Level level, @Nullable BlockPos pos, @Nullable Player player, Function<T,A> ctx , Consumer<A> actuator){
-        for (Map.Entry<PhaseType, Pair<ResourceLocation, T>> entry : phaseContexts.entries()) {
-            PhaseType phaseType = entry.getKey();
-            T phaseContext = entry.getValue().getSecond();
-            ResourceLocation phase = entry.getValue().getFirst();
-            PhaseAttachment phaseAttachment = phaseType.getPhaseAttachment(level, pos, player);
-            if (phaseAttachment.getPhases().contains(phase)) {
-                return;
-            }
-
-            A apply = ctx.apply(phaseContext);
-            if (apply != null){
-                actuator.accept(apply);
-            }
-        }
-    }
 
     public void forEach(BiConsumer<ResourceLocation, T> consumer) {
         for (Map.Entry<PhaseType, Pair<ResourceLocation, T>> entry : phaseContexts.entries()) {

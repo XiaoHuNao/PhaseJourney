@@ -1,6 +1,7 @@
 package com.xiaohunao.phase_journey.integration.ironsspellbooks.phase;
 
 import com.xiaohunao.phase_journey.api.phase.PhaseManager;
+import com.xiaohunao.phase_journey.common.util.PhaseUtils;
 import io.redspace.ironsspellbooks.api.events.SpellPreCastEvent;
 import io.redspace.ironsspellbooks.api.spells.SchoolType;
 import net.minecraft.resources.ResourceLocation;
@@ -15,7 +16,7 @@ public class SpellCastPhaseManager extends PhaseManager<SpellCastPhaseContext> {
     public static final SpellCastPhaseManager MANAGER = new SpellCastPhaseManager();
 
     public boolean isRestricted(Level level, ServerPlayer player, SpellPreCastEvent event) {
-        return isRestricted(level, player.getOnPos(),player, ctx -> {
+        return PhaseUtils.anyContextMatches(this,level,player,null, (ctx, phaseManager) -> {
             if (ctx.disableAll()) {
                 return true;
             }

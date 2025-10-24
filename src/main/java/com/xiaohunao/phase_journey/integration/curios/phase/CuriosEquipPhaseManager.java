@@ -1,6 +1,7 @@
 package com.xiaohunao.phase_journey.integration.curios.phase;
 
 import com.xiaohunao.phase_journey.api.phase.PhaseManager;
+import com.xiaohunao.phase_journey.common.util.PhaseUtils;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -14,7 +15,7 @@ public class CuriosEquipPhaseManager extends PhaseManager<CuriosEquipPhaseContex
     public static final CuriosEquipPhaseManager MANAGER = new CuriosEquipPhaseManager();
 
     public boolean isRestricted(Level level, Player player, String slotIdentifier) {
-        return isRestricted(level,null, player,ctx -> {
+        return PhaseUtils.anyContextMatches(this,level,player,null,(ctx, phaseManager) -> {
             return ctx.bannedSlots().contains(slotIdentifier);
         });
     }

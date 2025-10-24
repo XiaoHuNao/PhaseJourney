@@ -5,6 +5,7 @@ import com.google.common.collect.Multimap;
 import com.xiaohunao.phase_journey.common.phase.InteractType;
 import com.xiaohunao.phase_journey.api.phase.PhaseManager;
 import com.xiaohunao.phase_journey.common.phase.PhaseType;
+import com.xiaohunao.phase_journey.common.util.PhaseUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
@@ -38,14 +39,14 @@ public class InteractContextManager extends PhaseManager<InteractContext> {
         }
 
         public boolean isRestricted(Level level, BlockPos pos, Player player, EntityType<?> entityType, InteractType interactType) {
-            return isRestricted(level,pos,player,cxt -> {
-                return cxt.getTargetType() == entityType && cxt.interactTypes.contains(interactType);
+            return PhaseUtils.anyContextMatches(this, level, player, pos, (ctx,phaseManager) -> {
+                return ctx.getTargetType() == entityType && ctx.interactTypes.contains(interactType);
             });
         }
 
         public boolean isRestricted(Level level, BlockPos pos, Player player, EntityType<?> entityType, InteractType interactType, Function<InteractContext,Boolean> action) {
-            return isRestricted(level,pos,player,cxt -> {
-                return cxt.getTargetType() == entityType && cxt.interactTypes.contains(interactType) && action.apply(cxt);
+            return PhaseUtils.anyContextMatches(this, level, player, pos, (ctx,phaseManager) -> {
+                return ctx.getTargetType() == entityType && ctx.interactTypes.contains(interactType) && action.apply(ctx);
             });
         }
 

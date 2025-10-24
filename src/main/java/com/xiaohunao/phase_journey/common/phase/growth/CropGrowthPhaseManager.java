@@ -2,6 +2,7 @@ package com.xiaohunao.phase_journey.common.phase.growth;
 
 import com.xiaohunao.phase_journey.api.phase.PhaseManager;
 import com.xiaohunao.phase_journey.common.phase.PhaseType;
+import com.xiaohunao.phase_journey.common.util.PhaseUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -27,7 +28,7 @@ public class CropGrowthPhaseManager extends PhaseManager<CropGrowthInhibitionCon
             return false;
         }
 
-        return isRestricted(level,pos,null,ctx ->{
+        return PhaseUtils.anyContextMatches(this,level,null,pos, (ctx,phaseManager) -> {
             if (ctx.disableAll()) {
                 return true;
             }

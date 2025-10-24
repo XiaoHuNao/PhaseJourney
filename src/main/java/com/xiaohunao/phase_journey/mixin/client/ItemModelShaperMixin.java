@@ -1,7 +1,9 @@
 package com.xiaohunao.phase_journey.mixin.client;
 
+import com.xiaohunao.phase_journey.common.phase.block.BlockPhaseManager;
 import com.xiaohunao.phase_journey.common.phase.item.ItemPhaseManager;
 import com.xiaohunao.phase_journey.common.phase.item.ItemReplacementContext;
+import com.xiaohunao.phase_journey.common.util.PhaseUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.ItemModelShaper;
@@ -28,9 +30,11 @@ public abstract class ItemModelShaperMixin {
     private void getModel(ItemStack itemStack, CallbackInfoReturnable<BakedModel> callback) {
         LocalPlayer player = Minecraft.getInstance().player;
         if (player == null) return;
-        ItemPhaseManager.MANAGER.isRestricted(player.level(), null, player,ctx -> {
-            ItemReplacementContext itemReplacementContext = ItemPhaseManager.MANAGER.getItemReplacementContext(itemStack.getItem());
-            return ctx.equals(itemReplacementContext) ? itemReplacementContext.getTarget() : null;
-        }, item -> callback.setReturnValue(getItemModel(item)));
+
+        PhaseUtils.applyActionToMatchingContexts(ItemPhaseManager.MANAGER,player.level(),player,null,(ctx, phaseManager) -> {
+            return ctx.getSource().equals(itemStack.getItem());
+        },((ctx, phaseManager) -> {
+            callback.setReturnValue(getItemModel(ctx.getTarget()));
+        }));
     }
 }

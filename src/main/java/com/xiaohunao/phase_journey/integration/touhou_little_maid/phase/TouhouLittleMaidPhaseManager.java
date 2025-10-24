@@ -4,6 +4,7 @@ import com.github.tartaricacid.touhoulittlemaid.api.event.MaidTaskEnableEvent;
 import com.github.tartaricacid.touhoulittlemaid.api.task.IMaidTask;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.xiaohunao.phase_journey.api.phase.PhaseManager;
+import com.xiaohunao.phase_journey.common.util.PhaseUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
@@ -15,7 +16,7 @@ public class TouhouLittleMaidPhaseManager extends PhaseManager<TouhouLittleMaidP
     public static final TouhouLittleMaidPhaseManager MANAGER = new TouhouLittleMaidPhaseManager();
 
     public boolean isRestricted(Level level, BlockPos pos, Player player, ResourceLocation taskId) {
-        return isRestricted(level,pos,player,ctx -> {
+        return PhaseUtils.anyContextMatches(this,level,player,pos,(ctx, phaseManager) -> {
             return ctx.isTaskAllowed(taskId);
         });
     }

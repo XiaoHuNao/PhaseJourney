@@ -37,54 +37,8 @@ public class ItemPhaseManager extends PhaseManager<ItemReplacementContext> {
         return itemReplacements.get(item);
     }
 
-    public void applyTargetIfPhaseIsNotAchieved(Player player, Item source, Consumer<Item> targetConsumer) {
-        ItemReplacementContext replacement = itemReplacements.get(source);
-        if (replacement == null) return;
-
-        for (Map.Entry<PhaseType, Collection<Pair<ResourceLocation, ItemReplacementContext>>> entry : phaseContexts.asMap().entrySet()) {
-            for (Pair<ResourceLocation, ItemReplacementContext> pair : entry.getValue()) {
-                ResourceLocation phase = pair.getFirst();
-                ItemReplacementContext ctx = pair.getSecond();
-                if (PhaseUtils.hadPlayerOrLevelAchievedPhase(phase, player)) continue;
-                if (ctx.equals(replacement)) {
-                    targetConsumer.accept(replacement.getTarget());
-                    return;
-                }
-            }
-        }
-    }
-
-    public Item replaceSourceIfPhaseIsNotAchieved(Player player, Item source) {
-        ItemReplacementContext replacement = itemReplacements.get(source);
-        if (replacement == null) return source;
-
-        for (Map.Entry<PhaseType, Collection<Pair<ResourceLocation, ItemReplacementContext>>> entry : phaseContexts.asMap().entrySet()) {
-            for (Pair<ResourceLocation, ItemReplacementContext> pair : entry.getValue()) {
-                ResourceLocation phase = pair.getFirst();
-                ItemReplacementContext ctx = pair.getSecond();
-                if (PhaseUtils.hadPlayerOrLevelAchievedPhase(phase, player)) continue;
-                if (ctx.equals(replacement)) {
-                    return replacement.getTarget();
-                }
-            }
-        }
-        return source;
-    }
-
-    public Item getReplacedItem(Item source) {
-        ItemReplacementContext replacement = itemReplacements.get(source);
-        if (replacement == null) return source;
-        return replacement.getTarget();
-    }
-
     public boolean hasReplacedItem(Item source) {
         return itemReplacements.containsKey(source);
     }
 
-
-    public boolean isRestricted(Level level, BlockPos pos, ServerPlayer player, Item item) {
-        return isRestricted(level, pos, player, ctx -> {
-            return item.equals(ctx.getSource());
-        });
-    }
 }

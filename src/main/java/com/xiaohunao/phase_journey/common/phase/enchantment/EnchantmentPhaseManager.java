@@ -2,6 +2,7 @@ package com.xiaohunao.phase_journey.common.phase.enchantment;
 
 import com.xiaohunao.phase_journey.api.phase.PhaseManager;
 import com.xiaohunao.phase_journey.common.phase.PhaseType;
+import com.xiaohunao.phase_journey.common.util.PhaseUtils;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceKey;
@@ -25,7 +26,7 @@ public class EnchantmentPhaseManager extends PhaseManager<EnchantmentRestrictedC
     }
 
     public boolean isRestricted(Level level, Player player, ResourceKey<Enchantment> enchantment, boolean isEnchantmentTable) {
-        return isRestricted(level, player.getOnPos(),player, ctx -> {
+        return PhaseUtils.anyContextMatches(this, player.level(), player, null, (ctx, phaseManager) -> {
             if (isEnchantmentTable) {
                 return !ctx.isAllowInEnchantmentTable();
             } else {
