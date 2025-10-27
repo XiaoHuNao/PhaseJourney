@@ -1,8 +1,15 @@
 package com.xiaohunao.phase_journey.common.phase.dimension;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+
+import javax.annotation.Nullable;
+
 import com.xiaohunao.phase_journey.api.phase.PhaseManager;
 import com.xiaohunao.phase_journey.common.phase.PhaseType;
 import com.xiaohunao.phase_journey.common.util.PhaseUtils;
+
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
@@ -10,11 +17,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.event.entity.EntityTravelToDimensionEvent;
-
-import javax.annotation.Nullable;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
 
 public class DimensionPhaseManager extends PhaseManager<DimensionTravelRestrictedContext> {
     public static final DimensionPhaseManager MANAGER = new DimensionPhaseManager();
@@ -81,18 +83,26 @@ public class DimensionPhaseManager extends PhaseManager<DimensionTravelRestricte
         Entity entity = event.getEntity();
         ResourceKey<Level> targetDimension = event.getDimension();
 
+        if(!dimensionRestrictions.containsKey(targetDimension) || !dimensionRestrictions.containsKey(entity.level().dimension())){
+            return;
+        }
+
         Player player = entity instanceof Player ? (Player) entity : null;
         // 检查玩家是否可以离开当前维度
-        if (isRestricted(entity.level(), player, entity.level().dimension(), entity, false)){
-            recordPlayerEnterDimension(entity, entity.level().dimension(), false);
+        if (!isRestricted(entity.level(), player, entity.level().dimension(), entity, false)){
+            event.setCanceled(true);
             return;
         }
+        recordPlayerEnterDimension(entity, entity.level().dimension(), false);
+
+
         // 检查玩家是否可以进入目标维度
-        if (isRestricted(entity.level(), player, targetDimension, entity, true)){
-            recordPlayerEnterDimension(entity, targetDimension, true);
+        if (!isRestricted(entity.level(), player, targetDimension, entity, true)){
+            event.setCanceled(true);
             return;
         }
-        event.setCanceled(true);
+        recordPlayerEnterDimension(entity, targetDimension, true);
+
     }
 }
 
