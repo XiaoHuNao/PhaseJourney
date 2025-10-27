@@ -32,6 +32,10 @@ public abstract class BlockModelsMixin {
     private void getBlockModel(BlockState source, CallbackInfoReturnable<BakedModel> callback) {
         LocalPlayer player = Minecraft.getInstance().player;
         if (player == null) return;
+        if (!BlockPhaseManager.MANAGER.hasReplacement(source)){
+            return;
+        }
+
         PhaseUtils.applyActionToMatchingContexts(BlockPhaseManager.MANAGER,player.level(),player,null,(ctx, phaseManager) -> {
             return ctx.getSource().equals(source);
         },(ctx,phaseManager) -> {

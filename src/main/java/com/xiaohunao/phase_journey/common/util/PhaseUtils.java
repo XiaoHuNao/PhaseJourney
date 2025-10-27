@@ -5,9 +5,14 @@ import com.mojang.datafixers.util.Pair;
 import com.xiaohunao.phase_journey.api.phase.IPhaseContext;
 import com.xiaohunao.phase_journey.api.phase.PhaseManager;
 import com.xiaohunao.phase_journey.common.attachment.PhaseAttachment;
+import com.xiaohunao.phase_journey.common.init.PJRegistries;
+import com.xiaohunao.phase_journey.common.network.SyncPhasePacketS2C;
+import com.xiaohunao.phase_journey.common.phase.PhaseContextType;
 import com.xiaohunao.phase_journey.common.phase.PhaseType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 
@@ -15,6 +20,9 @@ import javax.annotation.Nullable;
 import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.stream.Stream;
 
 public class PhaseUtils {
     /**
@@ -67,14 +75,14 @@ public class PhaseUtils {
             ResourceLocation phase = entry.getValue().getFirst();
             PhaseAttachment phaseAttachment = phaseType.getPhaseAttachment(level, pos, player);
             if (phaseAttachment.getPhases().contains(phase)) {
-                return false;
+                return true;
             }
         }
-        return true;
+        return false;
     }
 
     public static <T extends IPhaseContext,M extends PhaseManager<T>> boolean anyContextMatches(M phaseManager, @Nullable Level level, @Nullable Player player, @Nullable BlockPos pos, BiFunction<T,M,Boolean> ctx){
-        if (isPhaseIncluded(phaseManager, level, player, pos)) {
+        if (!isPhaseIncluded(phaseManager, level, player, pos)) {
             return false;
         }
         return phaseManager.getPhaseContexts().values().stream()
@@ -93,7 +101,7 @@ public class PhaseUtils {
     }
 
     public static <T extends IPhaseContext,M extends PhaseManager<T>> void applyActionToMatchingContexts(M phaseManager , @Nullable Level level,@Nullable Player player, @Nullable BlockPos pos,BiFunction<T,M,Boolean> ctx, BiConsumer<T,M> actuator){
-        if (isPhaseIncluded(phaseManager, level, player, pos)) {
+        if (!isPhaseIncluded(phaseManager, level, player, pos)) {
             phaseManager.getPhaseContexts().values().stream()
                     .map(Pair::getSecond)
                     .filter(context -> ctx.apply(context, phaseManager))

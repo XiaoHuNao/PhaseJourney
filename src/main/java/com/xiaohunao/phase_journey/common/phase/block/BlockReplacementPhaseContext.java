@@ -65,7 +65,7 @@ public class BlockReplacementPhaseContext extends PhaseContext {
         sourceBlock.dynamicShape = targetBlock.dynamicShape;
         sourceBlock.requiredFeatures = targetBlock.requiredFeatures;
 
-        sourceBlock.properties.mapColor = targetBlock.properties.mapColor;
+        sourceBlock.properties = targetBlock.properties;
     }
 
     public void rollbackProperties() {
@@ -78,7 +78,7 @@ public class BlockReplacementPhaseContext extends PhaseContext {
         sourceBlock.dynamicShape = properties.dynamicShape;
         sourceBlock.requiredFeatures = properties.requiredFeatures;
 
-        sourceBlock.properties.mapColor = properties.mapColor;
+        sourceBlock.properties = properties;
     }
 
     @Override

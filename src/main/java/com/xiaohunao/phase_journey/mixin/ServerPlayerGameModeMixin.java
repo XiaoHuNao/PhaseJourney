@@ -45,4 +45,15 @@ public abstract class ServerPlayerGameModeMixin {
             return blockState;
         },blockState);
     }
+
+    @WrapOperation(method = "handleBlockBreakAction", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/level/ServerLevel;getBlockState(Lnet/minecraft/core/BlockPos;)Lnet/minecraft/world/level/block/state/BlockState;"))
+    public BlockState handleBlockBreakAction(ServerLevel instance, BlockPos pos, Operation<BlockState> original) {
+        BlockState blockState = original.call(instance, pos);
+        return PhaseUtils.findFirstContextOrReturnDefault(BlockPhaseManager.MANAGER,player.level(),player,pos,(ctx,phaseManager) -> {
+            if (ctx.getSource().equals(blockState)){
+                return ctx.getTarget();
+            }
+            return blockState;
+        },blockState);
+    }
 }

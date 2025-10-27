@@ -8,7 +8,6 @@ import com.xiaohunao.phase_journey.common.phase.dimension.DimensionPhaseManager;
 import com.xiaohunao.phase_journey.common.phase.effect.MobEffectPhaseManager;
 import com.xiaohunao.phase_journey.common.phase.enchantment.EnchantmentPhaseManager;
 import com.xiaohunao.phase_journey.common.phase.growth.CropGrowthPhaseManager;
-import com.xiaohunao.phase_journey.common.phase.player.interact.InteractContext;
 import com.xiaohunao.phase_journey.common.phase.player.interact.InteractContextManager;
 import com.xiaohunao.phase_journey.integration.LoadedCompat;
 import net.minecraft.core.Registry;

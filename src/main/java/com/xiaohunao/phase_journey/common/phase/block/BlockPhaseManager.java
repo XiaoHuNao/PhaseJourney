@@ -135,7 +135,6 @@ public class BlockPhaseManager extends PhaseManager<BlockReplacementPhaseContext
     }
 
     public boolean hasReplacement(BlockState source) {
-        if (source.hasBlockEntity() || source.isAir()) return false;
         return blockStateReplacements.get(source) != null;
     }
 
