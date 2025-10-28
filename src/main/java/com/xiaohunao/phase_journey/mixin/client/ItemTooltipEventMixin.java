@@ -17,6 +17,10 @@ public class ItemTooltipEventMixin {
 
     @ModifyVariable(method = "<init>", at = @At(value = "HEAD"), argsOnly = true)
     private static ItemStack init(ItemStack stack, @Local(argsOnly = true) Player player) {
+        if (player == null){
+            return stack;
+        }
+
         return PhaseUtils.findFirstContextOrReturnDefault(ItemPhaseManager.MANAGER,player.level(),player,null,(ctx, manager) -> {
             if (ctx.getSource().equals(stack.getItem())){
                 return ctx.getTarget().getDefaultInstance();
