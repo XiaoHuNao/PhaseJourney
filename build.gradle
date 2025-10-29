@@ -186,7 +186,7 @@ dependencies {
     //runtimeOnly "curse.maven:projecte-226410:6611984"
 
     compileOnly "curse.maven:immersive-engineering-231951:6733669"
-    runtimeOnly "curse.maven:immersive-engineering-231951:6733669"
+    //runtimeOnly "curse.maven:immersive-engineering-231951:6733669"
 
     compileOnly "curse.maven:irons-spells-n-spellbooks-855414:7036419"
     //runtimeOnly "curse.maven:irons-spells-n-spellbooks-855414:7036419"
