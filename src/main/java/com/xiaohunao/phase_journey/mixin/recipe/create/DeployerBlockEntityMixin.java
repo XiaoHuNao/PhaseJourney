@@ -6,14 +6,16 @@ import com.xiaohunao.phase_journey.common.phase.recipe.RecipePhaseManager;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Pseudo;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Optional;
 
-@Mixin(value = DeployerBlockEntity.class, remap = false)
-public class DeployerBlockEntityMixin {
+@Pseudo
+@Mixin(targets = "com.simibubi.create.content.kinetics.deployer.DeployerBlockEntity", remap = false)
+public abstract class DeployerBlockEntityMixin {
     //SANDPAPER_POLISHING
     @Inject(method = "getRecipe", at = @At("RETURN"), cancellable = true)
     public void phaseJourney$getRecipe(ItemStack item, CallbackInfoReturnable<Optional<RecipeHolder<PressingRecipe>>> cir) {

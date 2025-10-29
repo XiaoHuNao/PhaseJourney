@@ -180,12 +180,13 @@ dependencies {
     //runtimeOnly "curse.maven:hostile-neural-networks-552574:6751495"
 
     compileOnly("com.simibubi.create:create-${minecraft_version}:${create_version}") { transitive = false }
+    compileOnly("net.createmod.ponder:Ponder-NeoForge-${minecraft_version}:${ponder_version}")
 
     compileOnly "curse.maven:projecte-226410:6611984"
     //runtimeOnly "curse.maven:projecte-226410:6611984"
 
     compileOnly "curse.maven:immersive-engineering-231951:6733669"
-    //runtimeOnly "curse.maven:immersive-engineering-231951:6733669"
+    runtimeOnly "curse.maven:immersive-engineering-231951:6733669"
 
     compileOnly "curse.maven:irons-spells-n-spellbooks-855414:7036419"
     //runtimeOnly "curse.maven:irons-spells-n-spellbooks-855414:7036419"
@@ -202,16 +203,11 @@ dependencies {
     compileOnly "curse.maven:touhou-little-maid-355044:6988538"
 //    runtimeOnly "curse.maven:touhou-little-maid-355044:6988538"
 
-    compileOnly "curse.maven:create-328085:6641610"
-    //runtimeOnly "curse.maven:create-328085:6641610"
-
     compileOnly "curse.maven:industrial-foregoing-266515:7073719"
     //runtimeOnly "curse.maven:industrial-foregoing-266515:7073719"
 
     compileOnly "curse.maven:titanium-287342:6875285"
     //runtimeOnly "curse.maven:titanium-287342:6875285"
-
-    compileOnly("net.createmod.ponder:Ponder-NeoForge-${minecraft_version}:${ponder_version}")
 
     compileOnly "curse.maven:ftb-quests-forge-289412:7029249"
     compileOnly "curse.maven:ftb-teams-forge-404468:6930910"

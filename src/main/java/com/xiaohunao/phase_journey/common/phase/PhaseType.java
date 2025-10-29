@@ -17,12 +17,11 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.Locale;
-import java.util.function.Supplier;
 
 public enum PhaseType implements StringRepresentable {
     LEVEL {
         @Override
-        public PhaseAttachment getPhaseAttachment(@Nullable Level level,@Nullable BlockPos pos,@Nullable Player player) {
+        public PhaseAttachment getPhaseAttachment(@Nullable Level level, @Nullable BlockPos pos, @Nullable Player player) {
             if (level != null) {
                 return PhaseAttachment.of(level);
             }
@@ -31,7 +30,7 @@ public enum PhaseType implements StringRepresentable {
     },
     PLAYER {
         @Override
-        public PhaseAttachment getPhaseAttachment(@Nullable Level level,@Nullable BlockPos pos,@Nullable Player player) {
+        public PhaseAttachment getPhaseAttachment(@Nullable Level level, @Nullable BlockPos pos, @Nullable Player player) {
             if (player != null) {
                 return PhaseAttachment.of(player);
             }
@@ -40,7 +39,7 @@ public enum PhaseType implements StringRepresentable {
     },
     NEAREST_PLAYER {
         @Override
-        public PhaseAttachment getPhaseAttachment(@Nullable Level level,@Nullable BlockPos pos,@Nullable Player player) {
+        public PhaseAttachment getPhaseAttachment(@Nullable Level level, @Nullable BlockPos pos, @Nullable Player player) {
             if (level != null && pos != null) {
                 Player nearestPlayer = level.getNearestPlayer(pos.getX(), pos.getY(), pos.getZ(), 8, true);
                 if (nearestPlayer != null) {
@@ -71,11 +70,11 @@ public enum PhaseType implements StringRepresentable {
         }
     };
 
-    public abstract PhaseAttachment getPhaseAttachment(@Nullable Level level,@Nullable BlockPos pos,@Nullable Player player);
+    public abstract @Nullable PhaseAttachment getPhaseAttachment(@Nullable Level level, @Nullable BlockPos pos, @Nullable Player player);
 
-    public void applyOrRevokePhase(Level level,ResourceLocation phase, boolean add){
+    public void applyOrRevokePhase(Level level, ResourceLocation phase, boolean add) {
         PhaseAttachment phaseAttachment = getPhaseAttachment(level, null, null);
-        if (phaseAttachment == null){
+        if (phaseAttachment == null) {
             return;
         }
 
@@ -85,21 +84,21 @@ public enum PhaseType implements StringRepresentable {
             phaseAttachment.removePhase(phase);
         }
 
-        if (!level.isClientSide){
+        if (!level.isClientSide) {
             SyncPhasePacketS2C.sync2Level(add, phase);
         }
 
         for (PhaseContextType<?> type : PJRegistries.PHASE_CONTEXT_TYPE) {
             PhaseManager<?> manager = type.manager();
             if (manager.getPhases(this).stream().anyMatch(pair -> pair.getFirst().equals(phase))) {
-                manager.applyOrRevokePhase(level,phase, add);
+                manager.applyOrRevokePhase(level, phase, add);
             }
         }
     }
 
-    public void applyOrRevokePhase(Player player,ResourceLocation phase, boolean add){
+    public void applyOrRevokePhase(Player player, ResourceLocation phase, boolean add) {
         PhaseAttachment phaseAttachment = getPhaseAttachment(null, null, player);
-        if (phaseAttachment == null){
+        if (phaseAttachment == null) {
             return;
         }
 
@@ -111,11 +110,11 @@ public enum PhaseType implements StringRepresentable {
         for (PhaseContextType<?> type : PJRegistries.PHASE_CONTEXT_TYPE) {
             PhaseManager<?> manager = type.manager();
             if (manager.getPhases(this).stream().anyMatch(pair -> pair.getFirst().equals(phase))) {
-                manager.applyOrRevokePhase(player.level(),phase, add);
+                manager.applyOrRevokePhase(player.level(), phase, add);
             }
         }
 
-        if (!player.level().isClientSide){
+        if (!player.level().isClientSide) {
             SyncPhasePacketS2C.sync2Player((ServerPlayer) player, add, phase);
         }
     }
