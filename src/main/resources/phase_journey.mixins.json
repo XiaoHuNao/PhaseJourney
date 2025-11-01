@@ -11,8 +11,6 @@
         "EnchantmentTableMenuMixin",
         "ItemStackMixin",
         "ServerPlayerGameModeMixin",
-        "client.ClientItemStackMixin",
-        "client.ItemTooltipEventMixin",
         "integration.create.FluidDrainingBehaviourMixin",
         "integration.ftbquests.StageRewardMixin",
         "integration.hostilenetworks.SimChamberTileEntityMixin",
@@ -49,8 +47,10 @@
     "client": [
         "client.BlockModelsMixin",
         "client.ClientItemMixin",
+        "client.ClientItemStackMixin",
         "client.DebugScreenOverlayMixin",
         "client.ItemModelShaperMixin",
+        "client.ItemTooltipEventMixin",
         "client.LevelRendererMixin"
     ],
     "server": [],
